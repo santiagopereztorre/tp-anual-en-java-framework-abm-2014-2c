@@ -6,25 +6,25 @@ public interface Persistidor<T> {
 	
 	/**
 	 * Persiste unElemento
-	 * @param unElemento
+	 * @param unElemento Elemento a persistir
 	 */
 	void darDeAlta(T unElemento);
 	
 	/**
 	 * Despersiste unElemento
-	 * @param unElemento
+	 * @param unElemento Elemento a dar de baja
 	 */
 	void darDeBaja(T unElemento);
 	
 	/**
 	 * Persiste los cambios que sufrio unElemento
-	 * @param unElemento
+	 * @param unElemento Actualiza (si corresponde) el elemento con los nuevos cambios
 	 */
 	void modificar(T unElemento);
 	
 	/**
 	 * Devuelve una List con todos los elementos persistidos
-	 * @return
+	 * @return List<T> de los elementos persisitidos
 	 */
 	List<T> obtenerTodos();
 
