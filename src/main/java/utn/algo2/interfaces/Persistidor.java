@@ -8,24 +8,24 @@ public interface Persistidor<T> {
 	 * Persiste unElemento
 	 * @param unElemento Elemento a persistir
 	 */
-	void darDeAlta(T unElemento);
+	public void darDeAlta(T unElemento);
 	
 	/**
 	 * Despersiste unElemento
 	 * @param unElemento Elemento a dar de baja
 	 */
-	void darDeBaja(T unElemento);
+	public void darDeBaja(T unElemento);
 	
 	/**
 	 * Persiste los cambios que sufrio unElemento
 	 * @param unElemento Actualiza (si corresponde) el elemento con los nuevos cambios
 	 */
-	void modificar(T unElemento);
+	public void modificar(T unElemento);
 	
 	/**
 	 * Devuelve una List con todos los elementos persistidos
 	 * @return List<T> de los elementos persisitidos
 	 */
-	List<T> obtenerTodos();
+	public List<T> obtenerTodos();
 
 }

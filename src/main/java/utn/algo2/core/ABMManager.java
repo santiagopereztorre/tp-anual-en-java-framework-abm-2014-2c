@@ -5,7 +5,7 @@ public class ABMManager<T> {
 	/**
 	 * Ejecuta el ABM Manager
 	 */
-	void ejecutar()
+	public void ejecutar()
 	{
 		
 	}
