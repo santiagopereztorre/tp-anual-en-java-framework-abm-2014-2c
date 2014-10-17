@@ -1,17 +1,20 @@
 package utn.algo2;
 
-public class PruebaDeEscritorio {
+import utn.algo2.baseDeDatos.Persistidor;
+import utn.algo2.baseDeDatos.PersistidorEnMemoria;
+import utn.algo2.core.ABMManager;
 
+
+public class PruebaDeEscritorio {
+	
 	public static void main(String[] args) {
 		
-		ABMManager<Persona> manager = new ABMManager<Persona>();
+		Persistidor<Persona> persistidor = new PersistidorEnMemoria<Persona>();
 		
-		Persona personaCreada = manager.formularioAlta();
+		ABMManager<Persona> abm = new ABMManager<Persona>(persistidor);
 		
-		Boolean fueModificado = manager.formularioModificion(personaCreada);
+		abm.ejecutar();	// El programa queda aca hasta qe se sale de la ventana
 		
-		Persona personaBuscada = manager.formularioBusqueda();
-		
-		Boolean fueBorrada = manager.borrar(personaCreada);
 	}
+
 }
