@@ -6,8 +6,12 @@ import utn.algo2.visualizacion.Visualizador;
 
 public class ABMManager<T> {
 
-	public ABMManager(Persistidor<Persona> persistidor, Visualizador visualizador) {
-		// TODO Auto-generated constructor stub
+	Persistidor<T> persistidor;
+	Visualizador visualizador;
+	
+	public ABMManager(Persistidor<T> persistidor, Visualizador visualizador) {
+		this.persistidor = persistidor;
+		this.visualizador = visualizador;
 	}
 
 	/**
