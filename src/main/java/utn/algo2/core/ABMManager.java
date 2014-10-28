@@ -18,6 +18,7 @@ public class ABMManager<T> {
 	 */
 	public void ejecutar()
 	{
+		visualizador.run();
 	}
 	
 }

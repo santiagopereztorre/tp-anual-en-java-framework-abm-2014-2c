@@ -17,7 +17,6 @@ public class PruebaDeEscritorio {
 		ABMManager<Persona> abm = new ABMManager<Persona>(persistidor, visualizador);
 		
 		abm.ejecutar();	// El programa queda aca hasta qe se sale de la ventana
-		
 	}
 
 }
