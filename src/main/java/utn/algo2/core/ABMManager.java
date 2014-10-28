@@ -1,6 +1,5 @@
 package utn.algo2.core;
 
-import utn.algo2.Persona;
 import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.visualizacion.Visualizador;
 
@@ -19,6 +18,6 @@ public class ABMManager<T> {
 	 */
 	public void ejecutar()
 	{
-		
 	}
+	
 }

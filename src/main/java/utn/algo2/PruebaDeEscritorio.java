@@ -6,7 +6,6 @@ import utn.algo2.core.ABMManager;
 import utn.algo2.visualizacion.Visualizador;
 import utn.algo2.visualizacion.VisualizadorSwing;
 
-
 public class PruebaDeEscritorio {
 	
 	public static void main(String[] args) {
