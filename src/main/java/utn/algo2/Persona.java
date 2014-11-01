@@ -21,5 +21,9 @@ public class Persona {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
+	
+	public String toString() {
+		return this.nombre;
+	}
 
 }

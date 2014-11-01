@@ -8,11 +8,11 @@ import java.lang.reflect.*;
 public class ABMManager<T> {
 
 	private Persistidor<T> persistidor;
-	private Visualizador visualizador;
+	private Visualizador<T> visualizador;
 	private T objeto;
 
 	public ABMManager(T objeto, Persistidor<T> persistidor,
-			Visualizador visualizador) {
+			Visualizador<T> visualizador) {
 		this.objeto = objeto;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
@@ -26,7 +26,9 @@ public class ABMManager<T> {
 		Field[] fields = aClass.getFields();
 		
 		visualizador.setFields(fields);
-
+		visualizador.setObjeto(objeto);
+		visualizador.setPersistidor(persistidor);
+		
 		visualizador.run();
 	}
 }
