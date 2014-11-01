@@ -27,6 +27,7 @@ public class ABMManager<T> {
 		
 		visualizador.setFields(fields);
 		visualizador.setObjeto(objeto);
+		visualizador.setClase(aClass);
 		visualizador.setPersistidor(persistidor);
 		
 		visualizador.run();

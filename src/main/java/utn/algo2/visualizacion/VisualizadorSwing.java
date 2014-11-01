@@ -46,7 +46,6 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	}
 
 	public void setObjeto(Object objeto) {
-		aClass = (Class<T>) objeto.getClass();
 		T elemento = null;
 		try {
 			elemento = (T) aClass.newInstance();
@@ -58,6 +57,10 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 			e.printStackTrace();
 		}
 		this.anObject = elemento;
+	}
+
+	public void setClase(Class<?> aClass) {
+		this.aClass = (Class<T>) aClass;
 	}
 
 	public void setPersistidor(Persistidor<T> persistidor) {
