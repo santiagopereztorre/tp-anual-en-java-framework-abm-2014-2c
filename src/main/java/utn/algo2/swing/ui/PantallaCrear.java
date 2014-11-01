@@ -15,8 +15,8 @@ import javax.swing.JTextField;
 public class PantallaCrear extends JDialog implements ActionListener {
 
 	private Field[] fields;
-	private Hashtable<Field, JTextField> referencias = new Hashtable<Field, JTextField>();
-	private Hashtable<String, String> valores = new Hashtable<String, String>();
+	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+	private Hashtable<String, String> hashConValores = new Hashtable<String, String>();
 
 	public PantallaCrear(Field[] fields) {
 		this.fields = fields;
@@ -27,13 +27,13 @@ public class PantallaCrear extends JDialog implements ActionListener {
 		for (Field field : fields) {
 			String fieldName = field.getName();
 
-			JLabel labelCampo = new JLabel(fieldName + " :");
-			this.add(labelCampo);
+			JLabel labelName = new JLabel(fieldName + " :");
+			this.add(labelName);
 
-			JTextField textCampo = new JTextField();
-			this.add(textCampo);
+			JTextField textField = new JTextField();
+			this.add(textField);
 
-			referencias.put(field, textCampo);
+			referenciasATextField.put(field, textField);
 		}
 
 		JButton botonCrear = new JButton("Crear");
@@ -50,27 +50,26 @@ public class PantallaCrear extends JDialog implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		synchronized (valores) {
+		synchronized (hashConValores) {
 			for (Field field : fields) {
-				JTextField textoField = referencias.get(field);
-				valores.put(field.getName(), textoField.getText());
+				JTextField textoField = referenciasATextField.get(field);
+				hashConValores.put(field.getName(), textoField.getText());
 			}
-			valores.notify();
+			hashConValores.notify();
 		}
 		this.setVisible(false);
 	}
 
-	public Hashtable<String, String> getDatos() {
-		synchronized (valores) {
+	public Hashtable<String, String> getDato() {
+		synchronized (hashConValores) {
 			try {
-				if (valores.isEmpty())
-					valores.wait();
-
-				return valores;
+				if (hashConValores.isEmpty())
+					hashConValores.wait();
+				return hashConValores;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return valores;
+				return hashConValores;
 			}
 
 		}
