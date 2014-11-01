@@ -3,14 +3,15 @@ package utn.algo2.swing.ui;
 import java.lang.reflect.Field;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
-public class PantallaInicio extends JDialog {
+public class PantallaCrear extends JDialog {
 
-	public PantallaInicio(Field[] fields) {
+	public PantallaCrear(Field[] fields) {
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		
 		for (Field field : fields){
@@ -23,7 +24,8 @@ public class PantallaInicio extends JDialog {
 			this.add(textCampo);
 		}
 		
-		
+		JButton botonCrear = new JButton("Crear");
+		this.add(botonCrear);
 
 		this.configurar();
 	}

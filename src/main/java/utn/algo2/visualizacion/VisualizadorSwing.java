@@ -2,14 +2,14 @@ package utn.algo2.visualizacion;
 
 import java.lang.reflect.Field;
 
-import utn.algo2.swing.ui.PantallaInicio;
+import utn.algo2.swing.ui.PantallaCrear;
 
 public class VisualizadorSwing implements Visualizador {
 	
 	private Field[] fields;
 	
 	public void run() {
-		new PantallaInicio(fields);
+		new PantallaCrear(fields);
 	}
 
 	public void setFields(Field[] fields) {
