@@ -45,13 +45,10 @@ public class ABMManager<T> {
 				try {
 					method.invoke(objeto, valor);
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -69,13 +66,10 @@ public class ABMManager<T> {
 				try {
 					valor = (String) method.invoke(objeto);
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				entidad.setValor(nombreVariable, valor);
@@ -105,10 +99,8 @@ public class ABMManager<T> {
 		try {
 			return (T) unaClase.newInstance();
 		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return null;
