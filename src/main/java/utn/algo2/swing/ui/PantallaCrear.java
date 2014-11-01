@@ -72,6 +72,6 @@ public class PantallaCrear extends JDialog implements ActionListener {
 				e.printStackTrace();
 			}
 		}
-		return this.entidad;
+		return entidad;
 	}
 }
