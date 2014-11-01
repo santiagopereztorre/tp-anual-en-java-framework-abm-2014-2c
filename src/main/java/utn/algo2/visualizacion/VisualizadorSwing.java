@@ -16,13 +16,13 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 
 	public Entidad pantallaCrear() {
 		PantallaCrear crear = new PantallaCrear(fields);
-		return crear.getDato();
+		return crear.getEntidad();
 	}
 
 	public Entidad pantallaModificar(
 			Entidad entidad) {
 		PantallaModificar<T> modificar = new PantallaModificar<T>(fields, entidad);
-		return modificar.getDato();
+		return modificar.getEntidad();
 	}
 
 }

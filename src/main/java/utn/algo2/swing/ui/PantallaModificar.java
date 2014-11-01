@@ -66,7 +66,7 @@ public class PantallaModificar<T> extends JDialog implements ActionListener {
 
 	}
 
-	public Entidad getDato() {
+	public Entidad getEntidad() {
 		Entidad entidad = null;
 		synchronized (hashConValores) {
 			try {

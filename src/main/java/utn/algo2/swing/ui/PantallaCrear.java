@@ -62,7 +62,7 @@ public class PantallaCrear extends JDialog implements ActionListener {
 		this.setVisible(false);
 	}
 
-	public Entidad getDato() {
+	public Entidad getEntidad() {
 		Entidad entidad = null;
 		synchronized (hashConValores) {
 			try {
