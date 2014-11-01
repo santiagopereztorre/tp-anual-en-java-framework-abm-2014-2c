@@ -29,22 +29,20 @@ public class ABMManager<T> {
 	 */
 	public void ejecutar() {
 		Entidad entidadCreada = visualizador.pantallaCrear();
-		guardarEntidad(entidadCreada.getHashConValores());
+		guardarEntidad(entidadCreada);
 		
-		Hashtable<String, String> hashConValoresAModificar = recuperarEntidad();
-		Entidad entidadAModificar = new Entidad();
-		entidadAModificar.setHashConValores(hashConValoresAModificar);
+		Entidad entidadAModificar = recuperarEntidad();
 		
 		Entidad entidadModificada = visualizador.pantallaModificar(entidadAModificar);
-		guardarEntidad(entidadModificada.getHashConValores());
+		guardarEntidad(entidadModificada);
 	}
 
-	private void guardarEntidad(Hashtable<String, String> hashConValores) {
-		T entidadAGuardar = crearObjecto(aClass);
+	private void guardarEntidad(Entidad entidadCreada) {
+		T entidadAGuardar = crearObjeto(aClass);
 		for (Method method : methods) {
 			if (isSetter(method)) {
 				String nombreVariable = getNombreVariable(method);
-				String valor = getValorAGuardar(hashConValores, nombreVariable);
+				String valor = getValorAGuardar(entidadCreada.getHashConValores(), nombreVariable);
 				try {
 					method.invoke(entidadAGuardar, valor);
 				} catch (IllegalAccessException e) {
@@ -62,15 +60,15 @@ public class ABMManager<T> {
 		this.persistidor.guardar(entidadAGuardar);
 	}
 	
-	private Hashtable<String, String> recuperarEntidad() {
+	private Entidad recuperarEntidad() {
 		Hashtable<String, String> hashConValoresAModificar = new Hashtable<String, String>();
-		T entidad = persistidor.obtener();
+		T objecto = persistidor.obtener();
 		for (Method method : methods) {
 			if (isGetter(method) && !isGetClass(method)) {
 				String nombreVariable = getNombreVariable(method);
 				String valor = null;
 				try {
-					valor = (String) method.invoke(entidad);
+					valor = (String) method.invoke(objecto);
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -84,7 +82,9 @@ public class ABMManager<T> {
 				hashConValoresAModificar.put(nombreVariable.toLowerCase(), valor);
 			}
 		}
-		return hashConValoresAModificar;
+		Entidad entidad = new Entidad();
+		entidad.setHashConValores(hashConValoresAModificar);
+		return entidad;
 	}
 
 	private String getValorAGuardar(Hashtable<String, String> datos,
@@ -109,7 +109,7 @@ public class ABMManager<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private T crearObjecto(Class<?> unaClase) {
+	private T crearObjeto(Class<?> unaClase) {
 		try {
 			return (T) unaClase.newInstance();
 		} catch (InstantiationException e1) {
