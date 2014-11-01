@@ -1,6 +1,5 @@
 package utn.algo2.swing.ui;
 
-import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
@@ -14,6 +13,7 @@ import javax.swing.JTextField;
 
 import utn.algo2.core.Entidad;
 
+@SuppressWarnings("serial")
 public class PantallaModificar<T> extends JDialog implements ActionListener {
 
 	private Field[] fields;

@@ -108,6 +108,7 @@ public class ABMManager<T> {
 		return method.getName().startsWith("getClass");
 	}
 
+	@SuppressWarnings("unchecked")
 	private T crearObjecto(Class<?> unaClase) {
 		try {
 			return (T) unaClase.newInstance();
