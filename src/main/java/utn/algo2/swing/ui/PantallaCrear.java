@@ -18,7 +18,7 @@ public class PantallaCrear extends JDialog implements ActionListener {
 
 	private Field[] fields;
 	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
-	private Hashtable<String, String> hashConValores = new Hashtable<String, String>();
+	Entidad entidad = new Entidad();
 
 	public PantallaCrear(Field[] fields) {
 		this.fields = fields;
@@ -52,30 +52,26 @@ public class PantallaCrear extends JDialog implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		synchronized (hashConValores) {
+		synchronized (entidad) {
 			for (Field field : fields) {
 				JTextField textoField = referenciasATextField.get(field);
-				hashConValores.put(field.getName(), textoField.getText());
+				entidad.setValor(field.getName(), textoField.getText());
 			}
-			hashConValores.notify();
+			entidad.notify();
 		}
 		this.setVisible(false);
 	}
 
 	public Entidad getEntidad() {
-		Entidad entidad = null;
-		synchronized (hashConValores) {
+		synchronized (entidad) {
 			try {
-				if (hashConValores.isEmpty())
-					hashConValores.wait();
-				
-				entidad = new Entidad();
-				entidad.setHashConValores(hashConValores);
+				if (entidad.isEmpty())
+					entidad.wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		return entidad;
+		return this.entidad;
 	}
 }
