@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import utn.algo2.core.Entidad;
+
 @SuppressWarnings("serial")
 public class PantallaCrear extends JDialog implements ActionListener {
 
@@ -60,18 +62,20 @@ public class PantallaCrear extends JDialog implements ActionListener {
 		this.setVisible(false);
 	}
 
-	public Hashtable<String, String> getDato() {
+	public Entidad getDato() {
+		Entidad entidad = null;
 		synchronized (hashConValores) {
 			try {
 				if (hashConValores.isEmpty())
 					hashConValores.wait();
-				return hashConValores;
+				
+				entidad = new Entidad();
+				entidad.setHashConValores(hashConValores);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return hashConValores;
 			}
-
 		}
+		return entidad;
 	}
 }

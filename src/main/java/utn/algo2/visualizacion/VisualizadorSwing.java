@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.Map.Entry;
 
 import utn.algo2.baseDeDatos.Persistidor;
+import utn.algo2.core.Entidad;
 import utn.algo2.swing.ui.PantallaCrear;
 import utn.algo2.swing.ui.PantallaModificar;
 
@@ -18,7 +19,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		this.fields = fields;
 	}
 
-	public Hashtable<String, String> pantallaCrear() {
+	public Entidad pantallaCrear() {
 		PantallaCrear crear = new PantallaCrear(fields);
 		return crear.getDato();
 	}
