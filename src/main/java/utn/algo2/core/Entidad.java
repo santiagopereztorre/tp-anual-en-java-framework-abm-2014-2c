@@ -21,4 +21,8 @@ public class Entidad {
 	public String getValor(String aKey) {
 		return this.hashConValores.get(aKey.toLowerCase());
 	}
+
+	public boolean isEmpty() {
+		return hashConValores.isEmpty();
+	}
 }
