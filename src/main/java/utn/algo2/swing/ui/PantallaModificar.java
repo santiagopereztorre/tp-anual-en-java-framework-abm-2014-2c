@@ -72,6 +72,7 @@ public class PantallaModificar<T> extends JDialog implements ActionListener {
 			try {
 				if (hashConValores.isEmpty())
 					hashConValores.wait();
+				entidad = new Entidad();
 				entidad.setHashConValores(hashConValores);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
