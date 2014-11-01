@@ -11,5 +11,5 @@ public interface Visualizador<T> {
 
 	public void setFields(Field[] fields);
 	public Entidad pantallaCrear();
-	public Entidad pantallaModificar(Hashtable<String, String> hashConValoresAModificar);
+	public Entidad pantallaModificar(Entidad entidadAModificar);
 }

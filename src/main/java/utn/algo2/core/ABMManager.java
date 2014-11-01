@@ -28,12 +28,15 @@ public class ABMManager<T> {
 	 * Ejecuta el ABM Manager
 	 */
 	public void ejecutar() {
-		Entidad entidad;
-		entidad = visualizador.pantallaCrear();
-		guardarEntidad(entidad.getHashConValores());
+		Entidad entidadCreada = visualizador.pantallaCrear();
+		guardarEntidad(entidadCreada.getHashConValores());
+		
 		Hashtable<String, String> hashConValoresAModificar = recuperarEntidad();
-		entidad = visualizador.pantallaModificar(hashConValoresAModificar);
-		guardarEntidad(entidad.getHashConValores());
+		Entidad entidadAModificar = new Entidad();
+		entidadAModificar.setHashConValores(hashConValoresAModificar);
+		
+		Entidad entidadModificada = visualizador.pantallaModificar(entidadAModificar);
+		guardarEntidad(entidadModificada.getHashConValores());
 	}
 
 	private void guardarEntidad(Hashtable<String, String> hashConValores) {
