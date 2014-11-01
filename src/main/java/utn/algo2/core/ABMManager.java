@@ -4,7 +4,6 @@ import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.visualizacion.Visualizador;
 
 import java.lang.reflect.*;
-import java.util.Hashtable;
 
 public class ABMManager<T> {
 
@@ -37,14 +36,14 @@ public class ABMManager<T> {
 		guardarEntidad(entidadModificada);
 	}
 
-	private void guardarEntidad(Entidad entidadCreada) {
-		T entidadAGuardar = crearObjeto(aClass);
+	private void guardarEntidad(Entidad entidad) {
+		T objeto = crearObjeto(aClass);
 		for (Method method : methods) {
 			if (isSetter(method)) {
 				String nombreVariable = getNombreVariable(method);
-				String valor = getValorAGuardar(entidadCreada.getHashConValores(), nombreVariable);
+				String valor = entidad.getValor(nombreVariable);
 				try {
-					method.invoke(entidadAGuardar, valor);
+					method.invoke(objeto, valor);
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -57,18 +56,18 @@ public class ABMManager<T> {
 				}
 			}
 		}
-		this.persistidor.guardar(entidadAGuardar);
+		this.persistidor.guardar(objeto);
 	}
 	
 	private Entidad recuperarEntidad() {
-		Hashtable<String, String> hashConValoresAModificar = new Hashtable<String, String>();
-		T objecto = persistidor.obtener();
+		Entidad entidad = new Entidad();
+		T objeto = persistidor.obtener();
 		for (Method method : methods) {
 			if (isGetter(method) && !isGetClass(method)) {
 				String nombreVariable = getNombreVariable(method);
 				String valor = null;
 				try {
-					valor = (String) method.invoke(objecto);
+					valor = (String) method.invoke(objeto);
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -79,17 +78,10 @@ public class ABMManager<T> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				hashConValoresAModificar.put(nombreVariable.toLowerCase(), valor);
+				entidad.setValor(nombreVariable, valor);
 			}
 		}
-		Entidad entidad = new Entidad();
-		entidad.setHashConValores(hashConValoresAModificar);
 		return entidad;
-	}
-
-	private String getValorAGuardar(Hashtable<String, String> datos,
-			String nombre) {
-		return datos.get(nombre.toLowerCase());
 	}
 
 	private String getNombreVariable(Method method) {
