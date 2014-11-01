@@ -1,5 +1,6 @@
 package utn.algo2.swing.ui;
 
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
@@ -11,14 +12,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-@SuppressWarnings("serial")
-public class PantallaCrear extends JDialog implements ActionListener {
+public class PantallaModificar<T> extends JDialog implements ActionListener {
 
 	private Field[] fields;
 	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
 	private Hashtable<String, String> hashConValores = new Hashtable<String, String>();
 
-	public PantallaCrear(Field[] fields) {
+	public PantallaModificar(Field[] fields,
+			Hashtable<String, String> hashConValoresAModificar) {
 		this.fields = fields;
 
 		getContentPane().setLayout(
@@ -30,13 +31,15 @@ public class PantallaCrear extends JDialog implements ActionListener {
 			JLabel labelName = new JLabel(fieldName + " :");
 			this.add(labelName);
 
-			JTextField textField = new JTextField();
+			String valor = hashConValoresAModificar.get(fieldName);
+
+			JTextField textField = new JTextField(valor);
 			this.add(textField);
 
 			referenciasATextField.put(field, textField);
 		}
 
-		JButton botonCrear = new JButton("Crear");
+		JButton botonCrear = new JButton("Modificar");
 		botonCrear.addActionListener(this);
 		this.add(botonCrear);
 
@@ -58,6 +61,7 @@ public class PantallaCrear extends JDialog implements ActionListener {
 			hashConValores.notify();
 		}
 		this.setVisible(false);
+
 	}
 
 	public Hashtable<String, String> getDato() {
@@ -74,4 +78,5 @@ public class PantallaCrear extends JDialog implements ActionListener {
 
 		}
 	}
+
 }

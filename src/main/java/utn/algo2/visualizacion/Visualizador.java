@@ -10,4 +10,5 @@ public interface Visualizador<T> {
 
 	public void setFields(Field[] fields);
 	public Hashtable<String, String> pantallaCrear();
+	public Hashtable<String, String> pantallaModificar(Hashtable<String, String> hashConValoresAModificar);
 }

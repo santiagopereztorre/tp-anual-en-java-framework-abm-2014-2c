@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.swing.ui.PantallaCrear;
+import utn.algo2.swing.ui.PantallaModificar;
 
 public class VisualizadorSwing<T> implements Visualizador<T> {
 
@@ -20,6 +21,12 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	public Hashtable<String, String> pantallaCrear() {
 		PantallaCrear crear = new PantallaCrear(fields);
 		return crear.getDato();
+	}
+
+	public Hashtable<String, String> pantallaModificar(
+			Hashtable<String, String> hashConValoresAModificar) {
+		PantallaModificar<T> modificar = new PantallaModificar<T>(fields, hashConValoresAModificar);
+		return modificar.getDato();
 	}
 
 }
