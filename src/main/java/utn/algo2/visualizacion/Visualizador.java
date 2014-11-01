@@ -7,6 +7,6 @@ import utn.algo2.core.Entidad;
 public interface Visualizador<T> {
 
 	public void setFields(Field[] fields);
-	public Entidad pantallaCrear();
-	public Entidad pantallaModificar(Entidad entidadAModificar);
+	public Entidad<T> pantallaCrear();
+	public Entidad<T> pantallaModificar(Entidad<T> entidadAModificar);
 }

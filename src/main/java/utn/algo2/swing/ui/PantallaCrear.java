@@ -9,10 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
-public class PantallaCrear extends Pantalla implements ActionListener {
+public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
 
 	public PantallaCrear(Field[] fields) {
-		this.fields = fields;
+		super(fields);
 
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));

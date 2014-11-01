@@ -11,11 +11,11 @@ import javax.swing.JTextField;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public class PantallaModificar<T> extends Pantalla implements ActionListener {
+public class PantallaModificar<T> extends Pantalla<T> implements ActionListener {
 
 	public PantallaModificar(Field[] fields,
-			Entidad entidadAModificar) {
-		this.fields = fields;
+			Entidad<T> entidadAModificar) {
+		super(fields);
 
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));

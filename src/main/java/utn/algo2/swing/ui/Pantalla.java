@@ -11,11 +11,15 @@ import javax.swing.JTextField;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public class Pantalla extends JDialog implements ActionListener{
+public class Pantalla<T> extends JDialog implements ActionListener{
 
 	protected Field[] fields;
 	protected Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
-	protected Entidad entidad = new Entidad();
+	protected Entidad<T> entidad = new Entidad<T>();
+	
+	public Pantalla(Field[] fields) {
+		this.fields = fields;
+	}
 	
 	protected void configurar() {
 		this.setSize(400, 400);
@@ -34,7 +38,7 @@ public class Pantalla extends JDialog implements ActionListener{
 		this.setVisible(false);
 	}
 
-	public Entidad getEntidad() {
+	public Entidad<T> getEntidad() {
 		synchronized (entidad) {
 			try {
 				if (entidad.isEmpty())
