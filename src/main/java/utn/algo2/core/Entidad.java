@@ -13,4 +13,12 @@ public class Entidad {
 	public void setHashConValores(Hashtable<String, String> hashConValores) {
 		this.hashConValores = hashConValores;
 	}
+	
+	public void setValor(String aKey, String aValue) {
+		this.hashConValores.put(aKey, aValue);
+	}
+	
+	public String getValor(String aKey) {
+		return this.hashConValores.get(aKey);
+	}
 }
