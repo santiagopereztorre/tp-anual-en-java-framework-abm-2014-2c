@@ -12,7 +12,7 @@ public class PruebaDeEscritorio {
 		
 		Persistidor<Persona> persistidor = new PersistidorEnMemoria<Persona>();
 		
-		Visualizador<Persona> visualizador = new VisualizadorSwing();
+		Visualizador<Persona> visualizador = new VisualizadorSwing<Persona>();
 		
 		Persona persona = new Persona();
 		

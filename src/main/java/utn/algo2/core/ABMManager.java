@@ -10,14 +10,12 @@ public class ABMManager<T> {
 
 	private Persistidor<T> persistidor;
 	private Visualizador<T> visualizador;
-	private T anObject;
 	private Class<?> aClass;
 	private Field[] fields;
 	private Method[] methods;
 
 	public ABMManager(T objeto, Persistidor<T> persistidor,
 			Visualizador<T> visualizador) {
-		this.anObject = objeto;
 		this.aClass = objeto.getClass();
 		this.fields = this.aClass.getFields();
 		this.methods = this.aClass.getMethods();
