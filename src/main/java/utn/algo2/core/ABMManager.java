@@ -3,12 +3,17 @@ package utn.algo2.core;
 import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.visualizacion.Visualizador;
 
+import java.lang.reflect.*;
+
 public class ABMManager<T> {
 
-	Persistidor<T> persistidor;
-	Visualizador visualizador;
-	
-	public ABMManager(Persistidor<T> persistidor, Visualizador visualizador) {
+	private Persistidor<T> persistidor;
+	private Visualizador visualizador;
+	private T objeto;
+
+	public ABMManager(T objeto, Persistidor<T> persistidor,
+			Visualizador visualizador) {
+		this.objeto = objeto;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
 	}
@@ -16,9 +21,12 @@ public class ABMManager<T> {
 	/**
 	 * Ejecuta el ABM Manager
 	 */
-	public void ejecutar()
-	{
+	public void ejecutar() {
+		Class<?> aClass = objeto.getClass();
+		Field[] fields = aClass.getFields();
+		
+		visualizador.setFields(fields);
+
 		visualizador.run();
 	}
-	
 }
