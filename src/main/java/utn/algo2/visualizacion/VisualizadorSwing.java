@@ -26,7 +26,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 
 	public Entidad pantallaModificar(
 			Entidad entidad) {
-		PantallaModificar<T> modificar = new PantallaModificar<T>(fields, entidad.getHashConValores());
+		PantallaModificar<T> modificar = new PantallaModificar<T>(fields, entidad);
 		return modificar.getDato();
 	}
 

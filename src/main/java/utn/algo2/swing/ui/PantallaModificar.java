@@ -21,7 +21,7 @@ public class PantallaModificar<T> extends JDialog implements ActionListener {
 	private Hashtable<String, String> hashConValores = new Hashtable<String, String>();
 
 	public PantallaModificar(Field[] fields,
-			Hashtable<String, String> hashConValoresAModificar) {
+			Entidad entidad) {
 		this.fields = fields;
 
 		getContentPane().setLayout(
@@ -33,7 +33,7 @@ public class PantallaModificar<T> extends JDialog implements ActionListener {
 			JLabel labelName = new JLabel(fieldName + " :");
 			this.add(labelName);
 
-			String valor = hashConValoresAModificar.get(fieldName);
+			String valor = entidad.getValor(fieldName);
 
 			JTextField textField = new JTextField(valor);
 			this.add(textField);
