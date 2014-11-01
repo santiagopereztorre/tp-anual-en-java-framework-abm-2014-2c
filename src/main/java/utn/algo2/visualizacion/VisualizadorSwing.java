@@ -24,7 +24,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		return crear.getDato();
 	}
 
-	public Hashtable<String, String> pantallaModificar(
+	public Entidad pantallaModificar(
 			Hashtable<String, String> hashConValoresAModificar) {
 		PantallaModificar<T> modificar = new PantallaModificar<T>(fields, hashConValoresAModificar);
 		return modificar.getDato();
