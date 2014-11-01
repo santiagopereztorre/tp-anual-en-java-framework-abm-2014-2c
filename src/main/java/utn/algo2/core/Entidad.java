@@ -15,10 +15,10 @@ public class Entidad {
 	}
 	
 	public void setValor(String aKey, String aValue) {
-		this.hashConValores.put(aKey, aValue);
+		this.hashConValores.put(aKey.toLowerCase(), aValue);
 	}
 	
 	public String getValor(String aKey) {
-		return this.hashConValores.get(aKey);
+		return this.hashConValores.get(aKey.toLowerCase());
 	}
 }
