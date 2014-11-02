@@ -17,48 +17,6 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 	public PantallaModificar(Field[] fields) {
 		super(fields);
 
-		getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-		for (Field field : fields) {
-			String fieldName = field.getName();
-
-			JLabel labelName = new JLabel(fieldName + " :");
-			this.add(labelName);
-			
-			JTextField textField = new JTextField();
-			this.add(textField);
-
-			referenciasATextField.put(field, textField);
-		}
-
-		JButton botonCrear = new JButton("Modificar");
-		botonCrear.addActionListener(this);
-		this.add(botonCrear);
-
-		this.configurar();
-	}
-	
-	public PantallaModificar(Field[] fields, Entidad<T> entidadAModificar) {
-		super(fields);
-
-		getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-		for (Field field : fields) {
-			String fieldName = field.getName();
-
-			JLabel labelName = new JLabel(fieldName + " :");
-			this.add(labelName);
-			
-			String valor = entidadAModificar.getValor(fieldName);
-
-			JTextField textField = new JTextField(valor);
-			this.add(textField);
-
-			referenciasATextField.put(field, textField);
-		}
-
 		JButton botonCrear = new JButton("Modificar");
 		botonCrear.addActionListener(this);
 		this.add(botonCrear);

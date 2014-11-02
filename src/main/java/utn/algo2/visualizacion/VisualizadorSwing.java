@@ -16,17 +16,6 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		this.fields = fields;
 	}
 
-	public Entidad<T> pantallaCrear() {
-		PantallaCrear<T> crear = new PantallaCrear<T>(fields);
-		return crear.getEntidad();
-	}
-
-	public Entidad<T> pantallaModificar(
-			Entidad<T> entidad) {
-		PantallaModificar<T> modificar = new PantallaModificar<T>(fields, entidad);
-		return modificar.getEntidad();
-	}
-
 	public void abrirPantallaCrear() {
 		if (pantallaCrear == null) {
 			pantallaCrear = new PantallaCrear<T>(fields);

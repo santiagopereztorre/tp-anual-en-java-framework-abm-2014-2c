@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.Hashtable;
 
+import javax.swing.BoxLayout;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import utn.algo2.core.Entidad;
@@ -19,6 +21,21 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 	
 	public Pantalla(Field[] fields) {
 		this.fields = fields;
+		
+		getContentPane().setLayout(
+				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+		for (Field field : fields) {
+			String fieldName = field.getName();
+
+			JLabel labelName = new JLabel(fieldName + " :");
+			this.add(labelName);
+			
+			JTextField textField = new JTextField();
+			this.add(textField);
+
+			referenciasATextField.put(field, textField);
+		}
 	}
 	
 	protected void configurar() {
