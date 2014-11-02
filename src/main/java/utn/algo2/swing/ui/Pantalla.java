@@ -24,6 +24,8 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 		
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		
+		this.configurar();
 
 		for (Field field : fields) {
 			String fieldName = field.getName();

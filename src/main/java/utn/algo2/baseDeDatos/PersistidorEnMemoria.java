@@ -8,7 +8,7 @@ public class PersistidorEnMemoria<T> implements Persistidor<T> {
 	private List<T> objetos = new ArrayList<T>();
 
 	public void guardar(T objeto) {
-		System.out.println(objeto); // TODO eliminar (solo para pruebas)
+		System.out.println("Guarde persona: " + objeto); // TODO eliminar (solo para pruebas)
 		this.objetos.add(objeto);
 	}
 

@@ -4,9 +4,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.Map.Entry;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
@@ -18,8 +16,6 @@ public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
 		JButton botonCrear = new JButton("Crear");
 		botonCrear.addActionListener(this);
 		this.add(botonCrear);
-
-		this.configurar();
 	}
 
 	public void borrarCampos() {
