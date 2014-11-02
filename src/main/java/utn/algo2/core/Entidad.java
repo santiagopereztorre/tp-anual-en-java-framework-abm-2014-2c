@@ -1,42 +1,46 @@
 package utn.algo2.core;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
+import java.util.Map.Entry;
 
 public class Entidad<T> {
 
 	private Class<?> unaClase;
 	private T unObjeto;
-	private Hashtable<String, String> hashConValores = new Hashtable<String, String>();
-
-	public Entidad() {
-
-	}
-
-	public Entidad(Class<?> unaClase) {
-		this.unaClase = unaClase;
-	}
+	private Hashtable<Field, String> valoresFields = new Hashtable<Field, String>();
 
 	public T crearObjeto() {
 		this.unObjeto = crearInstancia(this.unaClase);
-
-		for (Method method : this.unaClase.getMethods()) {
-			if (isSetter(method)) {
-				String nombreVariable = getNombreVariable(method);
-				String valor = this.getValor(nombreVariable);
-				try {
-					method.invoke(unObjeto, valor);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
+		
+		for (Entry<Field, String> entry : this.valoresFields.entrySet()) {
+			Method metodo = null;
+			try {
+				Class<?>[] args = new Class[1];
+				args[0] = String.class;
+				metodo = this.unaClase.getMethod("set" + capitalize(entry.getKey().getName()), args);
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			}
+			try {
+				metodo.invoke(this.unObjeto, entry.getValue());
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
-		return unObjeto;
+		return this.unObjeto;
+	}
+
+	private String capitalize(String line) {
+		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -52,47 +56,39 @@ public class Entidad<T> {
 		return objeto;
 	}
 
-	private boolean isGetClass(Method method) {
-		return method.getName().startsWith("getClass");
-	}
-
-	private boolean isGetter(Method method) {
-		return method.getName().startsWith("get");
-	}
-
-	private boolean isSetter(Method method) {
-		return method.getName().startsWith("set");
-	}
-
-	private String getNombreVariable(Method method) {
-		return method.getName().substring("set".length());
-	}
-
 	public T getObjeto() {
 		return this.unObjeto;
 	}
 
 	public void setObjeto(T unObjeto) {
 		this.unObjeto = unObjeto;
-		actualizarHashConValores();
+		actualizarHashConFields();
 	}
 
-	private void actualizarHashConValores() {
-		for (Method method : this.unaClase.getMethods()) {
-			if (isGetter(method) && !isGetClass(method)) {
-				String nombreVariable = getNombreVariable(method);
-				String valor = null;
-				try {
-					valor = (String) method.invoke(this.unObjeto);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-				this.setValor(nombreVariable, valor);
+	private void actualizarHashConFields() {
+		for (Field field : this.unaClase.getFields()) {
+			String valor = null;
+			Class<?>[] args = new Class[0];
+			Method metodo = null;
+			try {
+				metodo = this.unaClase.getMethod("get" + capitalize(field.getName()), args);
+			} catch (NoSuchMethodException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+			try {
+				valor = (String) metodo.invoke(this.unObjeto);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			this.valoresFields.put(field, valor);
 		}
 	}
 
@@ -104,23 +100,15 @@ public class Entidad<T> {
 		this.unaClase = unaClase;
 	}
 
-	public Hashtable<String, String> getHashConValores() {
-		return hashConValores;
+	public void setValor(Field aKey, String aValue) {
+		this.valoresFields.put(aKey, aValue);
 	}
 
-	public void setHashConValores(Hashtable<String, String> hashConValores) {
-		this.hashConValores = hashConValores;
-	}
-
-	public void setValor(String aKey, String aValue) {
-		this.hashConValores.put(aKey.toLowerCase(), aValue);
-	}
-
-	public String getValor(String aKey) {
-		return this.hashConValores.get(aKey.toLowerCase());
+	public String getValor(Field aKey) {
+		return this.valoresFields.get(aKey);
 	}
 
 	public boolean isEmpty() {
-		return hashConValores.isEmpty();
+		return valoresFields.isEmpty();
 	}
 }

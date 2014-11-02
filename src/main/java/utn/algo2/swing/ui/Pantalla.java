@@ -47,9 +47,13 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		synchronized (entidad) {
+//			for (Field field : fields) {
+//				JTextField textoField = referenciasATextField.get(field);
+//				entidad.setValor(field.getName(), textoField.getText());
+//			}
 			for (Field field : fields) {
 				JTextField textoField = referenciasATextField.get(field);
-				entidad.setValor(field.getName(), textoField.getText());
+				entidad.setValor(field, textoField.getText());
 			}
 			entidad.notify();
 		}
@@ -58,6 +62,8 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 	public Entidad<T> getEntidad() {
 		synchronized (entidad) {
 			try {
+//				if (entidad.isEmpty())
+//					entidad.wait();
 				if (entidad.isEmpty())
 					entidad.wait();
 			} catch (InterruptedException e) {

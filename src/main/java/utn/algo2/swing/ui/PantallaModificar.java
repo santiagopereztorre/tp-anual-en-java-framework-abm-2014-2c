@@ -24,13 +24,10 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 	
 	public void cargarCampos(Entidad<T> entidadAModificar) {
 		for(Entry<Field, JTextField> entry : referenciasATextField.entrySet()) {
-		    Field key = entry.getKey();
-		    String fieldName = key.getName();
-		    
-		    String valor = entidadAModificar.getValor(fieldName);
-			
-			JTextField value = entry.getValue();
-		    value.setText(valor);
+		    Field field = entry.getKey();
+		    JTextField campoTexto = entry.getValue();
+		    String valor = entidadAModificar.getValor(field);
+		    campoTexto.setText(valor);
 		}
 	}
 }
