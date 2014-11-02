@@ -23,8 +23,7 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 	
 	protected void configurar() {
 		this.setSize(400, 400);
-		this.setModalityType(ModalityType.APPLICATION_MODAL);
-		this.setVisible(true);
+		this.setModalityType(ModalityType.MODELESS);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -35,7 +34,6 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 			}
 			entidad.notify();
 		}
-		this.setVisible(false);
 	}
 
 	public Entidad<T> getEntidad() {

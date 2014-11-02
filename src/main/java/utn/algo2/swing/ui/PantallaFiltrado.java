@@ -1,20 +1,19 @@
 package utn.algo2.swing.ui;
 
-import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
-import java.util.Map.Entry;
+import java.util.Hashtable;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
-public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
-
-	public PantallaCrear(Field[] fields) {
-		super(fields);
-
+public class PantallaFiltrado extends JDialog {
+	
+	protected Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+	
+	public PantallaFiltrado(Field[] fields) {
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -30,17 +29,13 @@ public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
 			referenciasATextField.put(field, textField);
 		}
 
-		JButton botonCrear = new JButton("Crear");
-		botonCrear.addActionListener(this);
-		this.add(botonCrear);
-
 		this.configurar();
 	}
-
-	public void borrarCampos() {
-		for(Entry<Field, JTextField> entry : referenciasATextField.entrySet()) {
-		    JTextField value = entry.getValue();
-		    value.setText("");
-		}
+	
+	protected void configurar() {
+		this.setSize(400, 400);
+		this.setModalityType(ModalityType.APPLICATION_MODAL);
+		this.setVisible(true);
 	}
+
 }

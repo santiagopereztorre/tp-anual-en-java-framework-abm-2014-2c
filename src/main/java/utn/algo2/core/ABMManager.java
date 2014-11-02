@@ -25,12 +25,16 @@ public class ABMManager<T> {
 	 * Ejecuta el ABM Manager
 	 */
 	public void ejecutar() {
-		Entidad<T> entidadCreada = visualizador.pantallaCrear();
+		visualizador.abrirPantallaCrear();
+		Entidad<T> entidadCreada = visualizador.getCreado();
+		visualizador.cerrarPantallaCrear();
 		guardarEntidad(entidadCreada);
+
 		
 		Entidad<T> entidadAModificar = recuperarEntidad();
-		
-		Entidad<T> entidadModificada = visualizador.pantallaModificar(entidadAModificar);
+		visualizador.abrirPantallaModificar(entidadAModificar);
+		Entidad<T> entidadModificada = visualizador.getModificado();
+		visualizador.cerrarPantallaModificar();
 		guardarEntidad(entidadModificada);
 	}
 
