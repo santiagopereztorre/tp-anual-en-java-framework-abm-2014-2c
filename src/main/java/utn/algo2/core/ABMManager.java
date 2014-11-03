@@ -11,7 +11,6 @@ public class ABMManager<T> {
 	private Persistidor<T> persistidor;
 	private Visualizador<T> visualizador;
 	private Class<?> aClass;
-	private Field[] fields;
 
 	public ABMManager(Class<T> class1, Persistidor<T> persistidor,
 			Visualizador<T> visualizador) {
@@ -19,8 +18,7 @@ public class ABMManager<T> {
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
 		
-		this.fields = this.aClass.getFields();
-		this.visualizador.setFields(fields);
+		this.visualizador.setFields(this.aClass.getFields());
 	}
 
 	/**
