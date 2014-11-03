@@ -14,9 +14,7 @@ public class PruebaDeEscritorio {
 		
 		Visualizador<Persona> visualizador = new VisualizadorSwing<Persona>();
 		
-		Persona persona = new Persona();
-		
-		ABMManager<Persona> abm = new ABMManager<Persona>(persona, persistidor, visualizador);
+		ABMManager<Persona> abm = new ABMManager<Persona>(Persona.class, persistidor, visualizador);
 		
 		abm.ejecutar();	// El programa queda aca hasta qe se sale de la ventana
 	}

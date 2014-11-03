@@ -1,5 +1,6 @@
 package utn.algo2.core;
 
+import utn.algo2.Persona;
 import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.visualizacion.Visualizador;
 
@@ -12,12 +13,13 @@ public class ABMManager<T> {
 	private Class<?> aClass;
 	private Field[] fields;
 
-	public ABMManager(T objeto, Persistidor<T> persistidor,
+	public ABMManager(Class<T> class1, Persistidor<T> persistidor,
 			Visualizador<T> visualizador) {
-		this.aClass = objeto.getClass();
-		this.fields = this.aClass.getFields();
+		this.aClass = class1;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
+		
+		this.fields = this.aClass.getFields();
 		this.visualizador.setFields(fields);
 	}
 
