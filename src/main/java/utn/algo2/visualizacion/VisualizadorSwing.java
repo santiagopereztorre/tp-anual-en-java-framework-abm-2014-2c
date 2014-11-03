@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import utn.algo2.core.Entidad;
 import utn.algo2.swing.ui.PantallaCrear;
+import utn.algo2.swing.ui.PantallaFiltrado;
 import utn.algo2.swing.ui.PantallaModificar;
 
 public class VisualizadorSwing<T> implements Visualizador<T> {
@@ -11,6 +12,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	private Field[] fields;
 	private PantallaCrear<T> pantallaCrear = null;
 	private PantallaModificar<T> pantallaModificar = null;
+	private PantallaFiltrado<T> pantallaFiltrado = null;
 
 	public void setFields(Field[] fields) {
 		this.fields = fields;
@@ -47,6 +49,22 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 
 	public Entidad<T> getModificado() {
 		return pantallaModificar.getEntidad();
+	}
+	
+	public void abrirPantallaFiltrado() {
+		if (pantallaFiltrado == null) {
+			pantallaFiltrado = new PantallaFiltrado<T>(fields);
+		}
+		pantallaFiltrado.setVisible(true);
+		
+	}
+
+	public void cerrarPantallaFiltrado() {
+		pantallaFiltrado.setVisible(false);
+	}
+
+	public Entidad<T> getFiltrado() {
+		return pantallaFiltrado.getEntidad();
 	}
 
 }

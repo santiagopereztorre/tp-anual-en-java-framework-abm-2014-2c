@@ -13,4 +13,7 @@ public interface Visualizador<T> {
 	public void abrirPantallaModificar(Entidad<T> entidadAModificar);
 	public void cerrarPantallaModificar();
 	public Entidad<T> getModificado();
+	public void abrirPantallaFiltrado();
+	public void cerrarPantallaFiltrado();
+	public Entidad<T> getFiltrado();
 }

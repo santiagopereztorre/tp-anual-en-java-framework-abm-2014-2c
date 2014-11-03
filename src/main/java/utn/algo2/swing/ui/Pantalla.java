@@ -1,5 +1,6 @@
 package utn.algo2.swing.ui;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
@@ -23,7 +24,7 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 		this.fields = fields;
 		
 		getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+				new GridLayout(0,2));
 		
 		this.configurar();
 

@@ -1,41 +1,48 @@
 package utn.algo2.swing.ui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.lang.reflect.Field;
 import java.util.Hashtable;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import utn.algo2.core.Entidad;
+
 @SuppressWarnings("serial")
-public class PantallaFiltrado extends JDialog {
-	
-	protected Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+public class PantallaFiltrado<T> extends JDialog {
+
+	private ModeloTabla modeloTabla = null;
 	
 	public PantallaFiltrado(Field[] fields) {
 		getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+				new GridLayout(1,0));
 
-		for (Field field : fields) {
-			String fieldName = field.getName();
+		this.modeloTabla = new ModeloTabla();
+		modeloTabla.setColumnNames(fields);
 
-			JLabel labelName = new JLabel(fieldName + " :");
-			this.add(labelName);
+		JTable table = new JTable(modeloTabla);
 
-			JTextField textField = new JTextField();
-			this.add(textField);
+		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		table.setFillsViewportHeight(true);
 
-			referenciasATextField.put(field, textField);
-		}
+		// Create the scroll pane and add the table to it.
+		JScrollPane scrollPane = new JScrollPane(table);
 
-		this.configurar();
+		// Add the scroll pane to this panel.
+		add(scrollPane);
+		
+		setSize(400, 400);
 	}
-	
-	protected void configurar() {
-		this.setSize(400, 400);
-		this.setModalityType(ModalityType.APPLICATION_MODAL);
-		this.setVisible(true);
+
+	public Entidad<T> getEntidad() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
