@@ -1,10 +1,8 @@
 package utn.algo2.core;
 
-import utn.algo2.Persona;
 import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.visualizacion.Visualizador;
 
-import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +55,6 @@ public class ABMManager<T> {
 		return entidad;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<Entidad<T>>recuperarTodasEntidades() {
 		List<T> objetos = persistidor.obtenerTodo();
 		List<Entidad<T>> entidades = new ArrayList<Entidad<T>>();

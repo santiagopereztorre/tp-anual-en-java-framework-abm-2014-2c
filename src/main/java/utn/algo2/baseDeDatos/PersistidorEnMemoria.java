@@ -3,8 +3,6 @@ package utn.algo2.baseDeDatos;
 import java.util.ArrayList;
 import java.util.List;
 
-import utn.algo2.core.Entidad;
-
 public class PersistidorEnMemoria<T> implements Persistidor<T> {
 
 	private List<T> objetos = new ArrayList<T>();

@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.Hashtable;
 
-import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;

@@ -5,8 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import utn.algo2.core.Entidad;
@@ -16,7 +14,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 
 	private String[] columnNames = {};
 	private Object[][] data = {};
-	
+
 	public ModeloTabla() {
 	}
 
@@ -76,42 +74,21 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		this.columnNames = columnNames;
 		fireTableStructureChanged();
 	}
-
+	
 	public void setEntidades(List<Entidad<T>> entidades) {
 		Class<?> clase = entidades.get(0).getClase();
 		Field[] atributos = clase.getFields();
 		Integer cantidadAtributos = atributos.length;
 		Integer cantidadEntidades = entidades.size();
 		Object[][] data = new Object[cantidadEntidades][cantidadAtributos];
-		for (int i = 0; i < cantidadEntidades; i ++) {
+		for (int i = 0; i < cantidadEntidades; i++) {
 			Entidad<T> entidad = entidades.get(i);
 			T objeto = entidad.crearObjeto();
 			Object[] arrayDeAtributos = new Object[cantidadAtributos];
-			for (int j = 0; j < cantidadAtributos; j ++) {
-				String valor = null;
+			for (int j = 0; j < cantidadAtributos; j++) {
 				String nombreDelAtributo = atributos[j].getName();
-				Method metodo = null;
-				Class<?>[] args = new Class[0];
-				try {
-					metodo = clase.getMethod("get" + capitalize(nombreDelAtributo), args);
-				} catch (NoSuchMethodException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SecurityException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				try {
-					valor = (String) metodo.invoke(objeto);
-					System.out.println(valor);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-				arrayDeAtributos[j] = valor;
+				Method metodo = obtenerGetter(clase, nombreDelAtributo);
+				arrayDeAtributos[j] = obtenerValor(objeto, metodo);
 			}
 			data[i] = arrayDeAtributos;
 		}
@@ -119,20 +96,38 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
+	private String obtenerValor(T objeto, Method metodo) {
+		String valor = null;
+		try {
+			valor = (String) metodo.invoke(objeto);
+			System.out.println(valor);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return valor;
+	}
+
+	private Method obtenerGetter(Class<?> clase, String nombreDelAtributo) {
+		Method metodo = null;
+		Class<?>[] args = new Class[0];
+		try {
+			metodo = clase.getMethod("get" + capitalize(nombreDelAtributo),
+					args);
+		} catch (NoSuchMethodException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return metodo;
+	}
+
 	private String capitalize(String line) {
 		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
 	}
-	
-	public void fireTableChanged(TableModelEvent e) {
-        // Guaranteed to return a non-null array
-        Object[] listeners = listenerList.getListenerList();
-        // Process the listeners last to first, notifying
-        // those that are interested in this event
-        for (int i = listeners.length-2; i>=0; i-=2) {
-            if (listeners[i]==TableModelListener.class) {
-                ((TableModelListener)listeners[i+1]).tableChanged(e);
-            }
-        }
-    }
-
 }

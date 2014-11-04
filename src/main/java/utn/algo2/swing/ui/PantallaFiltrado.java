@@ -3,15 +3,11 @@ package utn.algo2.swing.ui;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.lang.reflect.Field;
-import java.util.Hashtable;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import utn.algo2.core.Entidad;
 
@@ -25,7 +21,7 @@ public class PantallaFiltrado<T> extends JDialog {
 				new GridLayout(1,0));
 
 		this.modeloTabla = new ModeloTabla<T>();
-
+		
 		JTable table = new JTable(modeloTabla);
 		modeloTabla.setColumnNames(fields);
 
