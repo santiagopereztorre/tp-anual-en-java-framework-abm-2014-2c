@@ -1,6 +1,7 @@
 package utn.algo2.visualizacion;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import utn.algo2.core.Entidad;
 
@@ -13,7 +14,7 @@ public interface Visualizador<T> {
 	public void abrirPantallaModificar(Entidad<T> entidadAModificar);
 	public void cerrarPantallaModificar();
 	public Entidad<T> getModificado();
-	public void abrirPantallaFiltrado();
+	public void abrirPantallaFiltrado(List<Entidad<T>> entidades);
 	public void cerrarPantallaFiltrado();
 	public Entidad<T> getFiltrado();
 }

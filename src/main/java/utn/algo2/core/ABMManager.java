@@ -5,6 +5,8 @@ import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.visualizacion.Visualizador;
 
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ABMManager<T> {
 
@@ -25,19 +27,20 @@ public class ABMManager<T> {
 	 * Ejecuta el ABM Manager
 	 */
 	public void ejecutar() {
-//		visualizador.abrirPantallaCrear();
-//		Entidad<T> entidadCreada = visualizador.getCreado();
-//		visualizador.cerrarPantallaCrear();
-//		guardarEntidad(entidadCreada);
-//
-//		
-//		Entidad<T> entidadAModificar = recuperarEntidad();
-//		visualizador.abrirPantallaModificar(entidadAModificar);
-//		Entidad<T> entidadModificada = visualizador.getModificado();
-//		visualizador.cerrarPantallaModificar();
-//		guardarEntidad(entidadModificada);
+		visualizador.abrirPantallaCrear();
+		Entidad<T> entidadCreada = visualizador.getCreado();
+		visualizador.cerrarPantallaCrear();
+		guardarEntidad(entidadCreada);
+
 		
-		visualizador.abrirPantallaFiltrado();
+		Entidad<T> entidadAModificar = recuperarEntidad();
+		visualizador.abrirPantallaModificar(entidadAModificar);
+		Entidad<T> entidadModificada = visualizador.getModificado();
+		visualizador.cerrarPantallaModificar();
+		guardarEntidad(entidadModificada);
+		
+		List<Entidad<T>> entidades = recuperarTodasEntidades();
+		visualizador.abrirPantallaFiltrado(entidades);
 	}
 
 	private void guardarEntidad(Entidad<T> entidad) {
@@ -52,5 +55,18 @@ public class ABMManager<T> {
 		T objeto = persistidor.obtener();
 		entidad.setObjeto(objeto);
 		return entidad;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Entidad<T>>recuperarTodasEntidades() {
+		List<T> objetos = persistidor.obtenerTodo();
+		List<Entidad<T>> entidades = new ArrayList<Entidad<T>>();
+		for (T objeto : objetos) {
+			Entidad<T> entidad = new Entidad<T>();
+			entidad.setClase(this.aClass);
+			entidad.setObjeto(objeto);
+			entidades.add(entidad);
+		}
+		return entidades;
 	}
 }

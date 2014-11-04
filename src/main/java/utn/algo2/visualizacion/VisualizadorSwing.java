@@ -1,6 +1,7 @@
 package utn.algo2.visualizacion;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import utn.algo2.core.Entidad;
 import utn.algo2.swing.ui.PantallaCrear;
@@ -51,10 +52,11 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		return pantallaModificar.getEntidad();
 	}
 	
-	public void abrirPantallaFiltrado() {
+	public void abrirPantallaFiltrado(List<Entidad<T>> entidades) {
 		if (pantallaFiltrado == null) {
 			pantallaFiltrado = new PantallaFiltrado<T>(fields);
 		}
+		pantallaFiltrado.cargarEntidades(entidades);
 		pantallaFiltrado.setVisible(true);
 		
 	}

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.lang.reflect.Field;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
@@ -17,16 +18,16 @@ import utn.algo2.core.Entidad;
 @SuppressWarnings("serial")
 public class PantallaFiltrado<T> extends JDialog {
 
-	private ModeloTabla modeloTabla = null;
+	private ModeloTabla<T> modeloTabla = null;
 	
 	public PantallaFiltrado(Field[] fields) {
 		getContentPane().setLayout(
 				new GridLayout(1,0));
 
-		this.modeloTabla = new ModeloTabla();
-		modeloTabla.setColumnNames(fields);
+		this.modeloTabla = new ModeloTabla<T>();
 
 		JTable table = new JTable(modeloTabla);
+		modeloTabla.setColumnNames(fields);
 
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
@@ -43,6 +44,10 @@ public class PantallaFiltrado<T> extends JDialog {
 	public Entidad<T> getEntidad() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void cargarEntidades(List<Entidad<T>> entidades) {
+		modeloTabla.setEntidades(entidades);
 	}
 
 }
