@@ -9,34 +9,43 @@ import java.util.Map.Entry;
 public class Entidad<T> {
 
 	private Class<?> unaClase;
-	private T unObjeto;
 	private Hashtable<Field, String> valoresFields = new Hashtable<Field, String>();
 
 	public T crearObjeto() {
-		this.unObjeto = crearInstancia(this.unaClase);
+		T unObjeto = crearInstancia(this.unaClase);
 		
 		for (Entry<Field, String> entry : this.valoresFields.entrySet()) {
-			Method metodo = null;
-			try {
-				Class<?>[] args = new Class[1];
-				args[0] = String.class;
-				metodo = this.unaClase.getMethod("set" + capitalize(entry.getKey().getName()), args);
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
-			try {
-				metodo.invoke(this.unObjeto, entry.getValue());
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
+			Method metodo = obtenerSetter(entry.getKey());
+			settearValor(unObjeto, metodo, entry.getValue());
 		}
-		return this.unObjeto;
+		
+		return unObjeto;
+	}
+
+	private void settearValor(T objeto, Method metodo, String valor) {
+		try {
+			metodo.invoke(objeto, valor);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Method obtenerSetter(Field field) {
+		Method metodo = null;
+		try {
+			Class<?>[] args = new Class[1];
+			args[0] = String.class;
+			metodo = this.unaClase.getMethod("set" + capitalize(field.getName()), args);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return metodo;
 	}
 
 	private String capitalize(String line) {
@@ -56,16 +65,7 @@ public class Entidad<T> {
 		return objeto;
 	}
 
-	public T getObjeto() {
-		return this.unObjeto;
-	}
-
-	public void setObjeto(T unObjeto) {
-		this.unObjeto = unObjeto;
-		actualizarHashConFields();
-	}
-
-	private void actualizarHashConFields() {
+	private void actualizarHashConFields(T unObjeto) {
 		for (Field field : this.unaClase.getFields()) {
 			String valor = null;
 			Class<?>[] args = new Class[0];
@@ -80,7 +80,7 @@ public class Entidad<T> {
 				e1.printStackTrace();
 			}
 			try {
-				valor = (String) metodo.invoke(this.unObjeto);
+				valor = (String) metodo.invoke(unObjeto);
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
@@ -91,6 +91,12 @@ public class Entidad<T> {
 			this.valoresFields.put(field, valor);
 		}
 	}
+	
+	/* Setters y Getters */
+
+	public void setObjeto(T unObjeto) {
+		actualizarHashConFields(unObjeto);
+	}
 
 	public Class<?> getClase() {
 		return unaClase;
@@ -100,7 +106,7 @@ public class Entidad<T> {
 		this.unaClase = unaClase;
 	}
 
-	public void setValor(Field aKey, String aValue) {
+	public void putValor(Field aKey, String aValue) {
 		this.valoresFields.put(aKey, aValue);
 	}
 

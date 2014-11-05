@@ -53,7 +53,7 @@ public class Pantalla<T> extends JDialog implements ActionListener{
 //			}
 			for (Field field : fields) {
 				JTextField textoField = referenciasATextField.get(field);
-				entidad.setValor(field, textoField.getText());
+				entidad.putValor(field, textoField.getText());
 			}
 			entidad.notify();
 		}
