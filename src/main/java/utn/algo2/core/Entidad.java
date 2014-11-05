@@ -1,34 +1,27 @@
 package utn.algo2.core;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Hashtable;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Entidad<T> {
 
 	private Class<?> unaClase;
-	private Hashtable<Field, String> valoresFields = new Hashtable<Field, String>();
+	private List<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
 	
 	public T crearObjeto() {
-		T unObjeto = crearInstancia(this.unaClase);
-		for (Entry<Field, String> entry : this.valoresFields.entrySet()) {
-			Method metodo = obtenerSetter(entry.getKey());
-			settearValor(unObjeto, metodo, entry.getValue());
+		T otroObjeto = crearInstancia(this.unaClase);
+		for (Atributo<T> atributo : this.atributos) {
+			atributo.setIn(otroObjeto);
 		}
-		return unObjeto;
-	}
-
-	private String capitalize(String line) {
-		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
+		return otroObjeto;
 	}
 
 	private void actualizarHashConFields(T unObjeto) {
-		for (Field field : this.unaClase.getFields()) {
-			Method metodo = obtenerGetter(field, this.unaClase);
-			String valor = gettearValor(unObjeto, metodo);
-			this.valoresFields.put(field, valor);
+		for (Field field: this.unaClase.getFields()) {
+			Atributo<T> atributo = new Atributo<T>(field, this.unaClase);
+			atributo.getValorFrom(unObjeto);
+			this.atributos.add(atributo);
 		}
 	}
 	
@@ -47,58 +40,6 @@ public class Entidad<T> {
 		return objeto;
 	}
 	
-	private void settearValor(T objeto, Method metodo, String valor) {
-		try {
-			metodo.invoke(objeto, valor);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private String gettearValor(T unObjeto, Method metodo) {
-		String valor = null;
-		try {
-			valor = (String) metodo.invoke(unObjeto);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return valor;
-	}
-
-	private Method obtenerSetter(Field field) {
-		Method metodo = null;
-		try {
-			Class<?>[] args = new Class[1];
-			args[0] = String.class;
-			metodo = this.unaClase.getMethod("set" + capitalize(field.getName()), args);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		}
-		return metodo;
-	}
-	
-	private Method obtenerGetter(Field field, Class<?> unaClase) {
-		Method metodo = null;
-		try {
-			metodo = unaClase.getMethod("get" + capitalize(field.getName()), new Class[0]);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		}
-		return metodo;
-	}
-	
 	/* Setters y Getters */
 
 	public void setObjeto(T unObjeto) {
@@ -111,17 +52,30 @@ public class Entidad<T> {
 
 	public void setClase(Class<?> unaClase) {
 		this.unaClase = unaClase;
+		this.atributos.forEach((Atributo<T> atributo) -> atributo.setClase(unaClase));
 	}
 
 	public void putValor(Field aKey, String aValue) {
-		this.valoresFields.put(aKey, aValue);
+		Atributo<T> atributo = new Atributo<T>(aKey, aValue, this.unaClase);
+		addIfNotExists(atributo);
+	}
+
+	private void addIfNotExists(Atributo<T> atributo) {
+		if (this.atributos.contains(atributo)) {
+			int index = this.atributos.indexOf(atributo);
+			this.atributos.set(index, atributo);
+		} else {
+			this.atributos.add(atributo);
+		}
 	}
 
 	public String getValor(Field aKey) {
-		return this.valoresFields.get(aKey);
+		Atributo<T> atributoBuscado = new Atributo<T>(aKey, "");
+		int index = this.atributos.indexOf(atributoBuscado);
+		return this.atributos.get(index).getValor();
 	}
 
 	public boolean isEmpty() {
-		return valoresFields.isEmpty();
+		return this.atributos.isEmpty();
 	}
 }

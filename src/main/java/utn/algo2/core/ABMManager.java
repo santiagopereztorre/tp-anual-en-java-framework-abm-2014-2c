@@ -17,7 +17,6 @@ public class ABMManager<T> {
 		this.aClass = class1;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
-		
 		this.visualizador.setFields(this.aClass.getFields());
 	}
 
