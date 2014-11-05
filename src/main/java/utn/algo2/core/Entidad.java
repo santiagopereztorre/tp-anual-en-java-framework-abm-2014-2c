@@ -10,18 +10,43 @@ public class Entidad<T> {
 
 	private Class<?> unaClase;
 	private Hashtable<Field, String> valoresFields = new Hashtable<Field, String>();
-
+	
 	public T crearObjeto() {
 		T unObjeto = crearInstancia(this.unaClase);
-		
 		for (Entry<Field, String> entry : this.valoresFields.entrySet()) {
 			Method metodo = obtenerSetter(entry.getKey());
 			settearValor(unObjeto, metodo, entry.getValue());
 		}
-		
 		return unObjeto;
 	}
 
+	private String capitalize(String line) {
+		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
+	}
+
+	private void actualizarHashConFields(T unObjeto) {
+		for (Field field : this.unaClase.getFields()) {
+			Method metodo = obtenerGetter(field, this.unaClase);
+			String valor = gettearValor(unObjeto, metodo);
+			this.valoresFields.put(field, valor);
+		}
+	}
+	
+	/* Reflection */
+	
+	@SuppressWarnings("unchecked")
+	private T crearInstancia(Class<?> unaClase) {
+		T objeto = null;
+		try {
+			objeto = (T) unaClase.newInstance();
+		} catch (InstantiationException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
+		return objeto;
+	}
+	
 	private void settearValor(T objeto, Method metodo, String valor) {
 		try {
 			metodo.invoke(objeto, valor);
@@ -72,31 +97,6 @@ public class Entidad<T> {
 			e.printStackTrace();
 		}
 		return metodo;
-	}
-
-	private String capitalize(String line) {
-		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
-	}
-
-	@SuppressWarnings("unchecked")
-	private T crearInstancia(Class<?> unaClase) {
-		T objeto = null;
-		try {
-			objeto = (T) unaClase.newInstance();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		}
-		return objeto;
-	}
-
-	private void actualizarHashConFields(T unObjeto) {
-		for (Field field : this.unaClase.getFields()) {
-			Method metodo = obtenerGetter(field, this.unaClase);
-			String valor = gettearValor(unObjeto, metodo);
-			this.valoresFields.put(field, valor);
-		}
 	}
 	
 	/* Setters y Getters */
