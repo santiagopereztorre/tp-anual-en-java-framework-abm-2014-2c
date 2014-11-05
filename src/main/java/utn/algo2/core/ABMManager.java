@@ -10,14 +10,14 @@ public class ABMManager<T> {
 
 	private Persistidor<T> persistidor;
 	private Visualizador<T> visualizador;
-	private Class<?> aClass;
+	private Class<?> clase;
 
-	public ABMManager(Class<T> class1, Persistidor<T> persistidor,
+	public ABMManager(Class<T> clase, Persistidor<T> persistidor,
 			Visualizador<T> visualizador) {
-		this.aClass = class1;
+		this.clase = clase;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
-		this.visualizador.setFields(this.aClass.getFields());
+		this.visualizador.setFields(this.clase.getFields());
 	}
 
 	/**
@@ -28,7 +28,6 @@ public class ABMManager<T> {
 		Entidad<T> entidadCreada = visualizador.getCreado();
 		visualizador.cerrarPantallaCrear();
 		guardarEntidad(entidadCreada);
-
 		
 		Entidad<T> entidadAModificar = recuperarEntidad();
 		visualizador.abrirPantallaModificar(entidadAModificar);
@@ -41,15 +40,15 @@ public class ABMManager<T> {
 	}
 
 	private void guardarEntidad(Entidad<T> entidad) {
-		entidad.setClase(this.aClass);
+		entidad.setClase(this.clase);
 		T objeto = entidad.crearObjeto();
 		this.persistidor.guardar(objeto);
 	}
 	
 	private Entidad<T> recuperarEntidad() {
-		Entidad<T> entidad = new Entidad<T>();
-		entidad.setClase(this.aClass);
 		T objeto = persistidor.obtener();
+		Entidad<T> entidad = new Entidad<T>();
+		entidad.setClase(this.clase);
 		entidad.setObjeto(objeto);
 		return entidad;
 	}
@@ -59,7 +58,7 @@ public class ABMManager<T> {
 		List<Entidad<T>> entidades = new ArrayList<Entidad<T>>();
 		for (T objeto : objetos) {
 			Entidad<T> entidad = new Entidad<T>();
-			entidad.setClase(this.aClass);
+			entidad.setClase(this.clase);
 			entidad.setObjeto(objeto);
 			entidades.add(entidad);
 		}

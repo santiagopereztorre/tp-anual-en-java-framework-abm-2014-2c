@@ -6,20 +6,20 @@ import java.util.List;
 
 public class Entidad<T> {
 
-	private Class<?> unaClase;
+	private Class<?> clase;
 	private List<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
 	
+	/* Interfaz */
+	
 	public T crearObjeto() {
-		T otroObjeto = crearInstancia(this.unaClase);
-		for (Atributo<T> atributo : this.atributos) {
-			atributo.setIn(otroObjeto);
-		}
-		return otroObjeto;
+		T objeto = crearInstancia(this.clase);
+		atributos.forEach((Atributo<T> atributo) -> atributo.setIn(objeto));
+		return objeto;
 	}
 
-	private void actualizarHashConFields(T unObjeto) {
-		for (Field field: this.unaClase.getFields()) {
-			Atributo<T> atributo = new Atributo<T>(field, this.unaClase);
+	private void actualizarAtributosFrom(T unObjeto) {
+		for (Field field: this.clase.getFields()) {
+			Atributo<T> atributo = new Atributo<T>(field, this.clase);
 			atributo.getValorFrom(unObjeto);
 			this.atributos.add(atributo);
 		}
@@ -43,22 +43,34 @@ public class Entidad<T> {
 	/* Setters y Getters */
 
 	public void setObjeto(T unObjeto) {
-		actualizarHashConFields(unObjeto);
+		actualizarAtributosFrom(unObjeto);
 	}
 
 	public Class<?> getClase() {
-		return unaClase;
+		return clase;
 	}
 
 	public void setClase(Class<?> unaClase) {
-		this.unaClase = unaClase;
+		this.clase = unaClase;
 		this.atributos.forEach((Atributo<T> atributo) -> atributo.setClase(unaClase));
 	}
 
-	public void putValor(Field aKey, String aValue) {
-		Atributo<T> atributo = new Atributo<T>(aKey, aValue, this.unaClase);
+	public void putValor(Field unField, String unValor) {
+		Atributo<T> atributo = new Atributo<T>(unField, unValor, this.clase);
 		addIfNotExists(atributo);
 	}
+
+	public String getValor(Field unField) {
+		Atributo<T> atributoBuscado = new Atributo<T>(unField);
+		int index = this.atributos.indexOf(atributoBuscado);
+		return this.atributos.get(index).getValor();
+	}
+
+	public boolean isEmpty() {
+		return this.atributos.isEmpty();
+	}
+	
+	/* Complementarios */
 
 	private void addIfNotExists(Atributo<T> atributo) {
 		if (this.atributos.contains(atributo)) {
@@ -67,15 +79,5 @@ public class Entidad<T> {
 		} else {
 			this.atributos.add(atributo);
 		}
-	}
-
-	public String getValor(Field aKey) {
-		Atributo<T> atributoBuscado = new Atributo<T>(aKey, "");
-		int index = this.atributos.indexOf(atributoBuscado);
-		return this.atributos.get(index).getValor();
-	}
-
-	public boolean isEmpty() {
-		return this.atributos.isEmpty();
 	}
 }

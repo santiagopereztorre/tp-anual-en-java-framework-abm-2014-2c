@@ -10,6 +10,10 @@ public class Atributo<T> {
 	private String valor;
 	private Class<?> clase;
 
+	public Atributo(Field aKey) {
+		this.field = aKey;
+	}
+
 	public Atributo(Field aKey, Class<?> unaClase) {
 		this.field = aKey;
 		this.clase = unaClase;
