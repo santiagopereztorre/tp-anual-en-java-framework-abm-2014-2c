@@ -17,4 +17,6 @@ public interface Visualizador<T> {
 	public void abrirPantallaFiltrado(List<Entidad<T>> entidades);
 	public void cerrarPantallaFiltrado();
 	public Entidad<T> getFiltrado();
+	public void onModificar(Runnable modificacion);
+	public void onModificarFiltrado(Runnable modificacion);
 }

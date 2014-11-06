@@ -24,25 +24,53 @@ public class ABMManager<T> {
 	 * Ejecuta el ABM Manager
 	 */
 	public void ejecutar() {
+		
 		visualizador.abrirPantallaCrear();
 		Entidad<T> entidadCreada = visualizador.getCreado();
 		visualizador.cerrarPantallaCrear();
 		guardarEntidad(entidadCreada);
-		
-		Entidad<T> entidadAModificar = recuperarEntidad();
-		visualizador.abrirPantallaModificar(entidadAModificar);
-		Entidad<T> entidadModificada = visualizador.getModificado();
-		visualizador.cerrarPantallaModificar();
-		guardarEntidad(entidadModificada);
+
+		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
+		Runnable modificacion = () -> callbackModificacion();
 		
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
+		visualizador.onModificarFiltrado(modificacionFiltrado);
+		visualizador.onModificar(modificacion);
 		visualizador.abrirPantallaFiltrado(entidades);
-		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
-		visualizador.cerrarPantallaFiltrado();
-		visualizador.abrirPantallaModificar(entidadFiltrada);
-		entidadModificada = visualizador.getModificado();
-		visualizador.cerrarPantallaModificar();
+		
+		
+		
+		
+//		visualizador.abrirPantallaCrear();
+//		Entidad<T> entidadCreada = visualizador.getCreado();
+//		visualizador.cerrarPantallaCrear();
+//		guardarEntidad(entidadCreada);
+//		
+//		Entidad<T> entidadAModificar = recuperarEntidad();
+//		visualizador.abrirPantallaModificar(entidadAModificar);
+//		Entidad<T> entidadModificada = visualizador.getModificado();
+//		visualizador.cerrarPantallaModificar();
+//		guardarEntidad(entidadModificada);
+//		
+//		List<Entidad<T>> entidades = recuperarTodasEntidades();
+//		visualizador.abrirPantallaFiltrado(entidades);
+//		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
+//		visualizador.cerrarPantallaFiltrado();
+//		visualizador.abrirPantallaModificar(entidadFiltrada);
+//		entidadModificada = visualizador.getModificado();
+//		visualizador.cerrarPantallaModificar();
+//		guardarEntidad(entidadModificada);
+	}
+
+	private void callbackModificacion() {
+		Entidad<T> entidadModificada = visualizador.getModificado();
 		guardarEntidad(entidadModificada);
+		visualizador.cerrarPantallaModificar();
+	}
+
+	private void callbackModificacionFiltrado() {
+		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
+		visualizador.abrirPantallaModificar(entidadFiltrada);
 	}
 
 	private void guardarEntidad(Entidad<T> entidad) {

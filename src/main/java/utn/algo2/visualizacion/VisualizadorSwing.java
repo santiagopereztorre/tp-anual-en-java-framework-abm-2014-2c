@@ -43,7 +43,6 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		pantallaModificar.inicializar();
 		pantallaModificar.cargarCampos(entidadAModificar);
 		pantallaModificar.setVisible(true);
-		
 	}
 
 	public void cerrarPantallaModificar() {
@@ -69,6 +68,23 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 
 	public Entidad<T> getFiltrado() {
 		return pantallaFiltrado.getEntidad();
+	}
+
+	@Override
+	public void onModificar(Runnable modificacion) {
+		if (pantallaModificar == null) {
+			pantallaModificar = new PantallaModificar<T>(fields);
+		}
+		pantallaModificar.onModificar(modificacion);
+	}
+
+	@Override
+	public void onModificarFiltrado(Runnable modificacion) {
+		
+		if (pantallaFiltrado == null) {
+			pantallaFiltrado = new PantallaFiltrado<T>(fields);
+		}
+		pantallaFiltrado.onModificar(modificacion);
 	}
 
 }

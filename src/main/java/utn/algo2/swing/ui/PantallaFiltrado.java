@@ -33,6 +33,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	private JTable table;
 	private final Lock lock = new ReentrantLock();
 	private final Condition notEmpty = lock.newCondition();
+	private Runnable modificacion;
 
 	private enum Actions {
 		FILTRAR, MODIFICAR, CREAR,
@@ -88,15 +89,15 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	}
 
 	public Entidad<T> getEntidad() {
-		lock.lock();
-		try {
-			if (entidadAModificar.isEmpty())
-				notEmpty.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			lock.unlock();
-		}
+//		lock.lock();
+//		try {
+//			if (entidadAModificar.isEmpty())
+//				notEmpty.await();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} finally {
+//			lock.unlock();
+//		}
 		return entidadAModificar;
 	}
 
@@ -120,13 +121,15 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		if (row == -1) {
 			return;
 		}
-		lock.lock();
-		try {
-			this.entidadAModificar = modeloTabla.getValueAt(row);
-			notEmpty.signal();;
-		} finally {
-			lock.unlock();
-		}
+//		lock.lock();
+//		try {
+//			this.entidadAModificar = modeloTabla.getValueAt(row);
+//			notEmpty.signal();;
+//		} finally {
+//			lock.unlock();
+//		}
+		entidadAModificar = modeloTabla.getValueAt(row);
+		modificacion.run();
 	}
 
 	private void filtrar() {
@@ -144,6 +147,10 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 			}
 		}
 		modeloTabla.setEntidades(entidadesFiltradas);
+	}
+
+	public void onModificar(Runnable modificacion) {
+		this.modificacion = modificacion;
 	}
 
 }

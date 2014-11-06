@@ -23,10 +23,11 @@ public class Pantalla<T> extends JDialog implements ActionListener {
 	protected Entidad<T> entidad;
 	final Lock lock = new ReentrantLock();
 	final Condition notFull = lock.newCondition();
+	final Condition notComplete = lock.newCondition();
 
 	public Pantalla(Field[] fields) {
 		this.fields = fields;
-		
+
 		getContentPane().setLayout(new GridLayout(0, 2));
 
 		for (Field field : fields) {
@@ -46,6 +47,7 @@ public class Pantalla<T> extends JDialog implements ActionListener {
 		this.setSize(400, 400);
 		this.setModalityType(ModalityType.MODELESS);
 		this.entidad = new Entidad<T>();
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
