@@ -14,9 +14,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 
 	private String[] columnNames = {};
 	private Object[][] data = {};
-
-	public ModeloTabla() {
-	}
+	private Class<?> clase;
 
 	public int getColumnCount() {
 		return columnNames.length;
@@ -82,7 +80,8 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			return;
 		}
 		
-		Class<?> clase = entidades.get(0).getClase();
+		clase = entidades.get(0).getClase();
+		
 		Field[] atributos = clase.getFields();
 		Integer cantidadAtributos = atributos.length;
 		Integer cantidadEntidades = entidades.size();
@@ -132,5 +131,27 @@ public class ModeloTabla<T> extends AbstractTableModel {
 
 	private String capitalize(String line) {
 		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
+	}
+
+	public Entidad<T> getValueAt(int row) {
+		Object[] objeto = data[row];
+		Entidad<T> entidad = new Entidad<T>();
+		int totalColumnas = getColumnCount();
+		for (int col = 0; col < totalColumnas; col ++ ) {
+			String nombreColumna = getColumnName(col);
+			Field field = null;
+			try {
+				field = clase.getField(nombreColumna);
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String valor = (String) objeto[col];
+			entidad.putValor(field, valor);
+		}
+		return entidad;
 	}
 }

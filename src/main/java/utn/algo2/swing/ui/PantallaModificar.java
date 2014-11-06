@@ -18,8 +18,6 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 		JButton botonCrear = new JButton("Modificar");
 		botonCrear.addActionListener(this);
 		this.add(botonCrear);
-
-		this.configurar();
 	}
 	
 	public void cargarCampos(Entidad<T> entidadAModificar) {

@@ -2,12 +2,16 @@ package utn.algo2.swing.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -23,14 +27,22 @@ import utn.algo2.core.Entidad;
 public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	private ModeloTabla<T> modeloTabla = null;
-	protected Field[] fields;
+	private Field[] fields;
 	private List<Entidad<T>> entidades;
-	protected Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+	private Entidad<T> entidadAModificar = new Entidad<T>();
+	private JTable table;
+	private final Lock lock = new ReentrantLock();
+	private final Condition notEmpty = lock.newCondition();
+
+	private enum Actions {
+		FILTRAR, MODIFICAR, CREAR,
+	}
 
 	public PantallaFiltrado(Field[] fields) {
 		this.fields = fields;
-		
-		getContentPane().setLayout(new GridLayout(2, 0));
+
+		getContentPane().setLayout(new GridLayout(0, 2));
 
 		for (Field field : fields) {
 			String fieldName = field.getName();
@@ -45,18 +57,25 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		}
 
 		agregarTabla(fields);
-		
-		JButton botonCrear = new JButton("Buscar");
-		botonCrear.addActionListener(this);
-		this.add(botonCrear);
+
+		JButton botonFiltrar = new JButton("Filtrar");
+		botonFiltrar.setActionCommand(Actions.FILTRAR.name());
+		botonFiltrar.addActionListener(this);
+		this.add(botonFiltrar);
+
+		JButton botonModificar = new JButton("Modificar");
+		botonModificar.setActionCommand(Actions.MODIFICAR.name());
+		botonModificar.addActionListener(this);
+		this.add(botonModificar);
 
 		setSize(400, 400);
+		this.setModalityType(ModalityType.MODELESS);
 	}
 
 	private void agregarTabla(Field[] fields) {
 		this.modeloTabla = new ModeloTabla<T>();
 
-		JTable table = new JTable(modeloTabla);
+		this.table = new JTable(modeloTabla);
 		modeloTabla.setColumnNames(fields);
 
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
@@ -70,7 +89,18 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	}
 
 	public Entidad<T> getEntidad() {
-		return null;
+		lock.lock();
+		try {
+			if (entidadAModificar.isEmpty())
+				notEmpty.await();
+			notEmpty.signal();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+		return entidadAModificar;
 	}
 
 	public void cargarEntidades(List<Entidad<T>> entidades) {
@@ -80,17 +110,44 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == Actions.FILTRAR.name()) {
+			filtrar();
+		}
+		if (e.getActionCommand() == Actions.MODIFICAR.name()) {
+			modificar();
+		}
+
+	}
+
+	private void modificar() {
+		int row = table.getSelectedRow();
+		if (row == -1) {
+			return;
+		}
+		lock.lock();
+		try {
+			this.entidadAModificar = modeloTabla.getValueAt(row);
+			notEmpty.signal();;
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	private void filtrar() {
 		List<Entidad<T>> entidadesFiltradas = new ArrayList<Entidad<T>>();
 		entidadesFiltradas.addAll(entidades);
 		for (Field field : fields) {
 			JTextField textoField = referenciasATextField.get(field);
 			String texto = textoField.getText();
 			if (texto != null) {
-				entidadesFiltradas = entidadesFiltradas.stream().filter((Entidad<T> entidad) -> entidad.getValor(field).startsWith(texto)).collect(Collectors.toList());
+				entidadesFiltradas = entidadesFiltradas
+						.stream()
+						.filter((Entidad<T> entidad) -> entidad.getValor(field)
+								.startsWith(texto))
+						.collect(Collectors.toList());
 			}
 		}
 		modeloTabla.setEntidades(entidadesFiltradas);
-		
 	}
 
 }

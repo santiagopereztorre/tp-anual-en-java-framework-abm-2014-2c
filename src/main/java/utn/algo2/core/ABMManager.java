@@ -37,6 +37,12 @@ public class ABMManager<T> {
 		
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.abrirPantallaFiltrado(entidades);
+		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
+		visualizador.cerrarPantallaFiltrado();
+		visualizador.abrirPantallaModificar(entidadFiltrada);
+		entidadModificada = visualizador.getModificado();
+		visualizador.cerrarPantallaModificar();
+		guardarEntidad(entidadModificada);
 	}
 
 	private void guardarEntidad(Entidad<T> entidad) {
