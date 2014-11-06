@@ -13,8 +13,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.omg.CosNaming.NamingContextPackage.NotEmpty;
-
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")

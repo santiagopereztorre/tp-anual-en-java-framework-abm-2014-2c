@@ -2,7 +2,6 @@ package utn.algo2.swing.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
@@ -93,9 +92,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		try {
 			if (entidadAModificar.isEmpty())
 				notEmpty.await();
-			notEmpty.signal();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
@@ -116,7 +113,6 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		if (e.getActionCommand() == Actions.MODIFICAR.name()) {
 			modificar();
 		}
-
 	}
 
 	private void modificar() {
