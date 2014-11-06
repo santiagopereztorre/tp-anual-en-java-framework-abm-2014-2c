@@ -19,4 +19,7 @@ public interface Visualizador<T> {
 	public Entidad<T> getFiltrado();
 	public void onModificar(Runnable modificacion);
 	public void onModificarFiltrado(Runnable modificacion);
+	public void onCrearFiltrado(Runnable creacionFiltrado);
+	public void onCrear(Runnable creacion);
+	public void actualizarFiltro(List<Entidad<T>> entidades);
 }

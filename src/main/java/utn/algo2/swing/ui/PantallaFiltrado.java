@@ -8,9 +8,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -31,9 +28,8 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
 	private Entidad<T> entidadAModificar = new Entidad<T>();
 	private JTable table;
-	private final Lock lock = new ReentrantLock();
-	private final Condition notEmpty = lock.newCondition();
 	private Runnable modificacion;
+	private Runnable callback;
 
 	private enum Actions {
 		FILTRAR, MODIFICAR, CREAR,
@@ -67,6 +63,11 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		botonModificar.setActionCommand(Actions.MODIFICAR.name());
 		botonModificar.addActionListener(this);
 		this.add(botonModificar);
+		
+		JButton botonCrear = new JButton("Crear");
+		botonCrear.setActionCommand(Actions.CREAR.name());
+		botonCrear.addActionListener(this);
+		this.add(botonCrear);
 
 		setSize(400, 400);
 		this.setModalityType(ModalityType.MODELESS);
@@ -89,15 +90,6 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	}
 
 	public Entidad<T> getEntidad() {
-//		lock.lock();
-//		try {
-//			if (entidadAModificar.isEmpty())
-//				notEmpty.await();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} finally {
-//			lock.unlock();
-//		}
 		return entidadAModificar;
 	}
 
@@ -114,6 +106,13 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		if (e.getActionCommand() == Actions.MODIFICAR.name()) {
 			modificar();
 		}
+		if (e.getActionCommand() == Actions.CREAR.name()) {
+			crear();
+		}
+	}
+
+	private void crear() {
+		callback.run();
 	}
 
 	private void modificar() {
@@ -121,13 +120,6 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		if (row == -1) {
 			return;
 		}
-//		lock.lock();
-//		try {
-//			this.entidadAModificar = modeloTabla.getValueAt(row);
-//			notEmpty.signal();;
-//		} finally {
-//			lock.unlock();
-//		}
 		entidadAModificar = modeloTabla.getValueAt(row);
 		modificacion.run();
 	}
@@ -151,6 +143,10 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	public void onModificar(Runnable modificacion) {
 		this.modificacion = modificacion;
+	}
+
+	public void onCrear(Runnable creacionFiltrado) {
+		this.callback = creacionFiltrado;
 	}
 
 }

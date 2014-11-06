@@ -11,6 +11,7 @@ public class ABMManager<T> {
 	private Persistidor<T> persistidor;
 	private Visualizador<T> visualizador;
 	private Class<?> clase;
+	private Runnable actualizarFiltro;
 
 	public ABMManager(Class<T> clase, Persistidor<T> persistidor,
 			Visualizador<T> visualizador) {
@@ -24,48 +25,43 @@ public class ABMManager<T> {
 	 * Ejecuta el ABM Manager
 	 */
 	public void ejecutar() {
-		
-		visualizador.abrirPantallaCrear();
-		Entidad<T> entidadCreada = visualizador.getCreado();
-		visualizador.cerrarPantallaCrear();
-		guardarEntidad(entidadCreada);
-
 		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
 		Runnable modificacion = () -> callbackModificacion();
+		
+		Runnable creacionFiltrado = () -> callbackCreacionFiltrado();
+		Runnable creacion = () -> callbackCreacion();
+		
+		actualizarFiltro = () -> callbackActualizarFiltro();
 		
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.onModificarFiltrado(modificacionFiltrado);
 		visualizador.onModificar(modificacion);
+		visualizador.onCrearFiltrado(creacionFiltrado);
+		visualizador.onCrear(creacion);
 		visualizador.abrirPantallaFiltrado(entidades);
-		
-		
-		
-		
-//		visualizador.abrirPantallaCrear();
-//		Entidad<T> entidadCreada = visualizador.getCreado();
-//		visualizador.cerrarPantallaCrear();
-//		guardarEntidad(entidadCreada);
-//		
-//		Entidad<T> entidadAModificar = recuperarEntidad();
-//		visualizador.abrirPantallaModificar(entidadAModificar);
-//		Entidad<T> entidadModificada = visualizador.getModificado();
-//		visualizador.cerrarPantallaModificar();
-//		guardarEntidad(entidadModificada);
-//		
-//		List<Entidad<T>> entidades = recuperarTodasEntidades();
-//		visualizador.abrirPantallaFiltrado(entidades);
-//		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
-//		visualizador.cerrarPantallaFiltrado();
-//		visualizador.abrirPantallaModificar(entidadFiltrada);
-//		entidadModificada = visualizador.getModificado();
-//		visualizador.cerrarPantallaModificar();
-//		guardarEntidad(entidadModificada);
+	}
+
+	private void callbackActualizarFiltro() {
+		List<Entidad<T>> entidades = recuperarTodasEntidades();
+		visualizador.actualizarFiltro(entidades);
+	}
+
+	private void callbackCreacion() {
+		Entidad<T> entidadCreada = visualizador.getCreado();
+		visualizador.cerrarPantallaCrear();
+		guardarEntidad(entidadCreada);
+		actualizarFiltro.run();
+	}
+
+	private void callbackCreacionFiltrado() {
+		visualizador.abrirPantallaCrear();
 	}
 
 	private void callbackModificacion() {
 		Entidad<T> entidadModificada = visualizador.getModificado();
 		guardarEntidad(entidadModificada);
 		visualizador.cerrarPantallaModificar();
+		actualizarFiltro.run();
 	}
 
 	private void callbackModificacionFiltrado() {
@@ -79,14 +75,6 @@ public class ABMManager<T> {
 		this.persistidor.guardar(objeto);
 	}
 	
-	private Entidad<T> recuperarEntidad() {
-		T objeto = persistidor.obtener();
-		Entidad<T> entidad = new Entidad<T>();
-		entidad.setClase(this.clase);
-		entidad.setObjeto(objeto);
-		return entidad;
-	}
-
 	private List<Entidad<T>>recuperarTodasEntidades() {
 		List<T> objetos = persistidor.obtenerTodo();
 		List<Entidad<T>> entidades = new ArrayList<Entidad<T>>();

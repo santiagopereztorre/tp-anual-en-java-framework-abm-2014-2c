@@ -93,6 +93,8 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		this.data = data;
 		fireTableDataChanged();
 	}
+	
+	
 
 	public Entidad<T> getValueAt(int row) {
 		Object[] objeto = data[row];
@@ -104,15 +106,17 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			try {
 				field = clase.getField(nombreColumna);
 			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			String valor = (String) objeto[col];
 			entidad.putValor(field, valor);
 		}
 		return entidad;
+	}
+
+	public void actualizar() {
+		fireTableDataChanged();
 	}
 }

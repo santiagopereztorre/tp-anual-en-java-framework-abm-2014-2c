@@ -80,11 +80,32 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 
 	@Override
 	public void onModificarFiltrado(Runnable modificacion) {
-		
 		if (pantallaFiltrado == null) {
 			pantallaFiltrado = new PantallaFiltrado<T>(fields);
 		}
 		pantallaFiltrado.onModificar(modificacion);
+	}
+
+	@Override
+	public void onCrearFiltrado(Runnable creacionFiltrado) {
+		if (pantallaFiltrado == null) {
+			pantallaFiltrado = new PantallaFiltrado<T>(fields);
+		}
+		pantallaFiltrado.onCrear(creacionFiltrado);
+	}
+
+	@Override
+	public void onCrear(Runnable creacion) {
+		if (pantallaCrear == null) {
+			pantallaCrear = new PantallaCrear<T>(fields);
+		}
+		pantallaCrear.onCrear(creacion);
+		
+	}
+
+	@Override
+	public void actualizarFiltro(List<Entidad<T>> entidades) {
+		pantallaFiltrado.cargarEntidades(entidades);
 	}
 
 }
