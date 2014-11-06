@@ -5,6 +5,16 @@ public class Persona {
 	public String nombre;
 	
 	public String apellido;
+	
+	public Integer edad;
+
+	public Integer getEdad() {
+		return edad;
+	}
+
+	public void setEdad(Integer edad) {
+		this.edad = edad;
+	}
 
 	public String getNombre() {
 		return nombre;

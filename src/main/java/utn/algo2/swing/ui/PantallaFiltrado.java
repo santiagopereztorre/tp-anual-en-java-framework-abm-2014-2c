@@ -1,7 +1,11 @@
 package utn.algo2.swing.ui;
 
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
@@ -10,8 +14,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,40 +42,51 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	}
 
 	public PantallaFiltrado(Field[] fields) {
+		getContentPane().setFont(new Font("Verdana", Font.PLAIN, 14));
+		setBounds(100, 100, 426, 300);
 		this.fields = fields;
 
-		getContentPane().setLayout(new GridLayout(0, 2));
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 		for (Field field : fields) {
+			
+			Panel panel = new Panel();
+			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			getContentPane().add(panel);
 			String fieldName = field.getName();
 
 			JLabel labelName = new JLabel(fieldName + " :");
-			this.add(labelName);
+			panel.add(labelName);
 
 			JTextField textField = new JTextField();
-			this.add(textField);
+			textField.setColumns(10);
+			panel.add(textField);
 
 			referenciasATextField.put(field, textField);
 		}
 
 		agregarTabla(fields);
-
+		
+		Panel panelBotones = new Panel();
+		panelBotones.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		getContentPane().add(panelBotones);
+		
 		JButton botonFiltrar = new JButton("Filtrar");
 		botonFiltrar.setActionCommand(Actions.FILTRAR.name());
 		botonFiltrar.addActionListener(this);
-		this.add(botonFiltrar);
+		panelBotones.add(botonFiltrar);
 
 		JButton botonModificar = new JButton("Modificar");
 		botonModificar.setActionCommand(Actions.MODIFICAR.name());
 		botonModificar.addActionListener(this);
-		this.add(botonModificar);
+		panelBotones.add(botonModificar);
 		
 		JButton botonCrear = new JButton("Crear");
 		botonCrear.setActionCommand(Actions.CREAR.name());
 		botonCrear.addActionListener(this);
-		this.add(botonCrear);
+		panelBotones.add(botonCrear);
 
-		setSize(400, 400);
+		setSize(300, 300);
 		this.setModalityType(ModalityType.MODELESS);
 	}
 
