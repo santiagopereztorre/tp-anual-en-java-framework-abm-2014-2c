@@ -76,6 +76,12 @@ public class ModeloTabla<T> extends AbstractTableModel {
 	}
 	
 	public void setEntidades(List<Entidad<T>> entidades) {
+		if (entidades.isEmpty()) {
+			data = new Object[0][0];
+			fireTableDataChanged();
+			return;
+		}
+		
 		Class<?> clase = entidades.get(0).getClase();
 		Field[] atributos = clase.getFields();
 		Integer cantidadAtributos = atributos.length;
@@ -100,7 +106,6 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		String valor = null;
 		try {
 			valor = (String) metodo.invoke(objeto);
-			System.out.println(valor);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -118,10 +123,8 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			metodo = clase.getMethod("get" + capitalize(nombreDelAtributo),
 					args);
 		} catch (NoSuchMethodException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (SecurityException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return metodo;
