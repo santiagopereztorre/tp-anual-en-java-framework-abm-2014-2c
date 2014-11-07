@@ -26,16 +26,16 @@ public class ABMManager<T> {
 	public void ejecutar() {
 		Runnable creacion = () -> callbackCreacion();
 		visualizador.onCrear(creacion);
-		
+
 		Runnable modificacion = () -> callbackModificacion();
 		visualizador.onModificar(modificacion);
-		
+
 		Runnable creacionFiltrado = () -> callbackCreacionFiltrado();
 		visualizador.onCrearFiltrado(creacionFiltrado);
-		
+
 		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
 		visualizador.onModificarFiltrado(modificacionFiltrado);
-		
+
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.abrirPantallaFiltrado(entidades);
 	}
@@ -50,8 +50,9 @@ public class ABMManager<T> {
 
 	private void callbackModificacion() {
 		Entidad<T> entidadModificada = visualizador.getModificado();
+		Entidad<T> entidadVieja = visualizador.getEntidadModificada();
 		visualizador.cerrarPantallaModificar();
-		guardarEntidad(entidadModificada);
+		reemplazarEntidad(entidadVieja, entidadModificada);
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.actualizarFiltro(entidades);
 	}
@@ -70,7 +71,16 @@ public class ABMManager<T> {
 		T objeto = entidad.crearObjeto();
 		persistidor.guardar(objeto);
 	}
-	
+
+	private void reemplazarEntidad(Entidad<T> entidadVieja,
+			Entidad<T> entidadModificada) {
+		entidadVieja.setClase(clase);
+		T objetoViejo = entidadVieja.crearObjeto();
+		entidadModificada.setClase(clase);
+		T objetoNuevo = entidadModificada.crearObjeto();
+		persistidor.modificar(objetoViejo, objetoNuevo);
+	}
+
 	private List<Entidad<T>> recuperarTodasEntidades() {
 		List<T> objetos = persistidor.obtenerTodo();
 		List<Entidad<T>> entidades = new ArrayList<Entidad<T>>();

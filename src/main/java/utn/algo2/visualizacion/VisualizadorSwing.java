@@ -14,6 +14,8 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	private PantallaCrear<T> pantallaCrear = null;
 	private PantallaModificar<T> pantallaModificar = null;
 	private PantallaFiltrado<T> pantallaFiltrado = null;
+	
+	private Entidad<T> entidadModificada;
 
 	public void setFields(Field[] fields) {
 		this.fields = fields;
@@ -39,6 +41,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		if (pantallaModificar == null) {
 			pantallaModificar = new PantallaModificar<T>(fields);
 		}
+		this.setEntidadModificada(entidadAModificar);
 		pantallaModificar.cargarCampos(entidadAModificar);
 		pantallaModificar.setVisible(true);
 	}
@@ -108,6 +111,14 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	@Override
 	public void actualizarFiltro(List<Entidad<T>> entidades) {
 		pantallaFiltrado.cargarEntidades(entidades);
+	}
+
+	public Entidad<T> getEntidadModificada() {
+		return entidadModificada;
+	}
+
+	public void setEntidadModificada(Entidad<T> entidadModificada) {
+		this.entidadModificada = entidadModificada;
 	}
 
 }

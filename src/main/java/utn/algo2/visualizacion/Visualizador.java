@@ -11,6 +11,8 @@ public interface Visualizador<T> {
 	
 	public void setFields(Field[] fields);
 	public void actualizarFiltro(List<Entidad<T>> entidades);
+	public Entidad<T> getEntidadModificada();
+	public void setEntidadModificada(Entidad<T> entidadModificada);
 
 	/* Navegacion */
 	
