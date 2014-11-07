@@ -40,15 +40,10 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	public PantallaFiltrado(Field[] fields) {
 		this.fields = fields;
-
 		configurarPantalla();
-
 		agregarCamposDeTexto(fields);
-
 		agregarTabla(fields);
-
 		agregarBotones();
-
 	}
 
 	/* Visual */
@@ -64,17 +59,18 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	private void agregarCamposDeTexto(Field[] fields) {
 		for (Field field : fields) {
-			Panel panel = new Panel();
-			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			getContentPane().add(panel);
-
 			JLabel labelName = new JLabel(field.getName() + " :");
-			panel.add(labelName);
-
+			
 			JTextField textField = new JTextField();
 			textField.setColumns(10);
-			panel.add(textField);
 
+			Panel panel = new Panel();
+			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			panel.add(labelName);
+			panel.add(textField);
+			
+			getContentPane().add(panel);
+			
 			referenciasATextField.put(field, textField);
 		}
 	}

@@ -23,7 +23,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		if (pantallaCrear == null) {
 			pantallaCrear = new PantallaCrear<T>(fields);
 		}
-		pantallaCrear.inicializar();
+		pantallaCrear.configurarPantalla();
 		pantallaCrear.setVisible(true);
 	}
 
@@ -40,7 +40,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		if (pantallaModificar == null) {
 			pantallaModificar = new PantallaModificar<T>(fields);
 		}
-		pantallaModificar.inicializar();
+		pantallaModificar.configurarPantalla();
 		pantallaModificar.cargarCampos(entidadAModificar);
 		pantallaModificar.setVisible(true);
 	}
