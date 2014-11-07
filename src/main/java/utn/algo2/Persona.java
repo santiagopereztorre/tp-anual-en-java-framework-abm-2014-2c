@@ -1,13 +1,21 @@
 package utn.algo2;
 
+import utn.algo2.annotations.NotNull;
+import utn.algo2.annotations.ValidacionPersonalizada;
+import utn.algo2.validaciones.Validacion;
+
 public class Persona {
 	
+	@NotNull
 	private String nombre;
 	
+	@NotNull
 	private String apellido;
 	
+	@ValidacionPersonalizada(metodo=Validacion.MENOR_A_100)
 	private Integer edad;
 	
+	@ValidacionPersonalizada(metodo=Validacion.MAYOR_A_0)
 	private Double sueldo;
 	
 	/* Getters and Setters */
