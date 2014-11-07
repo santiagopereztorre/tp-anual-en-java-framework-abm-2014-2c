@@ -96,7 +96,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 	
 	
 
-	public Entidad<T> getValueAt(int row) {
+	public Entidad<T> getEntidadAt(int row) {
 		Object[] objeto = data[row];
 		Entidad<T> entidad = new Entidad<T>();
 		int totalColumnas = getColumnCount();

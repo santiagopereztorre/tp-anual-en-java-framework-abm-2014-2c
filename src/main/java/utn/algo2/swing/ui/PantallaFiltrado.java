@@ -2,9 +2,7 @@ package utn.algo2.swing.ui;
 
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +15,6 @@ import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,34 +25,50 @@ import utn.algo2.core.Entidad;
 @SuppressWarnings("serial")
 public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
-	private ModeloTabla<T> modeloTabla = null;
-	private Field[] fields;
-	private List<Entidad<T>> entidades;
-	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
 	private Entidad<T> entidadAModificar = new Entidad<T>();
+	private Field[] fields;
+	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
 	private JTable table;
-	private Runnable modificacion;
-	private Runnable callback;
+	private List<Entidad<T>> entidades;
+	private ModeloTabla<T> modeloTabla;
+	private Runnable callbackModificacion;
+	private Runnable callbackCreacion;
 
 	private enum Actions {
 		FILTRAR, MODIFICAR, CREAR,
 	}
 
 	public PantallaFiltrado(Field[] fields) {
-		getContentPane().setFont(new Font("Verdana", Font.PLAIN, 14));
-		setBounds(100, 100, 426, 300);
 		this.fields = fields;
 
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		configurarPantalla();
 
+		agregarCamposDeTexto(fields);
+
+		agregarTabla(fields);
+
+		agregarBotones();
+
+	}
+
+	/* Visual */
+
+	private void configurarPantalla() {
+		this.getContentPane().setFont(new Font("Verdana", Font.PLAIN, 14));
+		this.getContentPane().setLayout(
+				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		this.setBounds(100, 100, 426, 300);
+		this.setModalityType(ModalityType.MODELESS);
+		this.setSize(300, 300);
+	}
+
+	private void agregarCamposDeTexto(Field[] fields) {
 		for (Field field : fields) {
-			
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			getContentPane().add(panel);
-			String fieldName = field.getName();
 
-			JLabel labelName = new JLabel(fieldName + " :");
+			JLabel labelName = new JLabel(field.getName() + " :");
 			panel.add(labelName);
 
 			JTextField textField = new JTextField();
@@ -64,13 +77,26 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 			referenciasATextField.put(field, textField);
 		}
+	}
 
-		agregarTabla(fields);
-		
+	private void agregarTabla(Field[] fields) {
+		modeloTabla = new ModeloTabla<T>();
+		modeloTabla.setColumnNames(fields);
+
+		table = new JTable(modeloTabla);
+		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		table.setFillsViewportHeight(true);
+
+		JScrollPane scrollPane = new JScrollPane(table);
+		this.add(scrollPane);
+	}
+
+	private void agregarBotones() {
 		Panel panelBotones = new Panel();
-		panelBotones.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		getContentPane().add(panelBotones);
-		
+		panelBotones
+				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		this.getContentPane().add(panelBotones);
+
 		JButton botonFiltrar = new JButton("Filtrar");
 		botonFiltrar.setActionCommand(Actions.FILTRAR.name());
 		botonFiltrar.addActionListener(this);
@@ -80,65 +106,34 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		botonModificar.setActionCommand(Actions.MODIFICAR.name());
 		botonModificar.addActionListener(this);
 		panelBotones.add(botonModificar);
-		
+
 		JButton botonCrear = new JButton("Crear");
 		botonCrear.setActionCommand(Actions.CREAR.name());
 		botonCrear.addActionListener(this);
 		panelBotones.add(botonCrear);
-
-		setSize(300, 300);
-		this.setModalityType(ModalityType.MODELESS);
 	}
 
-	private void agregarTabla(Field[] fields) {
-		this.modeloTabla = new ModeloTabla<T>();
-
-		this.table = new JTable(modeloTabla);
-		modeloTabla.setColumnNames(fields);
-
-		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-		table.setFillsViewportHeight(true);
-
-		// Create the scroll pane and add the table to it.
-		JScrollPane scrollPane = new JScrollPane(table);
-
-		// Add the scroll pane to this panel.
-		add(scrollPane);
-	}
-
-	public Entidad<T> getEntidad() {
-		return entidadAModificar;
-	}
-
-	public void cargarEntidades(List<Entidad<T>> entidades) {
-		this.entidades = entidades;
-		modeloTabla.setEntidades(entidades);
-	}
+	/* Actions */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == Actions.FILTRAR.name()) {
-			filtrar();
-		}
-		if (e.getActionCommand() == Actions.MODIFICAR.name()) {
-			modificar();
-		}
-		if (e.getActionCommand() == Actions.CREAR.name()) {
+		if (e.getActionCommand() == Actions.CREAR.name())
 			crear();
-		}
+		if (e.getActionCommand() == Actions.MODIFICAR.name())
+			modificar();
+		if (e.getActionCommand() == Actions.FILTRAR.name())
+			filtrar();
 	}
 
 	private void crear() {
-		callback.run();
+		callbackCreacion.run();
 	}
 
 	private void modificar() {
 		int row = table.getSelectedRow();
-		if (row == -1) {
-			return;
-		}
-		entidadAModificar = modeloTabla.getValueAt(row);
-		modificacion.run();
+		if (row == -1) return; // TODO pensar si no combiene cambiar por excepcion
+		entidadAModificar = modeloTabla.getEntidadAt(row);
+		callbackModificacion.run();
 	}
 
 	private void filtrar() {
@@ -158,12 +153,25 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		modeloTabla.setEntidades(entidadesFiltradas);
 	}
 
+	/* Callbacks */
+
 	public void onModificar(Runnable modificacion) {
-		this.modificacion = modificacion;
+		this.callbackModificacion = modificacion;
 	}
 
 	public void onCrear(Runnable creacionFiltrado) {
-		this.callback = creacionFiltrado;
+		this.callbackCreacion = creacionFiltrado;
+	}
+
+	/* Getters and Setters */
+
+	public void cargarEntidades(List<Entidad<T>> entidades) {
+		this.entidades = entidades;
+		modeloTabla.setEntidades(entidades);
+	}
+
+	public Entidad<T> getEntidad() {
+		return entidadAModificar;
 	}
 
 }
