@@ -89,7 +89,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			} catch (SecurityException e) {
 				e.printStackTrace();
 			}
-			String valor = (String) objeto[col];
+			Object valor =  objeto[col];
 			entidad.setValor(field, valor);
 		}
 		return entidad;

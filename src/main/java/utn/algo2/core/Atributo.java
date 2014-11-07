@@ -1,18 +1,20 @@
 package utn.algo2.core;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 public class Atributo<T> {
 
 	private Field field;
-	private String valor;
+	private Object valor;
 
 	public Atributo(Field aKey) {
 		this.field = aKey;
 		field.setAccessible(true);
 	}
 
-	public Atributo(Field aKey, String aValue) {
+	public Atributo(Field aKey, Object aValue) {
 		this.field = aKey;
 		this.valor = aValue;
 		field.setAccessible(true);
@@ -21,8 +23,38 @@ public class Atributo<T> {
 	/* Metodos */
 
 	public void setIn(T destino) {
+		
+		Constructor<?> constructor = null;
+		Object valorField = null;
+		
 		try {
-			field.set(destino, valor);
+			constructor = field.getType().getConstructor(String.class);
+		} catch (NoSuchMethodException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			valorField = constructor.newInstance(valor);
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			field.set(destino, valorField);
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,7 +66,7 @@ public class Atributo<T> {
 	
 	public void getValorFrom(T fuente) {
 		try {
-			valor = (String) field.get(fuente);
+			valor = field.get(fuente).toString();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,6 +75,8 @@ public class Atributo<T> {
 			e.printStackTrace();
 		}
 	}
+	
+	/* Complementarios */
 	
 	/* Overrides */
 
@@ -71,11 +105,11 @@ public class Atributo<T> {
 		this.field = field;
 	}
 
-	public String getValor() {
+	public Object getValor() {
 		return valor;
 	}
 
-	public void setValor(String valor) {
+	public void setValor(Object valor) {
 		this.valor = valor;
 	}
 

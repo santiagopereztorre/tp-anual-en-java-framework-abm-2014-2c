@@ -36,7 +36,7 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 		for (Entry<Field, JTextField> entry : referenciaACamposDeTexto.entrySet()) {
 			Field field = entry.getKey();
 			JTextField campoTexto = entry.getValue();
-			String valor = entidadAModificar.getValor(field);
+			String valor = entidadAModificar.getValor(field).toString();
 			campoTexto.setText(valor);
 		}
 	}

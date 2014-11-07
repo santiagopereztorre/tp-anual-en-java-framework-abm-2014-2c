@@ -50,12 +50,12 @@ public class Entidad<T> {
 		clase = unaClase;
 	}
 
-	public void setValor(Field unField, String unValor) {
+	public void setValor(Field unField, Object unValor) {
 		Atributo<T> atributo = new Atributo<T>(unField, unValor);
 		addIfNotExists(atributo);
 	}
 
-	public String getValor(Field unField) {
+	public Object getValor(Field unField) {
 		Atributo<T> atributoBuscado = new Atributo<T>(unField);
 		int index = atributos.indexOf(atributoBuscado);
 		return atributos.get(index).getValor();

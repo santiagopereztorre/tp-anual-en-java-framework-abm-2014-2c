@@ -141,7 +141,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 			if (texto != null) {
 				entidadesFiltradas = entidadesFiltradas
 						.stream()
-						.filter((Entidad<T> entidad) -> entidad.getValor(field)
+						.filter((Entidad<T> entidad) -> entidad.getValor(field).toString()
 								.startsWith(texto))
 						.collect(Collectors.toList());
 			}
