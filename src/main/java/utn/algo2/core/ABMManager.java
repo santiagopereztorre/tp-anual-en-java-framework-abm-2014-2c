@@ -11,7 +11,6 @@ public class ABMManager<T> {
 	private Persistidor<T> persistidor;
 	private Visualizador<T> visualizador;
 	private Class<?> clase;
-	private Runnable actualizarFiltro;
 
 	public ABMManager(Class<T> clase, Persistidor<T> persistidor,
 			Visualizador<T> visualizador) {
@@ -31,8 +30,6 @@ public class ABMManager<T> {
 		Runnable creacionFiltrado = () -> callbackCreacionFiltrado();
 		Runnable creacion = () -> callbackCreacion();
 		
-		actualizarFiltro = () -> callbackActualizarFiltro();
-		
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.onModificarFiltrado(modificacionFiltrado);
 		visualizador.onModificar(modificacion);
@@ -41,16 +38,12 @@ public class ABMManager<T> {
 		visualizador.abrirPantallaFiltrado(entidades);
 	}
 
-	private void callbackActualizarFiltro() {
-		List<Entidad<T>> entidades = recuperarTodasEntidades();
-		visualizador.actualizarFiltro(entidades);
-	}
-
 	private void callbackCreacion() {
 		Entidad<T> entidadCreada = visualizador.getCreado();
 		visualizador.cerrarPantallaCrear();
 		guardarEntidad(entidadCreada);
-		actualizarFiltro.run();
+		List<Entidad<T>> entidades = recuperarTodasEntidades();
+		visualizador.actualizarFiltro(entidades);
 	}
 
 	private void callbackCreacionFiltrado() {
@@ -61,7 +54,8 @@ public class ABMManager<T> {
 		Entidad<T> entidadModificada = visualizador.getModificado();
 		guardarEntidad(entidadModificada);
 		visualizador.cerrarPantallaModificar();
-		actualizarFiltro.run();
+		List<Entidad<T>> entidades = recuperarTodasEntidades();
+		visualizador.actualizarFiltro(entidades);
 	}
 
 	private void callbackModificacionFiltrado() {
