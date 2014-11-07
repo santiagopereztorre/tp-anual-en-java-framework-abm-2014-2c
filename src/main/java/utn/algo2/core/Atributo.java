@@ -3,6 +3,12 @@ package utn.algo2.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.annotation.Annotation;
+
+import utn.algo2.annotations.Control;
+import utn.algo2.annotations.Label;
+import utn.algo2.annotations.NotNull;
+import utn.algo2.annotations.ValidacionPersonalizada;
 
 public class Atributo<T> {
 
@@ -112,5 +118,28 @@ public class Atributo<T> {
 	public void setValor(Object valor) {
 		this.valor = valor;
 	}
+	
+	/*
+	 * Pregunto si tiene annotations
+	 */
+	public boolean esNulable(){
+		return !this.field.isAnnotationPresent(NotNull.class);
+	}
+	
+	public boolean esControl(){
+		return !this.field.isAnnotationPresent(Control.class);
+	}
 
+	public boolean esLabel(){
+		return !this.field.isAnnotationPresent(Label.class);
+	}
+
+	public boolean tieneValidacion(){
+		return !this.field.isAnnotationPresent(ValidacionPersonalizada.class);
+	}
+
+	public String obtengoValidacion(){
+		ValidacionPersonalizada annotation = this.field.getAnnotation(ValidacionPersonalizada.class);
+		return annotation.metodo();
+	}
 }
