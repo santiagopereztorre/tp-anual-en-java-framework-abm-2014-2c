@@ -32,7 +32,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	/* Visual */
 
-	public void configurarPantalla() {
+	private void configurarPantalla() {
 		this.getContentPane().setFont(new Font("Verdana", Font.PLAIN, 14));
 		this.getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -68,7 +68,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		entidad = new Entidad<T>();
 		for (Field field : fields) {
 			JTextField textoField = referenciasATextField.get(field);
-			entidad.putValor(field, textoField.getText());
+			entidad.setValor(field, textoField.getText());
 		}
 		callback.run();
 	}

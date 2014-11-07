@@ -111,7 +111,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 				e.printStackTrace();
 			}
 			String valor = (String) objeto[col];
-			entidad.putValor(field, valor);
+			entidad.setValor(field, valor);
 		}
 		return entidad;
 	}

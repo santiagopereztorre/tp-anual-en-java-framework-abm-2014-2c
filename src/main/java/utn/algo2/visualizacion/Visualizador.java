@@ -7,19 +7,30 @@ import utn.algo2.core.Entidad;
 
 public interface Visualizador<T> {
 
+	/* Necesarios */
+	
 	public void setFields(Field[] fields);
+	public void actualizarFiltro(List<Entidad<T>> entidades);
+
+	/* Navegacion */
+	
 	public void abrirPantallaCrear();
 	public void cerrarPantallaCrear();
-	public Entidad<T> getCreado();
 	public void abrirPantallaModificar(Entidad<T> entidadAModificar);
 	public void cerrarPantallaModificar();
-	public Entidad<T> getModificado();
 	public void abrirPantallaFiltrado(List<Entidad<T>> entidades);
 	public void cerrarPantallaFiltrado();
+
+	/* Obtencion de datos */
+	
+	public Entidad<T> getCreado();
+	public Entidad<T> getModificado();
 	public Entidad<T> getFiltrado();
-	public void onModificar(Runnable modificacion);
-	public void onModificarFiltrado(Runnable modificacion);
-	public void onCrearFiltrado(Runnable creacionFiltrado);
-	public void onCrear(Runnable creacion);
-	public void actualizarFiltro(List<Entidad<T>> entidades);
+	
+	/* Callbacks */
+	
+	public void onCrear(Runnable callback);
+	public void onModificar(Runnable callback);
+	public void onCrearFiltrado(Runnable callback);
+	public void onModificarFiltrado(Runnable callback);
 }

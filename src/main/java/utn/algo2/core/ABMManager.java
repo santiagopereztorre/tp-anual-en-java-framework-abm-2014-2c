@@ -24,17 +24,19 @@ public class ABMManager<T> {
 	 * Ejecuta el ABM Manager
 	 */
 	public void ejecutar() {
-		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
+		Runnable creacion = () -> callbackCreacion();
+		visualizador.onCrear(creacion);
+		
 		Runnable modificacion = () -> callbackModificacion();
+		visualizador.onModificar(modificacion);
 		
 		Runnable creacionFiltrado = () -> callbackCreacionFiltrado();
-		Runnable creacion = () -> callbackCreacion();
+		visualizador.onCrearFiltrado(creacionFiltrado);
+		
+		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
+		visualizador.onModificarFiltrado(modificacionFiltrado);
 		
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
-		visualizador.onModificarFiltrado(modificacionFiltrado);
-		visualizador.onModificar(modificacion);
-		visualizador.onCrearFiltrado(creacionFiltrado);
-		visualizador.onCrear(creacion);
 		visualizador.abrirPantallaFiltrado(entidades);
 	}
 
@@ -46,16 +48,16 @@ public class ABMManager<T> {
 		visualizador.actualizarFiltro(entidades);
 	}
 
-	private void callbackCreacionFiltrado() {
-		visualizador.abrirPantallaCrear();
-	}
-
 	private void callbackModificacion() {
 		Entidad<T> entidadModificada = visualizador.getModificado();
-		guardarEntidad(entidadModificada);
 		visualizador.cerrarPantallaModificar();
+		guardarEntidad(entidadModificada);
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.actualizarFiltro(entidades);
+	}
+
+	private void callbackCreacionFiltrado() {
+		visualizador.abrirPantallaCrear();
 	}
 
 	private void callbackModificacionFiltrado() {
@@ -64,18 +66,18 @@ public class ABMManager<T> {
 	}
 
 	private void guardarEntidad(Entidad<T> entidad) {
-		entidad.setClase(this.clase);
+		entidad.setClase(clase);
 		T objeto = entidad.crearObjeto();
-		this.persistidor.guardar(objeto);
+		persistidor.guardar(objeto);
 	}
 	
-	private List<Entidad<T>>recuperarTodasEntidades() {
+	private List<Entidad<T>> recuperarTodasEntidades() {
 		List<T> objetos = persistidor.obtenerTodo();
 		List<Entidad<T>> entidades = new ArrayList<Entidad<T>>();
 		for (T objeto : objetos) {
 			Entidad<T> entidad = new Entidad<T>();
-			entidad.setClase(this.clase);
-			entidad.setObjeto(objeto);
+			entidad.setClase(clase);
+			entidad.actualizarAtributosFrom(objeto);
 			entidades.add(entidad);
 		}
 		return entidades;

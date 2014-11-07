@@ -12,16 +12,16 @@ public class Entidad<T> {
 	/* Interfaz */
 	
 	public T crearObjeto() {
-		T objeto = crearInstancia(this.clase);
+		T objeto = crearInstancia(clase);
 		atributos.forEach((Atributo<T> atributo) -> atributo.setIn(objeto));
 		return objeto;
 	}
 
-	private void actualizarAtributosFrom(T unObjeto) {
-		for (Field field: this.clase.getFields()) {
-			Atributo<T> atributo = new Atributo<T>(field, this.clase);
+	public void actualizarAtributosFrom(T unObjeto) {
+		for (Field field: clase.getFields()) {
+			Atributo<T> atributo = new Atributo<T>(field, clase);
 			atributo.getValorFrom(unObjeto);
-			this.atributos.add(atributo);
+			atributos.add(atributo);
 		}
 	}
 	
@@ -51,33 +51,33 @@ public class Entidad<T> {
 	}
 
 	public void setClase(Class<?> unaClase) {
-		this.clase = unaClase;
-		this.atributos.forEach((Atributo<T> atributo) -> atributo.setClase(unaClase));
+		clase = unaClase;
+		atributos.forEach((Atributo<T> atributo) -> atributo.setClase(unaClase));
 	}
 
-	public void putValor(Field unField, String unValor) {
+	public void setValor(Field unField, String unValor) {
 		Atributo<T> atributo = new Atributo<T>(unField, unValor, this.clase);
 		addIfNotExists(atributo);
 	}
 
 	public String getValor(Field unField) {
 		Atributo<T> atributoBuscado = new Atributo<T>(unField);
-		int index = this.atributos.indexOf(atributoBuscado);
-		return this.atributos.get(index).getValor();
+		int index = atributos.indexOf(atributoBuscado);
+		return atributos.get(index).getValor();
 	}
 
 	public boolean isEmpty() {
-		return this.atributos.isEmpty();
+		return atributos.isEmpty();
 	}
 	
 	/* Complementarios */
 
 	private void addIfNotExists(Atributo<T> atributo) {
-		if (this.atributos.contains(atributo)) {
-			int index = this.atributos.indexOf(atributo);
-			this.atributos.set(index, atributo);
+		if (atributos.contains(atributo)) {
+			int index = atributos.indexOf(atributo);
+			atributos.set(index, atributo);
 		} else {
-			this.atributos.add(atributo);
+			atributos.add(atributo);
 		}
 	}
 }

@@ -23,12 +23,11 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		if (pantallaCrear == null) {
 			pantallaCrear = new PantallaCrear<T>(fields);
 		}
-		pantallaCrear.configurarPantalla();
+		pantallaCrear.borrarCampos();
 		pantallaCrear.setVisible(true);
 	}
 
 	public void cerrarPantallaCrear() {
-		pantallaCrear.borrarCampos();
 		pantallaCrear.setVisible(false);
 	}
 
@@ -40,7 +39,6 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		if (pantallaModificar == null) {
 			pantallaModificar = new PantallaModificar<T>(fields);
 		}
-		pantallaModificar.configurarPantalla();
 		pantallaModificar.cargarCampos(entidadAModificar);
 		pantallaModificar.setVisible(true);
 	}
@@ -69,6 +67,17 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	public Entidad<T> getFiltrado() {
 		return pantallaFiltrado.getEntidad();
 	}
+	
+	/* Callbacks */
+
+	@Override
+	public void onCrear(Runnable creacion) {
+		if (pantallaCrear == null) {
+			pantallaCrear = new PantallaCrear<T>(fields);
+		}
+		pantallaCrear.onCrear(creacion);
+		
+	}
 
 	@Override
 	public void onModificar(Runnable modificacion) {
@@ -76,14 +85,6 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 			pantallaModificar = new PantallaModificar<T>(fields);
 		}
 		pantallaModificar.onModificar(modificacion);
-	}
-
-	@Override
-	public void onModificarFiltrado(Runnable modificacion) {
-		if (pantallaFiltrado == null) {
-			pantallaFiltrado = new PantallaFiltrado<T>(fields);
-		}
-		pantallaFiltrado.onModificar(modificacion);
 	}
 
 	@Override
@@ -95,13 +96,14 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	}
 
 	@Override
-	public void onCrear(Runnable creacion) {
-		if (pantallaCrear == null) {
-			pantallaCrear = new PantallaCrear<T>(fields);
+	public void onModificarFiltrado(Runnable modificacion) {
+		if (pantallaFiltrado == null) {
+			pantallaFiltrado = new PantallaFiltrado<T>(fields);
 		}
-		pantallaCrear.onCrear(creacion);
-		
+		pantallaFiltrado.onModificar(modificacion);
 	}
+	
+	/* Necesario */
 
 	@Override
 	public void actualizarFiltro(List<Entidad<T>> entidades) {
