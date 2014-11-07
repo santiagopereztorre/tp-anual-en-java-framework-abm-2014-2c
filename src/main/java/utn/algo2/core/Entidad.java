@@ -19,7 +19,7 @@ public class Entidad<T> {
 
 	public void actualizarAtributosFrom(T unObjeto) {
 		for (Field field: clase.getFields()) {
-			Atributo<T> atributo = new Atributo<T>(field, clase);
+			Atributo<T> atributo = new Atributo<T>(field);
 			atributo.getValorFrom(unObjeto);
 			atributos.add(atributo);
 		}
@@ -42,21 +42,16 @@ public class Entidad<T> {
 	
 	/* Setters y Getters */
 
-	public void setObjeto(T unObjeto) {
-		actualizarAtributosFrom(unObjeto);
-	}
-
 	public Class<?> getClase() {
 		return clase;
 	}
 
 	public void setClase(Class<?> unaClase) {
 		clase = unaClase;
-		atributos.forEach((Atributo<T> atributo) -> atributo.setClase(unaClase));
 	}
 
 	public void setValor(Field unField, String unValor) {
-		Atributo<T> atributo = new Atributo<T>(unField, unValor, this.clase);
+		Atributo<T> atributo = new Atributo<T>(unField, unValor);
 		addIfNotExists(atributo);
 	}
 

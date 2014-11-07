@@ -20,7 +20,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	protected Entidad<T> entidad;
 	protected Field[] fields;
-	protected Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+	protected Hashtable<Field, JTextField> referenciaACamposDeTexto = new Hashtable<Field, JTextField>();
 	protected Runnable callback;
 	
 	public Pantalla(Field[] fields) {
@@ -44,19 +44,19 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	private void agregarCamposDeTexto(Field[] fields) {
 		for (Field field : fields) {
-			JLabel labelName = new JLabel(field.getName() + " :");
+			JLabel label = new JLabel(field.getName() + " :");
 
-			JTextField textField = new JTextField();
-			textField.setColumns(10);
+			JTextField campoDeTexto = new JTextField();
+			campoDeTexto.setColumns(10);
 
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			panel.add(labelName);
-			panel.add(textField);
+			panel.add(label);
+			panel.add(campoDeTexto);
 
 			getContentPane().add(panel);
 
-			referenciasATextField.put(field, textField);
+			referenciaACamposDeTexto.put(field, campoDeTexto);
 		}
 	}
 	
@@ -67,8 +67,8 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		entidad = new Entidad<T>();
 		for (Field field : fields) {
-			JTextField textoField = referenciasATextField.get(field);
-			entidad.setValor(field, textoField.getText());
+			JTextField campoDeTexto = referenciaACamposDeTexto.get(field);
+			entidad.setValor(field, campoDeTexto.getText());
 		}
 		callback.run();
 	}

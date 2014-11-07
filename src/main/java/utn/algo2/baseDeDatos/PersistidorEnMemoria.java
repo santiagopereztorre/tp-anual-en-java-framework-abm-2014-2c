@@ -23,7 +23,8 @@ public class PersistidorEnMemoria<T> implements Persistidor<T> {
 	}
 	
 	public void modificar(T viejo, T nuevo) {
-		
+		remover(viejo);
+		guardar(nuevo);
 	}
 
 	public void remover(T objeto) {

@@ -27,7 +27,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	private Entidad<T> entidadAModificar = new Entidad<T>();
 	private Field[] fields;
-	private Hashtable<Field, JTextField> referenciasATextField = new Hashtable<Field, JTextField>();
+	private Hashtable<Field, JTextField> referenciasACamposDeTexto = new Hashtable<Field, JTextField>();
 	private JTable table;
 	private List<Entidad<T>> entidades;
 	private ModeloTabla<T> modeloTabla;
@@ -59,19 +59,19 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	private void agregarCamposDeTexto(Field[] fields) {
 		for (Field field : fields) {
-			JLabel labelName = new JLabel(field.getName() + " :");
-			
-			JTextField textField = new JTextField();
-			textField.setColumns(10);
+			JLabel label = new JLabel(field.getName() + " :");
+
+			JTextField campoDeTexto = new JTextField();
+			campoDeTexto.setColumns(10);
 
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			panel.add(labelName);
-			panel.add(textField);
-			
+			panel.add(label);
+			panel.add(campoDeTexto);
+
 			getContentPane().add(panel);
-			
-			referenciasATextField.put(field, textField);
+
+			referenciasACamposDeTexto.put(field, campoDeTexto);
 		}
 	}
 
@@ -127,17 +127,17 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	private void modificar() {
 		int row = table.getSelectedRow();
-		if (row == -1) return; // TODO pensar si no combiene cambiar por excepcion
+		if (row == -1)
+			return;
 		entidadAModificar = modeloTabla.getEntidadAt(row);
 		callbackModificacion.run();
 	}
 
 	private void filtrar() {
-		List<Entidad<T>> entidadesFiltradas = new ArrayList<Entidad<T>>();
-		entidadesFiltradas.addAll(entidades);
+		List<Entidad<T>> entidadesFiltradas = new ArrayList<Entidad<T>>(
+				entidades);
 		for (Field field : fields) {
-			JTextField textoField = referenciasATextField.get(field);
-			String texto = textoField.getText();
+			String texto = referenciasACamposDeTexto.get(field).getText();
 			if (texto != null) {
 				entidadesFiltradas = entidadesFiltradas
 						.stream()
@@ -146,7 +146,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 						.collect(Collectors.toList());
 			}
 		}
-		modeloTabla.setEntidades(entidadesFiltradas);
+		modeloTabla.actualizarEntidades(entidadesFiltradas);
 	}
 
 	/* Callbacks */
@@ -163,7 +163,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 
 	public void cargarEntidades(List<Entidad<T>> entidades) {
 		this.entidades = entidades;
-		modeloTabla.setEntidades(entidades);
+		modeloTabla.actualizarEntidades(entidades);
 	}
 
 	public Entidad<T> getEntidad() {

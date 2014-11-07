@@ -31,7 +31,7 @@ public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
 	/* Getters and Setters */
 	
 	public void borrarCampos() {
-		for(Entry<Field, JTextField> entry : referenciasATextField.entrySet()) {
+		for(Entry<Field, JTextField> entry : referenciaACamposDeTexto.entrySet()) {
 		    JTextField value = entry.getValue();
 		    value.setText("");
 		}

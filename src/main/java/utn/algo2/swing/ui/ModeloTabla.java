@@ -39,27 +39,6 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		return getValueAt(0, c).getClass();
 	}
 
-	/*
-	 * Don't need to implement this method unless your table's editable.
-	 */
-	public boolean isCellEditable(int row, int col) {
-		// Note that the data/cell address is constant,
-		// no matter where the cell appears onscreen.
-		if (col < 2) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	/*
-	 * Don't need to implement this method unless your table's data can change.
-	 */
-	public void setValueAt(Object value, int row, int col) {
-		data[row][col] = value;
-		fireTableCellUpdated(row, col);
-	}
-
 	public void setColumnNames(Field[] fields) {
 		String[] columnNames = new String[fields.length];
 		int i = 0;
@@ -68,10 +47,10 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			i++;
 		}
 		this.columnNames = columnNames;
-		fireTableStructureChanged();
+		actualizar();
 	}
 	
-	public void setEntidades(List<Entidad<T>> entidades) {
+	public void actualizarEntidades(List<Entidad<T>> entidades) {
 		if (entidades.isEmpty()) {
 			data = new Object[0][0];
 			fireTableDataChanged();
@@ -91,7 +70,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			data[i] = arrayDeAtributos;
 		}
 		this.data = data;
-		fireTableDataChanged();
+		actualizar();
 	}
 	
 	
