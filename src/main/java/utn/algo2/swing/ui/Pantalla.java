@@ -13,7 +13,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import utn.algo2.annotations.Control;
+import utn.algo2.annotations.Label;
+import utn.algo2.annotations.NotNull;
+import utn.algo2.annotations.ValidacionPersonalizada;
 import utn.algo2.core.Entidad;
+import utn.algo2.validaciones.Validacion;
 
 @SuppressWarnings("serial")
 public abstract class Pantalla<T> extends JDialog implements ActionListener{
@@ -38,7 +43,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setBounds(100, 100, 426, 300);
 		this.setModalityType(ModalityType.MODELESS);
-		this.setSize(300, 200);
+		this.setSize(700, 300);
 
 	}
 
@@ -49,11 +54,32 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 			JTextField campoDeTexto = new JTextField();
 			campoDeTexto.setColumns(10);
 
+			JLabel labelnull = new JLabel("Nullable: " + !field.isAnnotationPresent(NotNull.class) + "   ");
+			
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			panel.add(label);
 			panel.add(campoDeTexto);
-
+			panel.add(labelnull);
+			
+			if(field.isAnnotationPresent(Label.class)){
+				JLabel widget = new JLabel("Es label   ");
+				panel.add(widget);
+			}
+			
+			if(field.isAnnotationPresent(Control.class)){
+				JLabel widget = new JLabel("Es Control    ");
+				panel.add(widget);
+			}
+			
+			JLabel tienevalidacion = new JLabel("Tiene validacion: " + field.isAnnotationPresent(ValidacionPersonalizada.class)+ "   ");
+			panel.add(tienevalidacion);
+			
+			if(field.isAnnotationPresent(ValidacionPersonalizada.class)){
+				JLabel validacion = new JLabel("Validacion: " + obtengoValidacion(field).toString());
+				panel.add(validacion);
+			}
+			
 			getContentPane().add(panel);
 
 			referenciaACamposDeTexto.put(field, campoDeTexto);
@@ -73,6 +99,11 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		callback.run();
 	}
 
+	public Validacion obtengoValidacion(Field f){
+		ValidacionPersonalizada annotation = f.getAnnotation(ValidacionPersonalizada.class);
+		return annotation.metodo();
+	}
+	
 	/* Getters and Setters */
 
 	public Entidad<T> getEntidad() {

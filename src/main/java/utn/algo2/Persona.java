@@ -1,15 +1,20 @@
 package utn.algo2;
 
+import utn.algo2.annotations.Control;
+import utn.algo2.annotations.Label;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.ValidacionPersonalizada;
+import utn.algo2.core.controles.ControlBase;
 import utn.algo2.validaciones.Validacion;
 
 public class Persona {
 	
 	@NotNull
+	@Control(nombre = ControlBase.class)
 	private String nombre;
 	
 	@NotNull
+	@Label(nombre = "")
 	private String apellido;
 	
 	@ValidacionPersonalizada(metodo=Validacion.MENOR_A_100)

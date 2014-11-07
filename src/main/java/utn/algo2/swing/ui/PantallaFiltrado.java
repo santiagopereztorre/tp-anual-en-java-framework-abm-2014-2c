@@ -54,11 +54,12 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setBounds(100, 100, 426, 300);
 		this.setModalityType(ModalityType.MODELESS);
-		this.setSize(300, 300);
+		this.setSize(450, 450);
 	}
 
 	private void agregarCamposDeTexto(Field[] fields) {
 		for (Field field : fields) {
+			
 			JLabel label = new JLabel(field.getName() + " :");
 
 			JTextField campoDeTexto = new JTextField();
@@ -68,7 +69,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			panel.add(label);
 			panel.add(campoDeTexto);
-
+			
 			getContentPane().add(panel);
 
 			referenciasACamposDeTexto.put(field, campoDeTexto);
