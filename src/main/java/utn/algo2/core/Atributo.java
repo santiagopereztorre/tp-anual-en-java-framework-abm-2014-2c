@@ -9,6 +9,9 @@ import utn.algo2.annotations.Control;
 import utn.algo2.annotations.Label;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.ValidacionPersonalizada;
+import utn.algo2.validaciones.EnteroMenorA100;
+import utn.algo2.validaciones.Validacion;
+import utn.algo2.validaciones.Validador;
 
 public class Atributo<T> {
 
@@ -138,8 +141,16 @@ public class Atributo<T> {
 		return !this.field.isAnnotationPresent(ValidacionPersonalizada.class);
 	}
 
-	public String obtengoValidacion(){
+	public Validacion obtengoValidacion(){
 		ValidacionPersonalizada annotation = this.field.getAnnotation(ValidacionPersonalizada.class);
 		return annotation.metodo();
+	}
+	
+	public boolean cumpleValidacion(){
+		if(this.tieneValidacion()){
+			Validacion validacion = this.obtengoValidacion();
+			validacion.getValidador().evaluaValidacion(this.valor);
+		}
+		return true;
 	}
 }
