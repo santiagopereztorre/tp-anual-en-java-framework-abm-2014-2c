@@ -18,7 +18,7 @@ public class Entidad<T> {
 	}
 
 	public void actualizarAtributosFrom(T unObjeto) {
-		for (Field field: clase.getFields()) {
+		for (Field field: clase.getDeclaredFields()) {
 			Atributo<T> atributo = new Atributo<T>(field);
 			atributo.getValorFrom(unObjeto);
 			atributos.add(atributo);

@@ -57,7 +57,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			return;
 		}
 		clase = entidades.get(0).getClase();
-		Field[] fields = clase.getFields();
+		Field[] fields = clase.getDeclaredFields();
 		Integer cantidadAtributos = fields.length;
 		Integer cantidadEntidades = entidades.size();
 		Object[][] data = new Object[cantidadEntidades][cantidadAtributos];
@@ -83,7 +83,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			String nombreColumna = getColumnName(col);
 			Field field = null;
 			try {
-				field = clase.getField(nombreColumna);
+				field = clase.getDeclaredField(nombreColumna);
 			} catch (NoSuchFieldException e) {
 				e.printStackTrace();
 			} catch (SecurityException e) {

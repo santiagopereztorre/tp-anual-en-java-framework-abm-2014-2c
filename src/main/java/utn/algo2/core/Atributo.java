@@ -9,11 +9,13 @@ public class Atributo<T> {
 
 	public Atributo(Field aKey) {
 		this.field = aKey;
+		field.setAccessible(true);
 	}
 
 	public Atributo(Field aKey, String aValue) {
 		this.field = aKey;
 		this.valor = aValue;
+		field.setAccessible(true);
 	}
 	
 	/* Metodos */

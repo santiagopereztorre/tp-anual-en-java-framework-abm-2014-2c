@@ -2,9 +2,11 @@ package utn.algo2;
 
 public class Persona {
 	
-	public String nombre;
+	private String nombre;
 	
-	public String apellido;
+	private String apellido;
+	
+
 	
 	public String getNombre() {
 		return nombre;
