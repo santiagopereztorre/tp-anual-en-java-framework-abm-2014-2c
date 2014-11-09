@@ -2,32 +2,23 @@ package utn.algo2.swing.ui;
 
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public class PantallaFiltrado<T> extends JDialog implements ActionListener {
+public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 
-	private Entidad<T> entidadAModificar = new Entidad<T>();
-	private Field[] fields;
-	private Hashtable<Field, JTextField> referenciasACamposDeTexto = new Hashtable<Field, JTextField>();
 	private JTable table;
 	private List<Entidad<T>> entidades;
 	private ModeloTabla<T> modeloTabla;
@@ -39,44 +30,12 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	}
 
 	public PantallaFiltrado(Field[] fields) {
-		this.fields = fields;
-		configurarPantalla();
-		agregarCamposDeTexto(fields);
-		agregarTabla(fields);
-		agregarBotones();
+		super(fields);
 	}
 
 	/* Visual */
 
-	private void configurarPantalla() {
-		this.getContentPane().setFont(new Font("Verdana", Font.PLAIN, 14));
-		this.getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-		this.setBounds(100, 100, 426, 300);
-		this.setModalityType(ModalityType.MODELESS);
-		this.setSize(450, 450);
-	}
-
-	private void agregarCamposDeTexto(Field[] fields) {
-		for (Field field : fields) {
-			
-			JLabel label = new JLabel(field.getName() + " :");
-
-			JTextField campoDeTexto = new JTextField();
-			campoDeTexto.setColumns(10);
-
-			Panel panel = new Panel();
-			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			panel.add(label);
-			panel.add(campoDeTexto);
-			
-			getContentPane().add(panel);
-
-			referenciasACamposDeTexto.put(field, campoDeTexto);
-		}
-	}
-
-	private void agregarTabla(Field[] fields) {
+	protected void agregarTabla(Field[] fields) {
 		modeloTabla = new ModeloTabla<T>();
 		modeloTabla.setColumnNames(fields);
 
@@ -88,7 +47,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		this.add(scrollPane);
 	}
 
-	private void agregarBotones() {
+	protected void agregarBotones() {
 		Panel panelBotones = new Panel();
 		panelBotones
 				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -130,7 +89,7 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 		int row = table.getSelectedRow();
 		if (row == -1)
 			return;
-		entidadAModificar = modeloTabla.getEntidadAt(row);
+		entidad = modeloTabla.getEntidadAt(row);
 		callbackModificacion.run();
 	}
 
@@ -165,10 +124,6 @@ public class PantallaFiltrado<T> extends JDialog implements ActionListener {
 	public void cargarEntidades(List<Entidad<T>> entidades) {
 		this.entidades = entidades;
 		modeloTabla.actualizarEntidades(entidades);
-	}
-
-	public Entidad<T> getEntidad() {
-		return entidadAModificar;
 	}
 
 }

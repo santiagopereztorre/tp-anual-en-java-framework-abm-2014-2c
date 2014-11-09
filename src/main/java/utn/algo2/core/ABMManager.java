@@ -50,7 +50,7 @@ public class ABMManager<T> {
 
 	private void callbackModificacion() {
 		Entidad<T> entidadModificada = visualizador.getModificado();
-		Entidad<T> entidadVieja = visualizador.getEntidadModificada();
+		Entidad<T> entidadVieja = visualizador.getFiltrado();
 		visualizador.cerrarPantallaModificar();
 		reemplazarEntidad(entidadVieja, entidadModificada);
 		List<Entidad<T>> entidades = recuperarTodasEntidades();

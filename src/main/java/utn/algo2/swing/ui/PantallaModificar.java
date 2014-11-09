@@ -33,7 +33,7 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 	/* Getters and Setters */
 
 	public void cargarCampos(Entidad<T> entidadAModificar) {
-		for (Entry<Field, JTextField> entry : referenciaACamposDeTexto.entrySet()) {
+		for (Entry<Field, JTextField> entry : referenciasACamposDeTexto.entrySet()) {
 			Field field = entry.getKey();
 			JTextField campoTexto = entry.getValue();
 			String valor = entidadAModificar.getValor(field).toString();

@@ -25,13 +25,14 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	protected Entidad<T> entidad;
 	protected Field[] fields;
-	protected Hashtable<Field, JTextField> referenciaACamposDeTexto = new Hashtable<Field, JTextField>();
+	protected Hashtable<Field, JTextField> referenciasACamposDeTexto = new Hashtable<Field, JTextField>();
 	protected Runnable callback;
 	
 	public Pantalla(Field[] fields) {
 		this.fields = fields;
 		configurarPantalla();
 		agregarCamposDeTexto(fields);
+		agregarTabla(fields);
 		agregarBotones();
 	}
 
@@ -82,9 +83,11 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 			
 			getContentPane().add(panel);
 
-			referenciaACamposDeTexto.put(field, campoDeTexto);
+			referenciasACamposDeTexto.put(field, campoDeTexto);
 		}
 	}
+	
+	protected void agregarTabla(Field[] fields) {};
 	
 	protected abstract void agregarBotones();
 
@@ -93,7 +96,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		entidad = new Entidad<T>();
 		for (Field field : fields) {
-			JTextField campoDeTexto = referenciaACamposDeTexto.get(field);
+			JTextField campoDeTexto = referenciasACamposDeTexto.get(field);
 			entidad.setValor(field, campoDeTexto.getText());
 		}
 		callback.run();
