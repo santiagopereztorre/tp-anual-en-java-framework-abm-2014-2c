@@ -3,15 +3,15 @@ package utn.algo2.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.annotation.Annotation;
 
 import utn.algo2.annotations.Control;
 import utn.algo2.annotations.Label;
 import utn.algo2.annotations.NotNull;
+import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.ValidacionPersonalizada;
-import utn.algo2.validaciones.EnteroMenorA100;
-import utn.algo2.validaciones.Validacion;
-import utn.algo2.validaciones.Validador;
+import utn.algo2.validaciones.Validacion2;
 
 public class Atributo<T> {
 
@@ -28,65 +28,122 @@ public class Atributo<T> {
 		this.valor = aValue;
 		field.setAccessible(true);
 	}
-	
+
 	/* Metodos */
 
 	public void setIn(T destino) {
-		
+
 		Constructor<?> constructor = null;
 		Object valorField = null;
-		
+
 		try {
 			constructor = field.getType().getConstructor(String.class);
 		} catch (NoSuchMethodException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (SecurityException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		try {
 			valorField = constructor.newInstance(valor);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		for (Annotation a : field.getAnnotations()) {
+			String nombre = a.annotationType().getSimpleName();
+			
+			if (nombre.equals("Personalizada")) {
+				Personalizada personalizada = (Personalizada) a;
+				String nombreMetodo = personalizada.metodo();
+				
+				Method metodo = null;
+				try {
+					metodo = destino.getClass().getMethod(nombreMetodo, valorField.getClass());
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				}
+				
+				try {
+					boolean resultado = (boolean) metodo.invoke(destino, valorField);
+					System.out.println("Field: " + field.getName() + " se valida con " + nombreMetodo + " y da " + resultado);
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				continue;
+			}
+
+			Class<?> clase = null;
+			try {
+				clase = Class.forName("utn.algo2.validaciones." + nombre);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			Object objeto = null;
+			try {
+				objeto = clase.newInstance();
+			} catch (InstantiationException e1) {
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			}
+
+			Method metodo = null;
+			try {
+				metodo = clase.getMethod("evaluar", Object.class);
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				boolean resultado = (boolean) metodo.invoke(objeto, valorField);
+				System.out.println("Field: " + field.getName() + " se valida con " + objeto.getClass().getSimpleName() + " y da " + resultado);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+
 		try {
 			field.set(destino, valorField);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void getValorFrom(T fuente) {
 		try {
 			valor = field.get(fuente).toString();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/* Complementarios */
-	
+
 	/* Overrides */
 
 	@SuppressWarnings("unchecked")
@@ -121,34 +178,36 @@ public class Atributo<T> {
 	public void setValor(Object valor) {
 		this.valor = valor;
 	}
-	
+
 	/*
 	 * Pregunto si tiene annotations
 	 */
-	public boolean esNulable(){
+	
+	public boolean esNulable() {
 		return !this.field.isAnnotationPresent(NotNull.class);
 	}
-	
-	public boolean esControl(){
+
+	public boolean esControl() {
 		return !this.field.isAnnotationPresent(Control.class);
 	}
 
-	public boolean esLabel(){
+	public boolean esLabel() {
 		return !this.field.isAnnotationPresent(Label.class);
 	}
 
-	public boolean tieneValidacion(){
+	public boolean tieneValidacion() {
 		return !this.field.isAnnotationPresent(ValidacionPersonalizada.class);
 	}
 
-	public Validacion obtengoValidacion(){
-		ValidacionPersonalizada annotation = this.field.getAnnotation(ValidacionPersonalizada.class);
+	public Validacion2 obtengoValidacion() {
+		ValidacionPersonalizada annotation = this.field
+				.getAnnotation(ValidacionPersonalizada.class);
 		return annotation.metodo();
 	}
-	
-	public boolean cumpleValidacion(){
-		if(this.tieneValidacion()){
-			Validacion validacion = this.obtengoValidacion();
+
+	public boolean cumpleValidacion() {
+		if (this.tieneValidacion()) {
+			Validacion2 validacion = this.obtengoValidacion();
 			validacion.getValidador().evaluaValidacion(this.valor);
 		}
 		return true;
