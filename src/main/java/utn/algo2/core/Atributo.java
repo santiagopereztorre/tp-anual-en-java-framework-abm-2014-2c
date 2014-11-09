@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.lang.annotation.Annotation;
 
 import utn.algo2.annotations.Control;
@@ -33,104 +34,14 @@ public class Atributo<T> {
 
 	public void setIn(T destino) {
 
-		Constructor<?> constructor = null;
-		Object valorField = null;
+		Object valorField = castearValor();
 
-		try {
-			constructor = field.getType().getConstructor(String.class);
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		}
+		evaluarAnotaciones(destino, valorField);
 
-		try {
-			valorField = constructor.newInstance(valor);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-
-		for (Annotation a : field.getAnnotations()) {
-			String nombre = a.annotationType().getSimpleName();
-			
-			if (nombre.equals("Personalizada")) {
-				Personalizada personalizada = (Personalizada) a;
-				String nombreMetodo = personalizada.metodo();
-				
-				Method metodo = null;
-				try {
-					metodo = destino.getClass().getMethod(nombreMetodo, valorField.getClass());
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					boolean resultado = (boolean) metodo.invoke(destino, valorField);
-					System.out.println("Field: " + field.getName() + " se valida con " + nombreMetodo + " y da " + resultado);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-				
-				continue;
-			}
-
-			Class<?> clase = null;
-			try {
-				clase = Class.forName("utn.algo2.validaciones." + nombre);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-			Object objeto = null;
-			try {
-				objeto = clase.newInstance();
-			} catch (InstantiationException e1) {
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				e1.printStackTrace();
-			}
-
-			Method metodo = null;
-			try {
-				metodo = clase.getMethod("evaluar", Object.class);
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				boolean resultado = (boolean) metodo.invoke(objeto, valorField);
-				System.out.println("Field: " + field.getName() + " se valida con " + objeto.getClass().getSimpleName() + " y da " + resultado);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-
-		try {
-			field.set(destino, valorField);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		settearValor(destino, valorField);
 	}
+
+	
 
 	public void getValorFrom(T fuente) {
 		try {
@@ -143,6 +54,104 @@ public class Atributo<T> {
 	}
 
 	/* Complementarios */
+	
+	private Object castearValor() {
+		Constructor<?> constructor = null;
+		
+		try {
+			constructor = field.getType().getConstructor(String.class);
+		} catch (NoSuchMethodException e1) {
+			e1.printStackTrace();
+		} catch (SecurityException e1) {
+			e1.printStackTrace();
+		}
+
+		Object valorField = null;
+		
+		try {
+			valorField = constructor.newInstance(valor);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		return valorField;
+	}
+
+	private void evaluarAnotaciones(T destino, Object valorField) {
+		for (Annotation a : field.getAnnotations()) {
+			String nombre = a.annotationType().getSimpleName();
+			
+			Method metodo1 = null;
+			Object objeto1 = null;
+			
+			if (nombre.equals("Personalizada")) {
+				Personalizada personalizada = (Personalizada) a;
+				metodo1 = getMetodo(personalizada.metodo(), destino.getClass(), valorField.getClass());
+				objeto1 = destino;
+
+			} else {
+				Class<?> clase = null;
+				try {
+					clase = Class.forName("utn.algo2.validaciones." + nombre);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				try {
+					objeto1 = clase.newInstance();
+				} catch (InstantiationException e1) {
+					e1.printStackTrace();
+				} catch (IllegalAccessException e1) {
+					e1.printStackTrace();
+				}
+
+				metodo1 = getMetodo("evaluar", clase, Object.class);
+			}
+
+			invocar(metodo1, objeto1, valorField);
+		}
+	}
+
+	private Method getMetodo(String nombre, Class<?> clase, Class<? extends Object> class1) {
+		Method metodo = null;
+		try {
+			metodo = clase.getMethod(nombre, class1);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return metodo;
+	}
+
+	private void invocar(Method metodo, Object objeto, Object valorField) {
+		try {
+			boolean resultado = (boolean) metodo.invoke(objeto, valorField);
+			System.out.println("Field: " + field.getName() + " se valida con " + objeto.getClass().getSimpleName() + "." + metodo.getName() + " y da " + resultado);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void settearValor(T destino, Object valorField) {
+		try {
+			field.set(destino, valorField);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/* Overrides */
 
