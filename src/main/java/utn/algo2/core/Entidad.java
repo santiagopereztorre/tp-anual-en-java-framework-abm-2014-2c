@@ -8,16 +8,19 @@ public class Entidad<T> {
 
 	private Class<?> clase;
 	private List<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
+	private T objeto;
 	
 	/* Interfaz */
 	
 	public T crearObjeto() {
-		T objeto = crearInstancia(clase);
+		if (objeto == null) 
+			objeto = crearInstancia(clase);
 		atributos.forEach((Atributo<T> atributo) -> atributo.setIn(objeto));
 		return objeto;
 	}
 
 	public void actualizarAtributosFrom(T unObjeto) {
+		objeto = unObjeto;
 		for (Field field: clase.getDeclaredFields()) {
 			Atributo<T> atributo = new Atributo<T>(field);
 			atributo.getValorFrom(unObjeto);
@@ -60,7 +63,7 @@ public class Entidad<T> {
 		int index = atributos.indexOf(atributoBuscado);
 		return atributos.get(index).getValor();
 	}
-
+	
 	public boolean isEmpty() {
 		return atributos.isEmpty();
 	}

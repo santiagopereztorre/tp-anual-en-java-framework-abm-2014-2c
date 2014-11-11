@@ -68,7 +68,8 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	}
 
 	public Entidad<T> getFiltrado() {
-		return pantallaFiltrado.getEntidad();
+		entidadModificada = pantallaFiltrado.getEntidad();
+		return entidadModificada;
 	}
 	
 	/* Callbacks */

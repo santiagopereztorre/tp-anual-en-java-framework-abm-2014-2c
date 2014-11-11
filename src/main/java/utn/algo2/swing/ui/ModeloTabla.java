@@ -1,6 +1,7 @@
 package utn.algo2.swing.ui;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -12,6 +13,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 
 	private String[] columnNames = {};
 	private Object[][] data = {};
+	private List<Entidad<T>> entidadesPorRow = new ArrayList<Entidad<T>>();
 	private Class<?> clase;
 
 	public int getColumnCount() {
@@ -56,6 +58,7 @@ public class ModeloTabla<T> extends AbstractTableModel {
 			fireTableDataChanged();
 			return;
 		}
+		entidadesPorRow = entidades;
 		clase = entidades.get(0).getClase();
 		Field[] fields = clase.getDeclaredFields();
 		Integer cantidadAtributos = fields.length;
@@ -76,23 +79,24 @@ public class ModeloTabla<T> extends AbstractTableModel {
 	
 
 	public Entidad<T> getEntidadAt(int row) {
-		Object[] objeto = data[row];
-		Entidad<T> entidad = new Entidad<T>();
-		int totalColumnas = getColumnCount();
-		for (int col = 0; col < totalColumnas; col ++ ) {
-			String nombreColumna = getColumnName(col);
-			Field field = null;
-			try {
-				field = clase.getDeclaredField(nombreColumna);
-			} catch (NoSuchFieldException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
-			Object valor =  objeto[col];
-			entidad.setValor(field, valor);
-		}
-		return entidad;
+//		Object[] objeto = data[row];
+//		Entidad<T> entidad = new Entidad<T>();
+//		int totalColumnas = getColumnCount();
+//		for (int col = 0; col < totalColumnas; col ++ ) {
+//			String nombreColumna = getColumnName(col);
+//			Field field = null;
+//			try {
+//				field = clase.getDeclaredField(nombreColumna);
+//			} catch (NoSuchFieldException e) {
+//				e.printStackTrace();
+//			} catch (SecurityException e) {
+//				e.printStackTrace();
+//			}
+//			Object valor =  objeto[col];
+//			entidad.setValor(field, valor);
+//		}
+//		return entidad;
+		return entidadesPorRow.get(row);
 	}
 
 	public void actualizar() {

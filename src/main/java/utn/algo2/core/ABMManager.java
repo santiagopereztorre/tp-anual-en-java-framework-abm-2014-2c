@@ -52,7 +52,7 @@ public class ABMManager<T> {
 		Entidad<T> entidadModificada = visualizador.getModificado();
 		Entidad<T> entidadVieja = visualizador.getFiltrado();
 		visualizador.cerrarPantallaModificar();
-		reemplazarEntidad(entidadVieja, entidadModificada);
+		actualizar(entidadVieja, entidadModificada);
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.actualizarFiltro(entidades);
 	}
@@ -72,7 +72,7 @@ public class ABMManager<T> {
 		persistidor.guardar(objeto);
 	}
 
-	private void reemplazarEntidad(Entidad<T> entidadVieja,
+	private void actualizar(Entidad<T> entidadVieja,
 			Entidad<T> entidadModificada) {
 		entidadVieja.setClase(clase);
 		T objetoViejo = entidadVieja.crearObjeto();
