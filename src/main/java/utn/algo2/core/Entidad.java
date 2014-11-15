@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utn.algo2.exception.TipoInvalidoException;
+import utn.algo2.exception.ValorNoValidoException;
 
 public class Entidad<T> {
 
@@ -15,7 +16,7 @@ public class Entidad<T> {
 	
 	/* Interfaz */
 	
-	public T crearObjeto() throws TipoInvalidoException {
+	public T crearObjeto() throws TipoInvalidoException, ValorNoValidoException {
 		if (objeto == null) 
 			objeto = crearInstancia(clase);
 		for (Atributo<T> atributo : atributos) {

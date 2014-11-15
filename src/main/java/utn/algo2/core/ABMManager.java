@@ -2,6 +2,7 @@ package utn.algo2.core;
 
 import utn.algo2.baseDeDatos.Persistidor;
 import utn.algo2.exception.TipoInvalidoException;
+import utn.algo2.exception.ValorNoValidoException;
 import utn.algo2.visualizacion.Visualizador;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,6 +50,9 @@ public class ABMManager<T> {
 		} catch (TipoInvalidoException e) {
 			visualizador.mostrarErrorEnCrear(e.getMessage());
 			return;
+		} catch (ValorNoValidoException e) {
+			visualizador.mostrarErrorEnCrear(e.getMessage());
+			return;
 		}
 		visualizador.cerrarPantallaCrear();
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
@@ -61,6 +65,9 @@ public class ABMManager<T> {
 		try {
 			actualizar(entidadVieja, entidadModificada);
 		} catch (TipoInvalidoException e) {
+			visualizador.mostrarErrorEnModificar(e.getMessage());
+			return;
+		} catch (ValorNoValidoException e) {
 			visualizador.mostrarErrorEnModificar(e.getMessage());
 			return;
 		}
@@ -78,14 +85,14 @@ public class ABMManager<T> {
 		visualizador.abrirPantallaModificar(entidadFiltrada);
 	}
 
-	private void guardarEntidad(Entidad<T> entidad) throws TipoInvalidoException {
+	private void guardarEntidad(Entidad<T> entidad) throws TipoInvalidoException, ValorNoValidoException {
 		entidad.setClase(clase);
 		T objeto = entidad.crearObjeto();
 		persistidor.guardar(objeto);
 	}
 
 	private void actualizar(Entidad<T> entidadVieja,
-			Entidad<T> entidadModificada) throws TipoInvalidoException {
+			Entidad<T> entidadModificada) throws TipoInvalidoException, ValorNoValidoException {
 		entidadVieja.setClase(clase);
 		T objetoViejo = entidadVieja.crearObjeto();
 		entidadModificada.setClase(clase);

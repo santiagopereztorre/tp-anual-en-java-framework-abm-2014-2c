@@ -52,7 +52,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	private void agregarCampoDeMensajeError() {
 		Panel panel = new Panel();
-		labelError = new JLabel("Hola");
+		labelError = new JLabel();
 		panel.add(labelError);
 		getContentPane().add(panel);
 	}

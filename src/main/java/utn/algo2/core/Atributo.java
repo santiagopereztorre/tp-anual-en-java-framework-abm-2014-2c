@@ -12,6 +12,7 @@ import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.ValidacionPersonalizada;
 import utn.algo2.exception.TipoInvalidoException;
+import utn.algo2.exception.ValorNoValidoException;
 import utn.algo2.validaciones.Validacion2;
 
 public class Atributo<T> {
@@ -32,7 +33,7 @@ public class Atributo<T> {
 
 	/* Metodos */
 
-	public void setIn(T destino) throws TipoInvalidoException {
+	public void setIn(T destino) throws TipoInvalidoException, ValorNoValidoException {
 		
 		Object valorField = castearValor();
 
@@ -77,13 +78,13 @@ public class Atributo<T> {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			throw new TipoInvalidoException("Tipo invalido");
+			throw new TipoInvalidoException("Tipo invalido en " + field.getName());
 		}
 		
 		return valorField;
 	}
 
-	private void evaluarAnotaciones(T destino, Object valorField) {
+	private void evaluarAnotaciones(T destino, Object valorField) throws ValorNoValidoException {
 		for (Annotation a : field.getAnnotations()) {
 			String nombre = a.annotationType().getSimpleName();
 			
@@ -130,16 +131,19 @@ public class Atributo<T> {
 		return metodo;
 	}
 
-	private void invocar(Method metodo, Object objeto, Object valorField) {
+	private void invocar(Method metodo, Object objeto, Object valorField) throws ValorNoValidoException {
+		boolean resultado = true;
 		try {
-			boolean resultado = (boolean) metodo.invoke(objeto, valorField);
-			System.out.println("Field: " + field.getName() + " se valida con " + objeto.getClass().getSimpleName() + "." + metodo.getName() + " y da " + resultado);
+			resultado = (boolean) metodo.invoke(objeto, valorField);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
+		}
+		if (!resultado) {
+			throw new ValorNoValidoException("Campo " + field.getName() + " no cumple condicion " + objeto.getClass().getSimpleName() + "." + metodo.getName());
 		}
 	}
 
