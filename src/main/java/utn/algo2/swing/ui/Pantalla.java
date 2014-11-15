@@ -26,11 +26,13 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 	protected Entidad<T> entidad;
 	protected Field[] fields;
 	protected Hashtable<Field, JTextField> referenciasACamposDeTexto = new Hashtable<Field, JTextField>();
+	private JLabel labelError;
 	protected Runnable callback;
 	
 	public Pantalla(Field[] fields) {
 		this.fields = fields;
 		configurarPantalla();
+		agregarCampoDeMensajeError();
 		agregarCamposDeTexto(fields);
 		agregarTabla(fields);
 		agregarBotones();
@@ -46,6 +48,13 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		this.setModalityType(ModalityType.MODELESS);
 		this.setSize(700, 300);
 
+	}
+
+	private void agregarCampoDeMensajeError() {
+		Panel panel = new Panel();
+		labelError = new JLabel("Hola");
+		panel.add(labelError);
+		getContentPane().add(panel);
 	}
 
 	private void agregarCamposDeTexto(Field[] fields) {
@@ -111,5 +120,9 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	public Entidad<T> getEntidad() {
 		return entidad;
+	}
+	
+	public void mostrarError(String mensaje) {
+		labelError.setText(mensaje);
 	}
 }

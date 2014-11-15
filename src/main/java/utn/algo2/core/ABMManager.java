@@ -1,8 +1,10 @@
 package utn.algo2.core;
 
 import utn.algo2.baseDeDatos.Persistidor;
+import utn.algo2.exception.TipoInvalidoException;
 import utn.algo2.visualizacion.Visualizador;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +44,13 @@ public class ABMManager<T> {
 
 	private void callbackCreacion() {
 		Entidad<T> entidadCreada = visualizador.getCreado();
+		try {
+			guardarEntidad(entidadCreada);
+		} catch (TipoInvalidoException e) {
+			visualizador.mostrarErrorEnCrear(e.getMessage());
+			return;
+		}
 		visualizador.cerrarPantallaCrear();
-		guardarEntidad(entidadCreada);
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.actualizarFiltro(entidades);
 	}
@@ -51,8 +58,13 @@ public class ABMManager<T> {
 	private void callbackModificacion() {
 		Entidad<T> entidadModificada = visualizador.getModificado();
 		Entidad<T> entidadVieja = visualizador.getFiltrado();
+		try {
+			actualizar(entidadVieja, entidadModificada);
+		} catch (TipoInvalidoException e) {
+			visualizador.mostrarErrorEnModificar(e.getMessage());
+			return;
+		}
 		visualizador.cerrarPantallaModificar();
-		actualizar(entidadVieja, entidadModificada);
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.actualizarFiltro(entidades);
 	}
@@ -66,14 +78,14 @@ public class ABMManager<T> {
 		visualizador.abrirPantallaModificar(entidadFiltrada);
 	}
 
-	private void guardarEntidad(Entidad<T> entidad) {
+	private void guardarEntidad(Entidad<T> entidad) throws TipoInvalidoException {
 		entidad.setClase(clase);
 		T objeto = entidad.crearObjeto();
 		persistidor.guardar(objeto);
 	}
 
 	private void actualizar(Entidad<T> entidadVieja,
-			Entidad<T> entidadModificada) {
+			Entidad<T> entidadModificada) throws TipoInvalidoException {
 		entidadVieja.setClase(clase);
 		T objetoViejo = entidadVieja.crearObjeto();
 		entidadModificada.setClase(clase);

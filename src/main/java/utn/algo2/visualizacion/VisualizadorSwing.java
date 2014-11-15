@@ -121,5 +121,15 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	public void setEntidadModificada(Entidad<T> entidadModificada) {
 		this.entidadModificada = entidadModificada;
 	}
+	
+	/* Errores */
+
+	public void mostrarErrorEnCrear(String mensaje) {
+		this.pantallaCrear.mostrarError(mensaje);
+	}
+
+	public void mostrarErrorEnModificar(String mensaje) {
+		this.pantallaModificar.mostrarError(mensaje);
+	}
 
 }

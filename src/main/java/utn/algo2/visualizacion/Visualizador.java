@@ -35,4 +35,9 @@ public interface Visualizador<T> {
 	public void onModificar(Runnable callback);
 	public void onCrearFiltrado(Runnable callback);
 	public void onModificarFiltrado(Runnable callback);
+	
+	/* Errores */
+	
+	public void mostrarErrorEnCrear(String message);
+	public void mostrarErrorEnModificar(String message);
 }

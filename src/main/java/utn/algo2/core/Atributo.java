@@ -3,15 +3,13 @@ package utn.algo2.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.annotation.Annotation;
 
 import utn.algo2.annotations.Control;
 import utn.algo2.annotations.Label;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.ValidacionPersonalizada;
-import utn.algo2.validaciones.EnteroMenorA100;
+import utn.algo2.exception.TipoInvalidoException;
 import utn.algo2.validaciones.Validacion;
-import utn.algo2.validaciones.Validador;
 
 public class Atributo<T> {
 
@@ -31,7 +29,7 @@ public class Atributo<T> {
 	
 	/* Metodos */
 
-	public void setIn(T destino) {
+	public void setIn(T destino) throws TipoInvalidoException {
 		
 		Constructor<?> constructor = null;
 		Object valorField = null;
@@ -58,8 +56,7 @@ public class Atributo<T> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new TipoInvalidoException("Tipo invalido");
 		}
 		
 		try {
@@ -146,6 +143,7 @@ public class Atributo<T> {
 		return annotation.metodo();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public boolean cumpleValidacion(){
 		if(this.tieneValidacion()){
 			Validacion validacion = this.obtengoValidacion();

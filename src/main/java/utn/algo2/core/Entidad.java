@@ -1,8 +1,11 @@
 package utn.algo2.core;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import utn.algo2.exception.TipoInvalidoException;
 
 public class Entidad<T> {
 
@@ -12,10 +15,12 @@ public class Entidad<T> {
 	
 	/* Interfaz */
 	
-	public T crearObjeto() {
+	public T crearObjeto() throws TipoInvalidoException {
 		if (objeto == null) 
 			objeto = crearInstancia(clase);
-		atributos.forEach((Atributo<T> atributo) -> atributo.setIn(objeto));
+		for (Atributo<T> atributo : atributos) {
+			atributo.setIn(objeto);
+		}
 		return objeto;
 	}
 
