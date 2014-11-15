@@ -18,7 +18,7 @@ import utn.algo2.annotations.Label;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.ValidacionPersonalizada;
 import utn.algo2.core.Entidad;
-import utn.algo2.validaciones.Validacion;
+import utn.algo2.validaciones.Validacion2;
 
 @SuppressWarnings("serial")
 public abstract class Pantalla<T> extends JDialog implements ActionListener{
@@ -111,7 +111,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		callback.run();
 	}
 
-	public Validacion obtengoValidacion(Field f){
+	public Validacion2 obtengoValidacion(Field f){
 		ValidacionPersonalizada annotation = f.getAnnotation(ValidacionPersonalizada.class);
 		return annotation.metodo();
 	}
