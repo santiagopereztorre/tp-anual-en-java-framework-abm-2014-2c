@@ -5,7 +5,6 @@ import utn.algo2.exception.TipoInvalidoException;
 import utn.algo2.exception.ValorNoValidoException;
 import utn.algo2.visualizacion.Visualizador;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 

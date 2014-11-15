@@ -218,6 +218,7 @@ public class Atributo<T> {
 		return annotation.metodo();
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean cumpleValidacion() {
 		if (this.tieneValidacion()) {
 			Validacion2 validacion = this.obtengoValidacion();

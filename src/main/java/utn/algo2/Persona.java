@@ -3,8 +3,6 @@ package utn.algo2;
 import utn.algo2.annotations.EnteroMayorA0;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
-import utn.algo2.annotations.ValidacionPersonalizada;
-import utn.algo2.validaciones.Validacion2;
 
 public class Persona {
 	
