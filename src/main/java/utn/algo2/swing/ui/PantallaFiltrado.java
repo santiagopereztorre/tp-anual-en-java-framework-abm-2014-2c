@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import utn.algo2.core.Entidad;
+import utn.algo2.core.FieldExtendido;
 
 @SuppressWarnings("serial")
 public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
@@ -29,13 +30,13 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 		FILTRAR, MODIFICAR, CREAR,
 	}
 
-	public PantallaFiltrado(Field[] fields) {
+	public PantallaFiltrado(ArrayList<FieldExtendido> fields) {
 		super(fields);
 	}
 
 	/* Visual */
 
-	protected void agregarTabla(Field[] fields) {
+	protected void agregarTabla(ArrayList<FieldExtendido> fields) {
 		modeloTabla = new ModeloTabla<T>();
 		modeloTabla.setColumnNames(fields);
 
@@ -96,8 +97,9 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	private void filtrar() {
 		List<Entidad<T>> entidadesFiltradas = new ArrayList<Entidad<T>>(
 				entidades);
-		for (Field field : fields) {
-			String texto = referenciasACamposDeTexto.get(field).getText();
+		for (FieldExtendido field1 : fields) {
+			String texto = referenciasACamposDeTexto.get(field1).getText();
+			Field field = field1.getField();
 			if (texto != null) {
 				entidadesFiltradas = entidadesFiltradas
 						.stream()

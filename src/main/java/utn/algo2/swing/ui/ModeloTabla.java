@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import utn.algo2.core.Entidad;
+import utn.algo2.core.FieldExtendido;
 
 @SuppressWarnings("serial")
 public class ModeloTabla<T> extends AbstractTableModel {
@@ -41,10 +42,10 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		return getValueAt(0, c).getClass();
 	}
 
-	public void setColumnNames(Field[] fields) {
-		String[] columnNames = new String[fields.length];
+	public void setColumnNames(ArrayList<FieldExtendido> fields) {
+		String[] columnNames = new String[fields.size()];
 		int i = 0;
-		for (Field field : fields) {
+		for (FieldExtendido field : fields) {
 			columnNames[i] = field.getName();
 			i++;
 		}

@@ -5,6 +5,7 @@ import utn.algo2.exception.TipoInvalidoException;
 import utn.algo2.exception.ValorNoValidoException;
 import utn.algo2.visualizacion.Visualizador;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,16 @@ public class ABMManager<T> {
 		this.clase = clase;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
-		this.visualizador.setFields(this.clase.getDeclaredFields());
+		
+		Field[] fields = this.clase.getDeclaredFields();
+		ArrayList<FieldExtendido> fieldsExtendidos = new ArrayList<FieldExtendido>();
+		for (Field field : fields) {
+			FieldExtendido fieldExtendido = new FieldExtendido(field);
+			fieldsExtendidos.add(fieldExtendido);
+		}
+		
+		
+		this.visualizador.setFields(fieldsExtendidos);
 	}
 
 	/**

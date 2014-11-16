@@ -1,23 +1,25 @@
 package utn.algo2.visualizacion;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import utn.algo2.core.Entidad;
+import utn.algo2.core.FieldExtendido;
 import utn.algo2.swing.ui.PantallaCrear;
 import utn.algo2.swing.ui.PantallaFiltrado;
 import utn.algo2.swing.ui.PantallaModificar;
 
 public class VisualizadorSwing<T> implements Visualizador<T> {
 
-	private Field[] fields;
+	private ArrayList<FieldExtendido> fields;
 	private PantallaCrear<T> pantallaCrear = null;
 	private PantallaModificar<T> pantallaModificar = null;
 	private PantallaFiltrado<T> pantallaFiltrado = null;
 	
 	private Entidad<T> entidadModificada;
 
-	public void setFields(Field[] fields) {
+	public void setFields(ArrayList<FieldExtendido> fields) {
 		this.fields = fields;
 	}
 
