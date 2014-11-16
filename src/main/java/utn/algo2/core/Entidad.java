@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import utn.algo2.exception.TipoInvalidoException;
-import utn.algo2.exception.ValorNoValidoException;
+import utn.algo2.exception.CasteoInvalidoException;
+import utn.algo2.exception.ValorNoCumpleCondicionException;
 
 public class Entidad<T> {
 
@@ -15,7 +15,7 @@ public class Entidad<T> {
 	
 	/* Interfaz */
 	
-	public T crearObjeto() throws TipoInvalidoException, ValorNoValidoException {
+	public T crearObjeto() throws CasteoInvalidoException, ValorNoCumpleCondicionException {
 		if (objeto == null) 
 			objeto = crearInstancia(clase);
 		for (Atributo<T> atributo : atributos) {

@@ -1,8 +1,8 @@
 package utn.algo2.core;
 
 import utn.algo2.baseDeDatos.Persistidor;
-import utn.algo2.exception.TipoInvalidoException;
-import utn.algo2.exception.ValorNoValidoException;
+import utn.algo2.exception.CasteoInvalidoException;
+import utn.algo2.exception.ValorNoCumpleCondicionException;
 import utn.algo2.visualizacion.Visualizador;
 
 import java.lang.reflect.Field;
@@ -38,6 +38,9 @@ public class ABMManager<T> {
 
 		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
 		visualizador.onModificarFiltrado(modificacionFiltrado);
+		
+		Runnable borrarFiltrado = () -> callbackBorrarFiltrado();
+		visualizador.onBorrarFiltrado(borrarFiltrado);
 
 		Runnable volverCrear = () -> callbackVolverCrear();
 		visualizador.onVolverCrear(volverCrear);
@@ -70,12 +73,8 @@ public class ABMManager<T> {
 		Entidad<T> entidadCreada = visualizador.getCreado();
 		try {
 			guardarEntidad(entidadCreada);
-		} catch (TipoInvalidoException e) {
-			visualizador.mostrarErrorEnCrear(e.getMessage());
-			return;
-		} catch (ValorNoValidoException e) {
-			visualizador.mostrarErrorEnCrear(e.getMessage());
-			return;
+		} catch (CasteoInvalidoException | ValorNoCumpleCondicionException e) {
+			visualizador.mostrarErrorEnModificar(e.getMessage());
 		}
 		visualizador.cerrarPantallaCrear();
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
@@ -87,12 +86,8 @@ public class ABMManager<T> {
 		Entidad<T> entidadVieja = visualizador.getFiltrado();
 		try {
 			actualizar(entidadVieja, entidadModificada);
-		} catch (TipoInvalidoException e) {
+		} catch (CasteoInvalidoException | ValorNoCumpleCondicionException e) {
 			visualizador.mostrarErrorEnModificar(e.getMessage());
-			return;
-		} catch (ValorNoValidoException e) {
-			visualizador.mostrarErrorEnModificar(e.getMessage());
-			return;
 		}
 		visualizador.cerrarPantallaModificar();
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
@@ -106,6 +101,17 @@ public class ABMManager<T> {
 	private void callbackModificacionFiltrado() {
 		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
 		visualizador.abrirPantallaModificar(entidadFiltrada);
+	}
+	
+	private void callbackBorrarFiltrado() {
+		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
+		try {
+			eliminarEntidad(entidadFiltrada);
+		} catch (CasteoInvalidoException | ValorNoCumpleCondicionException e) {
+			visualizador.mostrarErrorEnModificar(e.getMessage());
+		}
+		List<Entidad<T>> entidades = recuperarTodasEntidades();
+		visualizador.actualizarFiltro(entidades);
 	}
 
 	private void callbackVolverCrear() {
@@ -122,14 +128,20 @@ public class ABMManager<T> {
 	
 	/* Base de datos */
 
-	private void guardarEntidad(Entidad<T> entidad) throws TipoInvalidoException, ValorNoValidoException {
+	private void guardarEntidad(Entidad<T> entidad) throws CasteoInvalidoException, ValorNoCumpleCondicionException {
 		entidad.setClase(clase);
 		T objeto = entidad.crearObjeto();
 		persistidor.guardar(objeto);
 	}
 
+	private void eliminarEntidad(Entidad<T> entidad) throws CasteoInvalidoException, ValorNoCumpleCondicionException {
+		entidad.setClase(clase);
+		T objeto = entidad.crearObjeto();
+		persistidor.remover(objeto);
+	}
+
 	private void actualizar(Entidad<T> entidadVieja,
-			Entidad<T> entidadModificada) throws TipoInvalidoException, ValorNoValidoException {
+			Entidad<T> entidadModificada) throws CasteoInvalidoException, ValorNoCumpleCondicionException {
 		entidadVieja.setClase(clase);
 		T objetoViejo = entidadVieja.crearObjeto();
 		entidadModificada.setClase(clase);

@@ -11,20 +11,20 @@ import utn.algo2.swing.ui.PantallaModificar;
 
 public class VisualizadorSwing<T> implements Visualizador<T> {
 
-	private ArrayList<Atributo<T>> fields;
+	private ArrayList<Atributo<T>> atributos;
 	private PantallaCrear<T> pantallaCrear = null;
 	private PantallaModificar<T> pantallaModificar = null;
 	private PantallaFiltrado<T> pantallaFiltrado = null;
 	
 	private Entidad<T> entidadModificada;
 
-	public void setFields(ArrayList<Atributo<T>> fields) {
-		this.fields = fields;
+	public void setFields(ArrayList<Atributo<T>> atributos) {
+		this.atributos = atributos;
 	}
 
 	public void abrirPantallaCrear() {
 		if (pantallaCrear == null) {
-			pantallaCrear = new PantallaCrear<T>(fields);
+			pantallaCrear = new PantallaCrear<T>(atributos);
 		}
 		pantallaCrear.borrarCampos();
 		pantallaCrear.setVisible(true);
@@ -40,7 +40,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 
 	public void abrirPantallaModificar(Entidad<T> entidadAModificar) {
 		if (pantallaModificar == null) {
-			pantallaModificar = new PantallaModificar<T>(fields);
+			pantallaModificar = new PantallaModificar<T>(atributos);
 		}
 		this.setEntidadModificada(entidadAModificar);
 		pantallaModificar.cargarCampos(entidadAModificar);
@@ -57,7 +57,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	
 	public void abrirPantallaFiltrado(List<Entidad<T>> entidades) {
 		if (pantallaFiltrado == null) {
-			pantallaFiltrado = new PantallaFiltrado<T>(fields);
+			pantallaFiltrado = new PantallaFiltrado<T>(atributos);
 		}
 		pantallaFiltrado.cargarEntidades(entidades);
 		pantallaFiltrado.setVisible(true);
@@ -76,51 +76,59 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	/* Callbacks */
 
 	@Override
-	public void onCrear(Runnable creacion) {
+	public void onCrear(Runnable callback) {
 		if (pantallaCrear == null) {
-			pantallaCrear = new PantallaCrear<T>(fields);
+			pantallaCrear = new PantallaCrear<T>(atributos);
 		}
-		pantallaCrear.onCrear(creacion);
+		pantallaCrear.onCrear(callback);
 		
 	}
 
 	@Override
-	public void onModificar(Runnable modificacion) {
+	public void onModificar(Runnable callback) {
 		if (pantallaModificar == null) {
-			pantallaModificar = new PantallaModificar<T>(fields);
+			pantallaModificar = new PantallaModificar<T>(atributos);
 		}
-		pantallaModificar.onModificar(modificacion);
+		pantallaModificar.onModificar(callback);
 	}
 
 	@Override
-	public void onCrearFiltrado(Runnable creacionFiltrado) {
+	public void onCrearFiltrado(Runnable callback) {
 		if (pantallaFiltrado == null) {
-			pantallaFiltrado = new PantallaFiltrado<T>(fields);
+			pantallaFiltrado = new PantallaFiltrado<T>(atributos);
 		}
-		pantallaFiltrado.onCrear(creacionFiltrado);
+		pantallaFiltrado.onCrear(callback);
 	}
 
 	@Override
-	public void onModificarFiltrado(Runnable modificacion) {
+	public void onModificarFiltrado(Runnable callback) {
 		if (pantallaFiltrado == null) {
-			pantallaFiltrado = new PantallaFiltrado<T>(fields);
+			pantallaFiltrado = new PantallaFiltrado<T>(atributos);
 		}
-		pantallaFiltrado.onModificar(modificacion);
+		pantallaFiltrado.onModificar(callback);
+	}
+	
+	@Override
+	public void onBorrarFiltrado(Runnable callback) {
+		if (pantallaFiltrado == null) {
+			pantallaFiltrado = new PantallaFiltrado<T>(atributos);
+		}
+		pantallaFiltrado.onBorrar(callback);
 	}
 
 	@Override
-	public void onVolverCrear(Runnable volverCrear) {
-		pantallaCrear.onVolver(volverCrear);
+	public void onVolverCrear(Runnable callback) {
+		pantallaCrear.onVolver(callback);
 	}
 
 	@Override
-	public void onVolverModificar(Runnable volverModificar) {
-		pantallaModificar.onVolver(volverModificar);
+	public void onVolverModificar(Runnable callback) {
+		pantallaModificar.onVolver(callback);
 	}
 
 	@Override
-	public void onVolverFiltrar(Runnable volverFiltrar) {
-		pantallaFiltrado.onVolver(volverFiltrar);
+	public void onVolverFiltrar(Runnable callback) {
+		pantallaFiltrado.onVolver(callback);
 	}
 	
 	/* Necesario */

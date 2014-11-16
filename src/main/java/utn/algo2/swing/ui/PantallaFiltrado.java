@@ -20,8 +20,9 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	private JTable table;
 	private List<Entidad<T>> entidades;
 	private ModeloTabla<T> modeloTabla;
-	private Runnable callbackModificacion;
-	private Runnable callbackCreacion;
+	private Runnable callbackModificar;
+	private Runnable callbackCrear;
+	private Runnable callbackBorrar;
 	
 	public PantallaFiltrado(ArrayList<Atributo<T>> atributos) {
 		super(atributos);
@@ -54,16 +55,21 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 		botonFiltrar.setActionCommand(Action.FILTRAR.name());
 		botonFiltrar.addActionListener(this);
 		panelBotones.add(botonFiltrar);
+		
+		JButton botonCrear = new JButton("Crear");
+		botonCrear.setActionCommand(Action.CREAR.name());
+		botonCrear.addActionListener(this);
+		panelBotones.add(botonCrear);
 
 		JButton botonModificar = new JButton("Modificar");
 		botonModificar.setActionCommand(Action.MODIFICAR.name());
 		botonModificar.addActionListener(this);
 		panelBotones.add(botonModificar);
 
-		JButton botonCrear = new JButton("Crear");
-		botonCrear.setActionCommand(Action.CREAR.name());
-		botonCrear.addActionListener(this);
-		panelBotones.add(botonCrear);
+		JButton botonBorrar = new JButton("Borrar");
+		botonBorrar.setActionCommand(Action.BORRAR.name());
+		botonBorrar.addActionListener(this);
+		panelBotones.add(botonBorrar);
 	}
 
 	/* Actions */
@@ -74,20 +80,31 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 			crear();
 		if (actionCommand == Action.MODIFICAR.name())
 			modificar();
+		if (actionCommand == Action.BORRAR.name())
+			borrar();
 		if (actionCommand == Action.FILTRAR.name())
 			filtrar();
 	}
 
 	private void crear() {
-		callbackCreacion.run();
+		callbackCrear.run();
 	}
 
 	private void modificar() {
+		getEntidadSeleccionada();
+		callbackModificar.run();
+	}
+
+	private void borrar() {
+		getEntidadSeleccionada();
+		callbackBorrar.run();
+	}
+
+	private void getEntidadSeleccionada() {
 		int fila = table.getSelectedRow();
 		if (fila == -1)
 			return;
 		entidad = modeloTabla.getEntidadAt(fila);
-		callbackModificacion.run();
 	}
 
 	private void filtrar() {
@@ -110,12 +127,16 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 
 	/* Callbacks */
 
-	public void onModificar(Runnable modificacion) {
-		this.callbackModificacion = modificacion;
+	public void onCrear(Runnable callback) {
+		this.callbackCrear = callback;
 	}
 
-	public void onCrear(Runnable creacionFiltrado) {
-		this.callbackCreacion = creacionFiltrado;
+	public void onModificar(Runnable callback) {
+		this.callbackModificar = callback;
+	}
+
+	public void onBorrar(Runnable callback) {
+		this.callbackBorrar = callback;
 	}
 
 	/* Getters and Setters */
