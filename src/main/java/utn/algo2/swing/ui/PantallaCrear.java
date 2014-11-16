@@ -12,8 +12,8 @@ import utn.algo2.core.Atributo;
 @SuppressWarnings("serial")
 public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
 
-	public PantallaCrear(ArrayList<Atributo<T>> fields) {
-		super(fields);
+	public PantallaCrear(ArrayList<Atributo<T>> atributos) {
+		super(atributos);
 	}
 	
 	/* Visual */

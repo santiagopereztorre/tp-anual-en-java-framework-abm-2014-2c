@@ -20,7 +20,7 @@ public class Persona {
 	@Personalizada(metodo="menorA100")
 	private Integer edad;
 	
-	@SoloLectura
+	@Filtrable
 	private Double sueldo;
 
 	/* Getters and Setters */

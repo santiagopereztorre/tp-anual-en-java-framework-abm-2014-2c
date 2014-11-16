@@ -1,6 +1,5 @@
 package utn.algo2.swing.ui;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +13,10 @@ public class ModeloTabla<T> extends AbstractTableModel {
 
 	private String[] columnNames = {};
 	private Object[][] data = {};
-	private List<Entidad<T>> entidadesPorRow = new ArrayList<Entidad<T>>();
-	private Class<?> clase;
+	private List<Entidad<T>> entidadesPorFila = new ArrayList<Entidad<T>>();
+	private ArrayList<Atributo<T>> atributos;
+	
+	/* Obligatorios */
 
 	public int getColumnCount() {
 		return columnNames.length;
@@ -25,82 +26,59 @@ public class ModeloTabla<T> extends AbstractTableModel {
 		return data.length;
 	}
 
+	public Object getValueAt(int row, int col) {
+		return data[row][col];
+	}
+	
+	/* Getters and Setters */
+
 	public String getColumnName(int col) {
 		return columnNames[col];
 	}
 
-	public Object getValueAt(int row, int col) {
-		return data[row][col];
-	}
-
-	/*
-	 * JTable uses this method to determine the default renderer/ editor for
-	 * each cell. If we didn't implement this method, then the last column would
-	 * contain text ("true"/"false"), rather than a check box.
-	 */
-	public Class<? extends Object> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
-	}
-
-	public void setColumnNames(ArrayList<Atributo<T>> fields) {
-		String[] columnNames = new String[fields.size()];
+	public void setNombresDeColumnas(ArrayList<Atributo<T>> atributos) {
+		this.atributos = atributos;
+		this.columnNames = new String[atributos.size()];
 		int i = 0;
-		for (Atributo<T> field : fields) {
-			columnNames[i] = field.getName();
+		for (Atributo<T> atributo : atributos) {
+			columnNames[i] = atributo.getName();
 			i++;
 		}
-		this.columnNames = columnNames;
-		actualizar();
+		actualizarTabla();
 	}
 	
+	/* Interfaz */
+	
+	public Entidad<T> getEntidadAt(int fila) {
+		return entidadesPorFila.get(fila);
+	}
+
 	public void actualizarEntidades(List<Entidad<T>> entidades) {
 		if (entidades.isEmpty()) {
-			data = new Object[0][0];
-			fireTableDataChanged();
+			actualizarData(new Object[0][0]);
 			return;
 		}
-		entidadesPorRow = entidades;
-		clase = entidades.get(0).getClase();
-		Field[] fields = clase.getDeclaredFields();
-		Integer cantidadAtributos = fields.length;
+		Integer cantidadAtributos = atributos.size();
 		Integer cantidadEntidades = entidades.size();
 		Object[][] data = new Object[cantidadEntidades][cantidadAtributos];
 		for (int i = 0; i < cantidadEntidades; i++) {
 			Entidad<T> entidad = entidades.get(i);
-			Object[] arrayDeAtributos = new Object[cantidadAtributos];
 			for (int j = 0; j < cantidadAtributos; j++) {
-				arrayDeAtributos[j] = entidad.getValor(fields[j]);
+				data[i][j] = entidad.getValor(atributos.get(j));
 			}
-			data[i] = arrayDeAtributos;
 		}
-		this.data = data;
-		actualizar();
+		this.entidadesPorFila = entidades;
+		actualizarData(data);
 	}
 	
+	/* Complementario */
 	
-
-	public Entidad<T> getEntidadAt(int row) {
-//		Object[] objeto = data[row];
-//		Entidad<T> entidad = new Entidad<T>();
-//		int totalColumnas = getColumnCount();
-//		for (int col = 0; col < totalColumnas; col ++ ) {
-//			String nombreColumna = getColumnName(col);
-//			Field field = null;
-//			try {
-//				field = clase.getDeclaredField(nombreColumna);
-//			} catch (NoSuchFieldException e) {
-//				e.printStackTrace();
-//			} catch (SecurityException e) {
-//				e.printStackTrace();
-//			}
-//			Object valor =  objeto[col];
-//			entidad.setValor(field, valor);
-//		}
-//		return entidad;
-		return entidadesPorRow.get(row);
-	}
-
-	public void actualizar() {
+	private void actualizarTabla() {
 		fireTableDataChanged();
+	}
+	
+	private void actualizarData(Object[][] data) {
+		this.data = data;
+		actualizarTabla();
 	}
 }

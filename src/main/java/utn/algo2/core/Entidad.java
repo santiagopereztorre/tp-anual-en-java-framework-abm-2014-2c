@@ -58,29 +58,18 @@ public class Entidad<T> {
 		clase = unaClase;
 	}
 
-	public void setValor(Field unField, Object unValor) {
-		Atributo<T> atributo = new Atributo<T>(unField, unValor);
-		addIfNotExists(atributo);
+	public void setValor(Atributo<T> atributo2, Object unValor) {
+		atributo2.setValor(unValor);
+		atributos.add(atributo2);
 	}
 
-	public Object getValor(Field unField) {
-		Atributo<T> atributoBuscado = new Atributo<T>(unField);
-		int index = atributos.indexOf(atributoBuscado);
+	public Object getValor(Atributo<T> atributo) {
+		int index = atributos.indexOf(atributo);
 		return atributos.get(index).getValor();
 	}
 	
 	public boolean isEmpty() {
 		return atributos.isEmpty();
 	}
-	
-	/* Complementarios */
 
-	private void addIfNotExists(Atributo<T> atributo) {
-		if (atributos.contains(atributo)) {
-			int index = atributos.indexOf(atributo);
-			atributos.set(index, atributo);
-		} else {
-			atributos.add(atributo);
-		}
-	}
 }

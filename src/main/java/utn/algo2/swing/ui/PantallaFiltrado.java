@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,49 +32,48 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 		FILTRAR, MODIFICAR, CREAR,
 	}
 
-	public PantallaFiltrado(ArrayList<Atributo<T>> fields) {
-		super(fields);
+	public PantallaFiltrado(ArrayList<Atributo<T>> atributos) {
+		super(atributos);
 	}
 
 	/* Visual */
-	
-	protected void agregarCamposDeTexto(ArrayList<Atributo<T>> fields) {
-		for (Atributo<T> field : fields) {
-			JLabel label = new JLabel(field.getName() + " :");
+
+	protected void agregarCamposDeTexto(ArrayList<Atributo<T>> atributos) {
+		for (Atributo<T> atributo : atributos) {
+			JLabel label = new JLabel(atributo.getName() + " :");
 
 			JTextField campoDeTexto = new JTextField();
 			campoDeTexto.setColumns(10);
-			campoDeTexto.setEditable(!field.esSoloLectura());
+			campoDeTexto.setEditable(!atributo.esSoloLectura());
 
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			panel.add(label);
 			panel.add(campoDeTexto);
-			
-			if (field.esFiltrable())
+
+			if (atributo.esFiltrable())
 				getContentPane().add(panel);
 
-			referenciasACamposDeTexto.put(field, campoDeTexto);
+			referenciasACamposDeTexto.put(atributo, campoDeTexto);
 		}
 	}
 
-	protected void agregarTabla(ArrayList<Atributo<T>> fields) {
+	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {
 		modeloTabla = new ModeloTabla<T>();
-		modeloTabla.setColumnNames(fields);
+		modeloTabla.setNombresDeColumnas(atributos);
 
 		table = new JTable(modeloTabla);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
 
-		JScrollPane scrollPane = new JScrollPane(table);
-		this.add(scrollPane);
+		this.add(new JScrollPane(table));
 	}
 
 	protected void agregarBotones() {
 		Panel panelBotones = new Panel();
 		panelBotones
 				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		this.getContentPane().add(panelBotones);
+		getContentPane().add(panelBotones);
 
 		JButton botonFiltrar = new JButton("Filtrar");
 		botonFiltrar.setActionCommand(Actions.FILTRAR.name());
@@ -109,24 +108,25 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	}
 
 	private void modificar() {
-		int row = table.getSelectedRow();
-		if (row == -1)
+		int fila = table.getSelectedRow();
+		if (fila == -1)
 			return;
-		entidad = modeloTabla.getEntidadAt(row);
+		entidad = modeloTabla.getEntidadAt(fila);
 		callbackModificacion.run();
 	}
 
 	private void filtrar() {
 		List<Entidad<T>> entidadesFiltradas = new ArrayList<Entidad<T>>(
 				entidades);
-		for (Atributo<T> field1 : fields) {
-			String texto = referenciasACamposDeTexto.get(field1).getText();
-			Field field = field1.getField();
-			if (texto != null) {
+		for (Atributo<T> atributo : atributos) {
+			String valorIngresado = referenciasACamposDeTexto.get(atributo)
+					.getText();
+			if (valorIngresado != null) {
 				entidadesFiltradas = entidadesFiltradas
 						.stream()
-						.filter((Entidad<T> entidad) -> entidad.getValor(field).toString()
-								.startsWith(texto))
+						.filter((Entidad<T> entidad) -> entidad
+								.getValor(atributo).toString()
+								.startsWith(valorIngresado))
 						.collect(Collectors.toList());
 			}
 		}
