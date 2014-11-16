@@ -1,17 +1,16 @@
 package utn.algo2.visualizacion;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
-import utn.algo2.core.FieldExtendido;
 
 public interface Visualizador<T> {
 
 	/* Necesarios */
 	
-	public void setFields(ArrayList<FieldExtendido> fieldsExtendidos);
+	public void setFields(ArrayList<Atributo<T>> atributos);
 	public void actualizarFiltro(List<Entidad<T>> entidades);
 	public Entidad<T> getEntidadModificada();
 	public void setEntidadModificada(Entidad<T> entidadModificada);

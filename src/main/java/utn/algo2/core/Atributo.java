@@ -6,22 +6,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.annotation.Annotation;
 
-import utn.algo2.annotations.Control;
-import utn.algo2.annotations.Label;
-import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
-import utn.algo2.annotations.ValidacionPersonalizada;
+import utn.algo2.annotations.SoloLectura;
 import utn.algo2.exception.TipoInvalidoException;
 import utn.algo2.exception.ValorNoValidoException;
-import utn.algo2.validaciones.Validacion2;
 
 public class Atributo<T> {
 
 	private Field field;
 	private Object valor;
 
-	public Atributo(Field aKey) {
-		this.field = aKey;
+	public Atributo(Field field2) {
+		this.field = field2;
 		field.setAccessible(true);
 	}
 
@@ -34,6 +30,10 @@ public class Atributo<T> {
 	/* Metodos */
 
 	public void setIn(T destino) throws TipoInvalidoException, ValorNoValidoException {
+		
+		if (valor.equals("")) {
+			return;
+		}
 		
 		Object valorField = castearValor();
 
@@ -51,6 +51,8 @@ public class Atributo<T> {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			valor = "";
 		}
 	}
 
@@ -191,39 +193,49 @@ public class Atributo<T> {
 	public void setValor(Object valor) {
 		this.valor = valor;
 	}
-
-	/*
-	 * Pregunto si tiene annotations
-	 */
 	
-	public boolean esNulable() {
-		return !this.field.isAnnotationPresent(NotNull.class);
+	public String getName() {
+		return field.getName();
 	}
 
-	public boolean esControl() {
-		return !this.field.isAnnotationPresent(Control.class);
-	}
-
-	public boolean esLabel() {
-		return !this.field.isAnnotationPresent(Label.class);
-	}
-
-	public boolean tieneValidacion() {
-		return !this.field.isAnnotationPresent(ValidacionPersonalizada.class);
-	}
-
-	public Validacion2 obtengoValidacion() {
-		ValidacionPersonalizada annotation = this.field
-				.getAnnotation(ValidacionPersonalizada.class);
-		return annotation.metodo();
-	}
-
-	@SuppressWarnings("unchecked")
-	public boolean cumpleValidacion() {
-		if (this.tieneValidacion()) {
-			Validacion2 validacion = this.obtengoValidacion();
-			validacion.getValidador().evaluaValidacion(this.valor);
-		}
-		return true;
+//	/*
+//	 * Pregunto si tiene annotations
+//	 */
+//	
+//	public boolean esNulable() {
+//		return !this.field.isAnnotationPresent(NotNull.class);
+//	}
+//
+//	public boolean esControl() {
+//		return !this.field.isAnnotationPresent(Control.class);
+//	}
+//
+//	public boolean esLabel() {
+//		return !this.field.isAnnotationPresent(Label.class);
+//	}
+//
+//	public boolean tieneValidacion() {
+//		return !this.field.isAnnotationPresent(ValidacionPersonalizada.class);
+//	}
+//
+//	public Validacion2 obtengoValidacion() {
+//		ValidacionPersonalizada annotation = this.field
+//				.getAnnotation(ValidacionPersonalizada.class);
+//		return annotation.metodo();
+//	}
+//
+//	@SuppressWarnings("unchecked")
+//	public boolean cumpleValidacion() {
+//		if (this.tieneValidacion()) {
+//			Validacion2 validacion = this.obtengoValidacion();
+//			validacion.getValidador().evaluaValidacion(this.valor);
+//		}
+//		return true;
+//	}
+	
+	/* Anotaciones */
+	
+	public boolean esSoloLectura() {
+		return field.isAnnotationPresent((Class<? extends Annotation>) SoloLectura.class);
 	}
 }

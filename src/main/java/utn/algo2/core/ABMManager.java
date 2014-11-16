@@ -22,14 +22,14 @@ public class ABMManager<T> {
 		this.visualizador = visualizador;
 		
 		Field[] fields = this.clase.getDeclaredFields();
-		ArrayList<FieldExtendido> fieldsExtendidos = new ArrayList<FieldExtendido>();
+		ArrayList<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
 		for (Field field : fields) {
-			FieldExtendido fieldExtendido = new FieldExtendido(field);
-			fieldsExtendidos.add(fieldExtendido);
+			Atributo<T> atributo = new Atributo<T>(field);
+			atributos.add(atributo);
 		}
 		
 		
-		this.visualizador.setFields(fieldsExtendidos);
+		this.visualizador.setFields(atributos);
 	}
 
 	/**

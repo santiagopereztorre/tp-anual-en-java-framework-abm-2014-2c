@@ -8,13 +8,13 @@ import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
-import utn.algo2.core.FieldExtendido;
 
 @SuppressWarnings("serial")
 public class PantallaModificar<T> extends Pantalla<T> implements ActionListener {
 
-	public PantallaModificar(ArrayList<FieldExtendido> fields) {
+	public PantallaModificar(ArrayList<Atributo<T>> fields) {
 		super(fields);
 	}
 
@@ -35,7 +35,7 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 	/* Getters and Setters */
 
 	public void cargarCampos(Entidad<T> entidadAModificar) {
-		for (Entry<FieldExtendido, JTextField> entry : referenciasACamposDeTexto.entrySet()) {
+		for (Entry<Atributo<T>, JTextField> entry : referenciasACamposDeTexto.entrySet()) {
 			Field field = entry.getKey().getField();
 			JTextField campoTexto = entry.getValue();
 			String valor = entidadAModificar.getValor(field).toString();

@@ -14,24 +14,21 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import utn.algo2.annotations.Control;
-import utn.algo2.annotations.Label;
-import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.ValidacionPersonalizada;
+import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
-import utn.algo2.core.FieldExtendido;
 import utn.algo2.validaciones.Validacion2;
 
 @SuppressWarnings("serial")
 public abstract class Pantalla<T> extends JDialog implements ActionListener{
 
 	protected Entidad<T> entidad;
-	protected ArrayList<FieldExtendido> fields;
-	protected Hashtable<FieldExtendido, JTextField> referenciasACamposDeTexto = new Hashtable<FieldExtendido, JTextField>();
+	protected ArrayList<Atributo<T>> fields;
+	protected Hashtable<Atributo<T>, JTextField> referenciasACamposDeTexto = new Hashtable<Atributo<T>, JTextField>();
 	private JLabel labelError;
 	protected Runnable callback;
 	
-	public Pantalla(ArrayList<FieldExtendido> fields2) {
+	public Pantalla(ArrayList<Atributo<T>> fields2) {
 		this.fields = fields2;
 		configurarPantalla();
 		agregarCampoDeMensajeError();
@@ -63,12 +60,13 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		labelError.setText(mensaje);
 	}
 
-	private void agregarCamposDeTexto(ArrayList<FieldExtendido> fields2) {
-		for (FieldExtendido field : fields2) {
+	private void agregarCamposDeTexto(ArrayList<Atributo<T>> fields2) {
+		for (Atributo<T> field : fields2) {
 			JLabel label = new JLabel(field.getName() + " :");
 
 			JTextField campoDeTexto = new JTextField();
 			campoDeTexto.setColumns(10);
+			campoDeTexto.setEditable(!field.esSoloLectura());
 
 //			JLabel labelnull = new JLabel("Nullable: " + !field.isAnnotationPresent(NotNull.class) + "   ");
 			
@@ -102,7 +100,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		}
 	}
 	
-	protected void agregarTabla(ArrayList<FieldExtendido> fields2) {};
+	protected void agregarTabla(ArrayList<Atributo<T>> fields2) {};
 	
 	protected abstract void agregarBotones();
 
@@ -110,7 +108,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		entidad = new Entidad<T>();
-		for (FieldExtendido field : fields) {
+		for (Atributo<T> field : fields) {
 			JTextField campoDeTexto = referenciasACamposDeTexto.get(field);
 			entidad.setValor(field.getField(), campoDeTexto.getText());
 		}
