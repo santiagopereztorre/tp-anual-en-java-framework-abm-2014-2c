@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.annotation.Annotation;
 
+import utn.algo2.annotations.Filtrable;
 import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.SoloLectura;
 import utn.algo2.exception.TipoInvalidoException;
@@ -236,6 +237,10 @@ public class Atributo<T> {
 	/* Anotaciones */
 	
 	public boolean esSoloLectura() {
-		return field.isAnnotationPresent((Class<? extends Annotation>) SoloLectura.class);
+		return field.isAnnotationPresent(SoloLectura.class);
+	}
+
+	public boolean esFiltrable() {
+		return field.isAnnotationPresent(Filtrable.class);
 	}
 }

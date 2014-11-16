@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
@@ -35,6 +37,26 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	}
 
 	/* Visual */
+	
+	protected void agregarCamposDeTexto(ArrayList<Atributo<T>> fields) {
+		for (Atributo<T> field : fields) {
+			JLabel label = new JLabel(field.getName() + " :");
+
+			JTextField campoDeTexto = new JTextField();
+			campoDeTexto.setColumns(10);
+			campoDeTexto.setEditable(!field.esSoloLectura());
+
+			Panel panel = new Panel();
+			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			panel.add(label);
+			panel.add(campoDeTexto);
+			
+			if (field.esFiltrable())
+				getContentPane().add(panel);
+
+			referenciasACamposDeTexto.put(field, campoDeTexto);
+		}
+	}
 
 	protected void agregarTabla(ArrayList<Atributo<T>> fields) {
 		modeloTabla = new ModeloTabla<T>();

@@ -60,7 +60,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		labelError.setText(mensaje);
 	}
 
-	private void agregarCamposDeTexto(ArrayList<Atributo<T>> fields2) {
+	protected void agregarCamposDeTexto(ArrayList<Atributo<T>> fields2) {
 		for (Atributo<T> field : fields2) {
 			JLabel label = new JLabel(field.getName() + " :");
 

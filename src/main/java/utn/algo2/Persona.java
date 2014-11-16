@@ -1,6 +1,7 @@
 package utn.algo2;
 
 import utn.algo2.annotations.EnteroMayorA0;
+import utn.algo2.annotations.Filtrable;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.SoloLectura;
@@ -8,6 +9,7 @@ import utn.algo2.annotations.SoloLectura;
 public class Persona {
 	
 	@NotNull
+	@Filtrable
 	private String nombre;
 
 	@SoloLectura

@@ -20,21 +20,12 @@ public class ABMManager<T> {
 		this.clase = clase;
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
-		
-		Field[] fields = this.clase.getDeclaredFields();
-		ArrayList<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
-		for (Field field : fields) {
-			Atributo<T> atributo = new Atributo<T>(field);
-			atributos.add(atributo);
-		}
-		
-		
+		ArrayList<Atributo<T>> atributos = convertirFieldsAAtributos();
 		this.visualizador.setFields(atributos);
 	}
+	
+	/* Interfaz */
 
-	/**
-	 * Ejecuta el ABM Manager
-	 */
 	public void ejecutar() {
 		Runnable creacion = () -> callbackCreacion();
 		visualizador.onCrear(creacion);
@@ -51,6 +42,20 @@ public class ABMManager<T> {
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.abrirPantallaFiltrado(entidades);
 	}
+	
+	/* Complementarios */
+
+	private ArrayList<Atributo<T>> convertirFieldsAAtributos() {
+		Field[] fields = this.clase.getDeclaredFields();
+		ArrayList<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
+		for (Field field : fields) {
+			Atributo<T> atributo = new Atributo<T>(field);
+			atributos.add(atributo);
+		}
+		return atributos;
+	}
+	
+	/* Callbacks */
 
 	private void callbackCreacion() {
 		Entidad<T> entidadCreada = visualizador.getCreado();
@@ -93,6 +98,8 @@ public class ABMManager<T> {
 		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
 		visualizador.abrirPantallaModificar(entidadFiltrada);
 	}
+	
+	/* Base de datos */
 
 	private void guardarEntidad(Entidad<T> entidad) throws TipoInvalidoException, ValorNoValidoException {
 		entidad.setClase(clase);
