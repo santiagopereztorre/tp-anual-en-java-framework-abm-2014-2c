@@ -7,9 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -18,13 +18,14 @@ import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public abstract class Pantalla<T> extends JDialog implements ActionListener{
+public abstract class Pantalla<T> extends JDialog implements ActionListener {
 
 	protected Entidad<T> entidad;
 	protected ArrayList<Atributo<T>> atributos;
 	protected Hashtable<Atributo<T>, JTextField> referenciasACamposDeTexto = new Hashtable<Atributo<T>, JTextField>();
 	private JLabel labelError;
 	protected Runnable callback;
+	private Runnable callbackVolver;
 	
 	public Pantalla(ArrayList<Atributo<T>> atributos) {
 		this.atributos = atributos;
@@ -58,13 +59,13 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 		labelError.setText(mensaje);
 	}
 
-	protected void agregarCamposDeTexto(ArrayList<Atributo<T>> atributos) {
+	private void agregarCamposDeTexto(ArrayList<Atributo<T>> atributos) {
 		for (Atributo<T> atributo : atributos) {
 			JLabel label = new JLabel(atributo.getName() + " :");
 
 			JTextField campoDeTexto = new JTextField();
 			campoDeTexto.setColumns(10);
-			campoDeTexto.setEditable(!atributo.esSoloLectura());
+			campoDeTexto.setEditable(esEditable(atributo));
 
 //			JLabel labelnull = new JLabel("Nullable: " + !field.isAnnotationPresent(NotNull.class) + "   ");
 			
@@ -92,31 +93,62 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener{
 //				panel.add(validacion);
 //			}
 			
-			getContentPane().add(panel);
+			if (hayQueAgregarlo(atributo))
+				getContentPane().add(panel);
 
 			referenciasACamposDeTexto.put(atributo, campoDeTexto);
 		}
 	}
 	
-	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {};
+	private void agregarBotones() {
+		Panel panelBotones = new Panel();
+		panelBotones
+				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		getContentPane().add(panelBotones);
+		
+		agregarBotones(panelBotones);
+		
+		JButton botonVolver = new JButton("Volver");
+		botonVolver.setActionCommand(Action.VOLVER.name());
+		botonVolver.addActionListener(this);
+		panelBotones.add(botonVolver);
+	}
 	
-	protected abstract void agregarBotones();
+	/* Redefinibles */
 
-	/* Actions */
-	
-	public void actionPerformed(ActionEvent e) {
-		entidad = new Entidad<T>();
-		for (Entry<Atributo<T>, JTextField> entry : referenciasACamposDeTexto.entrySet()) {
-			entidad.setValor(entry.getKey(), entry.getValue().getText());
-		}
-		callback.run();
+	protected boolean esEditable(Atributo<T> atributo) {
+		return !atributo.esSoloLectura();
 	}
 
-//	public Validacion2 obtengoValidacion(Field f){
-//		ValidacionPersonalizada annotation = f.getAnnotation(ValidacionPersonalizada.class);
-//		return annotation.metodo();
-//	}
+	protected boolean hayQueAgregarlo(Atributo<T> atributo) {
+		return true;
+	}
 	
+	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {};
+	
+	protected abstract void agregarBotones(Panel panelBotones);
+
+	/* Actions */
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == Action.VOLVER.name())
+			volver();
+		
+		verificarMasPosibilidades(e.getActionCommand());
+	}
+	
+	protected abstract void verificarMasPosibilidades(String actionCommand);
+
+	private void volver() {
+		callbackVolver.run();
+	}
+	
+	/* Callbacks */
+	
+	public void onVolver(Runnable callback) {
+		this.callbackVolver = callback;
+	}
+
 	/* Getters and Setters */
 
 	public Entidad<T> getEntidad() {

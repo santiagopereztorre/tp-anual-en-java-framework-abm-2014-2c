@@ -39,10 +39,19 @@ public class ABMManager<T> {
 		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
 		visualizador.onModificarFiltrado(modificacionFiltrado);
 
+		Runnable volverCrear = () -> callbackVolverCrear();
+		visualizador.onVolverCrear(volverCrear);
+		
+		Runnable volverModificar = () -> callbackVolverModificar();
+		visualizador.onVolverModificar(volverModificar);
+		
+		Runnable volverFiltrar = () -> callbackVolverFiltrar();
+		visualizador.onVolverFiltrar(volverFiltrar);
+
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.abrirPantallaFiltrado(entidades);
 	}
-	
+
 	/* Complementarios */
 
 	private ArrayList<Atributo<T>> convertirFieldsAAtributos() {
@@ -97,6 +106,18 @@ public class ABMManager<T> {
 	private void callbackModificacionFiltrado() {
 		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
 		visualizador.abrirPantallaModificar(entidadFiltrada);
+	}
+
+	private void callbackVolverCrear() {
+		visualizador.cerrarPantallaCrear();
+	}
+
+	private void callbackVolverModificar() {
+		visualizador.cerrarPantallaModificar();
+	}
+	
+	private void callbackVolverFiltrar() {
+		System.exit(0);
 	}
 	
 	/* Base de datos */

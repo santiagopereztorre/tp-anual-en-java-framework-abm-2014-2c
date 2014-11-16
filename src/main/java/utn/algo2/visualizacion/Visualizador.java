@@ -36,6 +36,9 @@ public interface Visualizador<T> {
 	public void onModificar(Runnable callback);
 	public void onCrearFiltrado(Runnable callback);
 	public void onModificarFiltrado(Runnable callback);
+	public void onVolverCrear(Runnable volverCrear);
+	public void onVolverModificar(Runnable volverModificar);
+	public void onVolverFiltrar(Runnable volverFiltrar);
 	
 	/* Errores */
 	

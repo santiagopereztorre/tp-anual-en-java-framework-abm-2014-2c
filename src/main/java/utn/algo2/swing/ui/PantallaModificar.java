@@ -1,5 +1,6 @@
 package utn.algo2.swing.ui;
 
+import java.awt.Panel;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -19,10 +20,27 @@ public class PantallaModificar<T> extends Pantalla<T> implements ActionListener 
 
 	/* Visual */
 
-	protected void agregarBotones() {
+	protected void agregarBotones(Panel panelBotones) {
 		JButton botonCrear = new JButton("Modificar");
+		botonCrear.setActionCommand(Action.MODIFICAR.name());
 		botonCrear.addActionListener(this);
-		this.add(botonCrear);
+		panelBotones.add(botonCrear);
+	}
+	
+	/* Actions */
+
+	@Override
+	protected void verificarMasPosibilidades(String actionCommand) {
+		if (actionCommand == Action.MODIFICAR.name())
+			modificar();
+	}
+
+	private void modificar() {
+		entidad = new Entidad<T>();
+		for (Entry<Atributo<T>, JTextField> entry : referenciasACamposDeTexto.entrySet()) {
+			entidad.setValor(entry.getKey(), entry.getValue().getText());
+		}
+		callback.run();
 	}
 
 	/* Callbacks */

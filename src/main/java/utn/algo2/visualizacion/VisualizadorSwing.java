@@ -107,6 +107,21 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 		}
 		pantallaFiltrado.onModificar(modificacion);
 	}
+
+	@Override
+	public void onVolverCrear(Runnable volverCrear) {
+		pantallaCrear.onVolver(volverCrear);
+	}
+
+	@Override
+	public void onVolverModificar(Runnable volverModificar) {
+		pantallaModificar.onVolver(volverModificar);
+	}
+
+	@Override
+	public void onVolverFiltrar(Runnable volverFiltrar) {
+		pantallaFiltrado.onVolver(volverFiltrar);
+	}
 	
 	/* Necesario */
 

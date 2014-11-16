@@ -1,20 +1,15 @@
 package utn.algo2.swing.ui;
 
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Panel;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
@@ -27,35 +22,19 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	private ModeloTabla<T> modeloTabla;
 	private Runnable callbackModificacion;
 	private Runnable callbackCreacion;
-
-	private enum Actions {
-		FILTRAR, MODIFICAR, CREAR,
-	}
-
+	
 	public PantallaFiltrado(ArrayList<Atributo<T>> atributos) {
 		super(atributos);
 	}
 
 	/* Visual */
 
-	protected void agregarCamposDeTexto(ArrayList<Atributo<T>> atributos) {
-		for (Atributo<T> atributo : atributos) {
-			JLabel label = new JLabel(atributo.getName() + " :");
+	protected boolean esEditable(Atributo<T> atributo) {
+		return true;
+	}
 
-			JTextField campoDeTexto = new JTextField();
-			campoDeTexto.setColumns(10);
-			campoDeTexto.setEditable(!atributo.esSoloLectura());
-
-			Panel panel = new Panel();
-			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			panel.add(label);
-			panel.add(campoDeTexto);
-
-			if (atributo.esFiltrable())
-				getContentPane().add(panel);
-
-			referenciasACamposDeTexto.put(atributo, campoDeTexto);
-		}
+	protected boolean hayQueAgregarlo(Atributo<T> atributo) {
+		return atributo.esFiltrable();
 	}
 
 	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {
@@ -69,24 +48,20 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 		this.add(new JScrollPane(table));
 	}
 
-	protected void agregarBotones() {
-		Panel panelBotones = new Panel();
-		panelBotones
-				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		getContentPane().add(panelBotones);
+	protected void agregarBotones(Panel panelBotones) {
 
 		JButton botonFiltrar = new JButton("Filtrar");
-		botonFiltrar.setActionCommand(Actions.FILTRAR.name());
+		botonFiltrar.setActionCommand(Action.FILTRAR.name());
 		botonFiltrar.addActionListener(this);
 		panelBotones.add(botonFiltrar);
 
 		JButton botonModificar = new JButton("Modificar");
-		botonModificar.setActionCommand(Actions.MODIFICAR.name());
+		botonModificar.setActionCommand(Action.MODIFICAR.name());
 		botonModificar.addActionListener(this);
 		panelBotones.add(botonModificar);
 
 		JButton botonCrear = new JButton("Crear");
-		botonCrear.setActionCommand(Actions.CREAR.name());
+		botonCrear.setActionCommand(Action.CREAR.name());
 		botonCrear.addActionListener(this);
 		panelBotones.add(botonCrear);
 	}
@@ -94,12 +69,12 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	/* Actions */
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == Actions.CREAR.name())
+	protected void verificarMasPosibilidades(String actionCommand) {
+		if (actionCommand == Action.CREAR.name())
 			crear();
-		if (e.getActionCommand() == Actions.MODIFICAR.name())
+		if (actionCommand == Action.MODIFICAR.name())
 			modificar();
-		if (e.getActionCommand() == Actions.FILTRAR.name())
+		if (actionCommand == Action.FILTRAR.name())
 			filtrar();
 	}
 
