@@ -23,6 +23,7 @@ public class PersistidorEnMemoria<T> implements Persistidor<T> {
 	}
 	
 	public void modificar(T viejo, T nuevo) {
+		System.out.println("Cambie: " + viejo + " por " + nuevo);
 		int pos = objetos.indexOf(viejo);
 		objetos.set(pos, nuevo);
 	}
