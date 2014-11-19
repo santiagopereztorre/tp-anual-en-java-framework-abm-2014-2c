@@ -12,8 +12,8 @@ public class Persona {
 	@Filtrable
 	private String nombre;
 
-	@SoloLectura
-	private String apellido;
+//	@SoloLectura
+//	private String apellido;
 	
 	@NotNull
 	@EnteroMayorA0
@@ -21,7 +21,7 @@ public class Persona {
 	private Integer edad;
 	
 	@Filtrable
-	private Double sueldo;
+//	private Double sueldo;
 
 	/* Getters and Setters */
 	
@@ -33,13 +33,13 @@ public class Persona {
 		this.nombre = nombre;
 	}
 	
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
+//	public String getApellido() {
+//		return apellido;
+//	}
+//
+//	public void setApellido(String apellido) {
+//		this.apellido = apellido;
+//	}
 	
 	public Integer getEdad() {
 		return edad;
@@ -49,13 +49,13 @@ public class Persona {
 		this.edad = edad;
 	}
 
-	public Double getSueldo() {
-		return sueldo;
-	}
-
-	public void setSueldo(Double sueldo) {
-		this.sueldo = sueldo;
-	}
+//	public Double getSueldo() {
+//		return sueldo;
+//	}
+//
+//	public void setSueldo(Double sueldo) {
+//		this.sueldo = sueldo;
+//	}
 	
 	/* Override */
 

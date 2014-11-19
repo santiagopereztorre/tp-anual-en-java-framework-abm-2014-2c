@@ -43,6 +43,37 @@ public class Atributo<T> {
 		settearValor(valorCasteado, destino);
 	}
 
+	private Object cast(Object valor, Class<?> type) {
+		Class<?> clase = null;
+		Object casteador = null;
+		Method metodoCastear = null;
+		Object valorCasteado = null;
+
+		try {
+			clase = Class
+					.forName("utn.algo2.casteadores." + type.getSimpleName() + "Casteador");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			casteador = clase.newInstance();
+		} catch (InstantiationException | IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
+
+		metodoCastear = getMetodo("castear", clase, String.class);
+
+		try {
+			valorCasteado = metodoCastear.invoke(casteador, valor);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return valorCasteado;
+	}
+
 	public void getValorFrom(T fuente) {
 		try {
 			valor = field.get(fuente).toString();
@@ -56,35 +87,6 @@ public class Atributo<T> {
 	}
 
 	/* Complementarios */
-
-	private Object cast(Object valor, Class<?> tipo) {
-		Constructor<?> constructor = null;
-
-		try {
-			constructor = tipo.getConstructor(String.class);
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		}
-
-		Object valorField = null;
-
-		try {
-			valorField = constructor.newInstance(valor);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			throw new CasteoInvalidoException("Tipo invalido en "
-					+ field.getName());
-		}
-
-		return valorField;
-	}
 
 	private void evaluarAnotaciones(Object valorCasteado, T destino)
 			throws ValorNoCumpleCondicionException {

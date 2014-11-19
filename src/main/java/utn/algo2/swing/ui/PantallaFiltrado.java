@@ -91,13 +91,17 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 	}
 
 	private void modificar() {
+		entidad = null;
 		getEntidadSeleccionada();
-		callbackModificar.run();
+		if (entidad != null)
+			callbackModificar.run();
 	}
 
 	private void borrar() {
+		entidad = null;
 		getEntidadSeleccionada();
-		callbackBorrar.run();
+		if (entidad != null)
+			callbackBorrar.run();
 	}
 
 	private void getEntidadSeleccionada() {
