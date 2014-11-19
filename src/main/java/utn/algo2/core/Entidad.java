@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import utn.algo2.exception.CasteoInvalidoException;
 import utn.algo2.exception.ValorNoCumpleCondicionException;
 
@@ -12,11 +14,12 @@ public class Entidad<T> {
 	private Class<?> clase;
 	private List<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
 	private T objeto;
-	
+
 	/* Interfaz */
-	
-	public T crearObjeto() throws CasteoInvalidoException, ValorNoCumpleCondicionException {
-		if (objeto == null) 
+
+	public T crearObjeto() throws CasteoInvalidoException,
+			ValorNoCumpleCondicionException, RuntimeException {
+		if (objeto == null)
 			objeto = crearInstancia(clase);
 		for (Atributo<T> atributo : atributos) {
 			atributo.setIn(objeto);
@@ -26,15 +29,15 @@ public class Entidad<T> {
 
 	public void actualizarAtributosFrom(T unObjeto) {
 		objeto = unObjeto;
-		for (Field field: clase.getDeclaredFields()) {
+		for (Field field : clase.getDeclaredFields()) {
 			Atributo<T> atributo = new Atributo<T>(field);
 			atributo.getValorFrom(unObjeto);
 			atributos.add(atributo);
 		}
 	}
-	
+
 	/* Reflection */
-	
+
 	@SuppressWarnings("unchecked")
 	private T crearInstancia(Class<?> unaClase) {
 		T objeto = null;
@@ -47,7 +50,7 @@ public class Entidad<T> {
 		}
 		return objeto;
 	}
-	
+
 	/* Setters y Getters */
 
 	public Class<?> getClase() {
@@ -67,7 +70,7 @@ public class Entidad<T> {
 		int index = atributos.indexOf(atributo);
 		return atributos.get(index).getValor();
 	}
-	
+
 	public boolean isEmpty() {
 		return atributos.isEmpty();
 	}

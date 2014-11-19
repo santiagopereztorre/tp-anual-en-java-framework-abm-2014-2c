@@ -74,7 +74,8 @@ public class ABMManager<T> {
 		try {
 			guardarEntidad(entidadCreada);
 		} catch (CasteoInvalidoException | ValorNoCumpleCondicionException e) {
-			visualizador.mostrarErrorEnModificar(e.getMessage());
+			visualizador.mostrarErrorEnCrear(e.getMessage());
+			return;
 		}
 		visualizador.cerrarPantallaCrear();
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
@@ -87,7 +88,9 @@ public class ABMManager<T> {
 		try {
 			actualizar(entidadVieja, entidadModificada);
 		} catch (CasteoInvalidoException | ValorNoCumpleCondicionException e) {
+			System.out.println(e.getMessage());
 			visualizador.mostrarErrorEnModificar(e.getMessage());
+			return;
 		}
 		visualizador.cerrarPantallaModificar();
 		List<Entidad<T>> entidades = recuperarTodasEntidades();

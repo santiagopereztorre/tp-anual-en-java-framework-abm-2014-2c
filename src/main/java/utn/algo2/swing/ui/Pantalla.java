@@ -50,7 +50,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener {
 
 	private void agregarCampoDeMensajeError() {
 		Panel panel = new Panel();
-		labelError = new JLabel();
+		labelError = new JLabel("asa");
 		panel.add(labelError);
 		getContentPane().add(panel);
 	}

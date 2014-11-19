@@ -35,23 +35,24 @@ public class Atributo<T> {
 
 		if (valor.equals(""))
 			return;
-
+		
 		Object valorCasteado = cast(valor, field.getType());
-
+		
 		evaluarAnotaciones(valorCasteado, destino);
 
 		settearValor(valorCasteado, destino);
 	}
 
-	private Object cast(Object valor, Class<?> type) {
+	private Object cast(Object valor, Class<?> type)
+			throws CasteoInvalidoException {
 		Class<?> clase = null;
 		Object casteador = null;
 		Method metodoCastear = null;
 		Object valorCasteado = null;
 
 		try {
-			clase = Class
-					.forName("utn.algo2.casteadores." + type.getSimpleName() + "Casteador");
+			clase = Class.forName("utn.algo2.casteadores."
+					+ type.getSimpleName() + "Casteador");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -66,11 +67,14 @@ public class Atributo<T> {
 
 		try {
 			valorCasteado = metodoCastear.invoke(casteador, valor);
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		} catch (IllegalAccessException | IllegalArgumentException e) {
 
+		} catch (InvocationTargetException e) {
+			if (e.getCause().getClass().equals(CasteoInvalidoException.class)) {
+				throw new CasteoInvalidoException(e.getCause().getMessage());
+			}
+		}
+		
 		return valorCasteado;
 	}
 
