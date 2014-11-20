@@ -1,6 +1,5 @@
 package utn.algo2.core;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -229,41 +228,6 @@ public class Atributo<T> {
 		}
 		return field.getName();
 	}
-
-	// /*
-	// * Pregunto si tiene annotations
-	// */
-	//
-	// public boolean esNulable() {
-	// return !this.field.isAnnotationPresent(NotNull.class);
-	// }
-	//
-	// public boolean esControl() {
-	// return !this.field.isAnnotationPresent(Control.class);
-	// }
-	//
-	// public boolean esLabel() {
-	// return !this.field.isAnnotationPresent(Label.class);
-	// }
-	//
-	// public boolean tieneValidacion() {
-	// return !this.field.isAnnotationPresent(ValidacionPersonalizada.class);
-	// }
-	//
-	// public Validacion2 obtengoValidacion() {
-	// ValidacionPersonalizada annotation = this.field
-	// .getAnnotation(ValidacionPersonalizada.class);
-	// return annotation.metodo();
-	// }
-	//
-	// @SuppressWarnings("unchecked")
-	// public boolean cumpleValidacion() {
-	// if (this.tieneValidacion()) {
-	// Validacion2 validacion = this.obtengoValidacion();
-	// validacion.getValidador().evaluaValidacion(this.valor);
-	// }
-	// return true;
-	// }
 
 	/* Anotaciones */
 

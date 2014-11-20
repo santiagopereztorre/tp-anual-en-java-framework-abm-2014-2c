@@ -3,6 +3,7 @@ package utn.algo2.swing.ui;
 import java.awt.Dimension;
 import java.awt.Panel;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,6 +85,21 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 			borrar();
 		if (actionCommand == Action.FILTRAR.name())
 			filtrar();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		filtrar();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		filtrar();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		filtrar();
 	}
 
 	private void crear() {

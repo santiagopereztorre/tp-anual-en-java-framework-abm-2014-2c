@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import utn.algo2.exception.CasteoInvalidoException;
 import utn.algo2.exception.ValorNoCumpleCondicionException;
 

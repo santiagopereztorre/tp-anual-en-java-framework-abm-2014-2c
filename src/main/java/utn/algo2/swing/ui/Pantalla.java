@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -18,7 +20,7 @@ import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public abstract class Pantalla<T> extends JDialog implements ActionListener {
+public abstract class Pantalla<T> extends JDialog implements ActionListener, KeyListener {
 
 	protected Entidad<T> entidad;
 	protected ArrayList<Atributo<T>> atributos;
@@ -66,29 +68,12 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener {
 			JTextField campoDeTexto = new JTextField();
 			campoDeTexto.setColumns(10);
 			campoDeTexto.setEditable(esEditable(atributo));
+			campoDeTexto.addKeyListener(this);
 
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			panel.add(label);
 			panel.add(campoDeTexto);
-			
-//			if(field.isAnnotationPresent(Label.class)){
-//				JLabel widget = new JLabel("Es label   ");
-//				panel.add(widget);
-//			}
-//			
-//			if(field.isAnnotationPresent(Control.class)){
-//				JLabel widget = new JLabel("Es Control    ");
-//				panel.add(widget);
-//			}
-//			
-//			JLabel tienevalidacion = new JLabel("Tiene validacion: " + field.isAnnotationPresent(ValidacionPersonalizada.class)+ "   ");
-//			panel.add(tienevalidacion);
-//			
-//			if(field.isAnnotationPresent(ValidacionPersonalizada.class)){
-//				JLabel validacion = new JLabel("Validacion: " + obtengoValidacion(field).toString());
-//				panel.add(validacion);
-//			}
 			
 			if (hayQueAgregarlo(atributo))
 				getContentPane().add(panel);
@@ -132,6 +117,18 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener {
 			volver();
 		
 		verificarMasPosibilidades(e.getActionCommand());
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 	
 	protected abstract void verificarMasPosibilidades(String actionCommand);
