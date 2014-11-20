@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.annotation.Annotation;
 
+import utn.algo2.annotations.Etiqueta;
 import utn.algo2.annotations.Filtrable;
 import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.SoloLectura;
@@ -222,6 +223,10 @@ public class Atributo<T> {
 	}
 
 	public String getName() {
+		if (field.isAnnotationPresent(Etiqueta.class)) {
+			Etiqueta annotacion = (Etiqueta) field.getAnnotation(Etiqueta.class);
+			return annotacion.nombre();
+		}
 		return field.getName();
 	}
 

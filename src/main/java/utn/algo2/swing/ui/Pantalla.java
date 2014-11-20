@@ -67,13 +67,10 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener {
 			campoDeTexto.setColumns(10);
 			campoDeTexto.setEditable(esEditable(atributo));
 
-//			JLabel labelnull = new JLabel("Nullable: " + !field.isAnnotationPresent(NotNull.class) + "   ");
-			
 			Panel panel = new Panel();
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			panel.add(label);
 			panel.add(campoDeTexto);
-//			panel.add(labelnull);
 			
 //			if(field.isAnnotationPresent(Label.class)){
 //				JLabel widget = new JLabel("Es label   ");

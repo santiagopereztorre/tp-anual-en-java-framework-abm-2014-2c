@@ -3,6 +3,7 @@ package utn.algo2;
 import java.time.LocalDate;
 
 import utn.algo2.annotations.EnteroMayorA0;
+import utn.algo2.annotations.Etiqueta;
 import utn.algo2.annotations.Filtrable;
 import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
@@ -25,6 +26,7 @@ public class Persona {
 	@Filtrable
 	private Double sueldo;
 	
+	@Etiqueta(nombre="santi")
 	private LocalDate fecha;
 
 	/* Getters and Setters */
