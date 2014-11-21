@@ -16,7 +16,7 @@ import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
+public class PantallaFiltrado<T> extends Pantalla<T>{
 
 	private JTable table;
 	private List<Entidad<T>> entidades;
@@ -85,16 +85,6 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 			borrar();
 		if (actionCommand == Action.FILTRAR.name())
 			filtrar();
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		filtrar();
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		filtrar();
 	}
 
 	@Override

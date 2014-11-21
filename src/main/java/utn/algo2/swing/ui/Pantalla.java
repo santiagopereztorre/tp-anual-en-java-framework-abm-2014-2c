@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -20,7 +22,8 @@ import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public abstract class Pantalla<T> extends JDialog implements ActionListener, KeyListener {
+public abstract class Pantalla<T> extends JDialog implements ActionListener,
+		KeyListener, WindowListener {
 
 	protected Entidad<T> entidad;
 	protected ArrayList<Atributo<T>> atributos;
@@ -28,7 +31,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 	private JLabel labelError;
 	protected Runnable callback;
 	private Runnable callbackVolver;
-	
+
 	public Pantalla(ArrayList<Atributo<T>> atributos) {
 		this.atributos = atributos;
 		configurarPantalla();
@@ -47,7 +50,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 		this.setBounds(100, 100, 426, 300);
 		this.setModalityType(ModalityType.MODELESS);
 		this.setSize(700, 300);
-
+		this.addWindowListener(this);
 	}
 
 	private void agregarCampoDeMensajeError() {
@@ -56,7 +59,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 		panel.add(labelError);
 		getContentPane().add(panel);
 	}
-	
+
 	public void mostrarError(String mensaje) {
 		labelError.setText(mensaje);
 	}
@@ -74,22 +77,22 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 			panel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			panel.add(label);
 			panel.add(campoDeTexto);
-			
+
 			if (esVisible(atributo))
 				getContentPane().add(panel);
 
 			referenciasACamposDeTexto.put(atributo, campoDeTexto);
 		}
 	}
-	
+
 	private void agregarBotones() {
 		Panel panelBotones = new Panel();
 		panelBotones
 				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		getContentPane().add(panelBotones);
-		
+
 		agregarBotones(panelBotones);
-		
+
 		JButton botonVolver = new JButton("Volver");
 		botonVolver.setActionCommand(Action.VOLVER.name());
 		botonVolver.addActionListener(this);
@@ -102,7 +105,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == Action.VOLVER.name())
 			volver();
-		
+
 		verificarMasPosibilidades(e.getActionCommand());
 	}
 
@@ -117,25 +120,55 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		callbackVolver.run();
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+	}
+
 	private void volver() {
 		callbackVolver.run();
 	}
-	
+
 	/* Redefinibles */
 
 	protected abstract boolean esEditable(Atributo<T> atributo);
 
 	protected abstract boolean esVisible(Atributo<T> atributo);
-	
-	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {};
-	
+
+	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {
+	};
+
 	protected abstract void agregarBotones(Panel panelBotones);
-	
+
 	protected abstract void verificarMasPosibilidades(String actionCommand);
-	
+
 	/* Callbacks */
-	
+
 	public void onVolver(Runnable callback) {
 		this.callbackVolver = callback;
 	}

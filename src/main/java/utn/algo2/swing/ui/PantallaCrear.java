@@ -12,7 +12,7 @@ import utn.algo2.core.Atributo;
 import utn.algo2.core.Entidad;
 
 @SuppressWarnings("serial")
-public class PantallaCrear<T> extends Pantalla<T> implements ActionListener {
+public class PantallaCrear<T> extends Pantalla<T>{
 
 	public PantallaCrear(ArrayList<Atributo<T>> atributos) {
 		super(atributos);
