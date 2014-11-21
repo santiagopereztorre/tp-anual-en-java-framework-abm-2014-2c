@@ -2,7 +2,6 @@ package utn.algo2.swing.ui;
 
 import java.awt.Dimension;
 import java.awt.Panel;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +51,6 @@ public class PantallaFiltrado<T> extends Pantalla<T>{
 
 	protected void agregarBotones(Panel panelBotones) {
 
-		JButton botonFiltrar = new JButton("Filtrar");
-		botonFiltrar.setActionCommand(Action.FILTRAR.name());
-		botonFiltrar.addActionListener(this);
-		panelBotones.add(botonFiltrar);
-		
 		JButton botonCrear = new JButton("Crear");
 		botonCrear.setActionCommand(Action.CREAR.name());
 		botonCrear.addActionListener(this);
@@ -83,8 +77,6 @@ public class PantallaFiltrado<T> extends Pantalla<T>{
 			modificar();
 		if (actionCommand == Action.BORRAR.name())
 			borrar();
-		if (actionCommand == Action.FILTRAR.name())
-			filtrar();
 	}
 
 	@Override

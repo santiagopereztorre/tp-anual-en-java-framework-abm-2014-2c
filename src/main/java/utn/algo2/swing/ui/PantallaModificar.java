@@ -1,8 +1,6 @@
 package utn.algo2.swing.ui;
 
 import java.awt.Panel;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
