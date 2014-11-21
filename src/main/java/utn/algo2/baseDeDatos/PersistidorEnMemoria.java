@@ -12,12 +12,6 @@ public class PersistidorEnMemoria<T> implements Persistidor<T> {
 		this.objetos.add(objeto);
 	}
 	
-	public void modificar(T viejo, T nuevo) {
-		System.out.println("Cambie: " + viejo + " por " + nuevo);
-		int pos = objetos.indexOf(viejo);
-		objetos.set(pos, nuevo);
-	}
-
 	public void remover(T objeto) {
 		System.out.println("Borre: " + objeto);
 		objetos.remove(objeto);

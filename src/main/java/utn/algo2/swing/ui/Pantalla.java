@@ -52,7 +52,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 
 	private void agregarCampoDeMensajeError() {
 		Panel panel = new Panel();
-		labelError = new JLabel("asa");
+		labelError = new JLabel();
 		panel.add(labelError);
 		getContentPane().add(panel);
 	}
@@ -75,7 +75,7 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 			panel.add(label);
 			panel.add(campoDeTexto);
 			
-			if (hayQueAgregarlo(atributo))
+			if (esVisible(atributo))
 				getContentPane().add(panel);
 
 			referenciasACamposDeTexto.put(atributo, campoDeTexto);
@@ -95,23 +95,10 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 		botonVolver.addActionListener(this);
 		panelBotones.add(botonVolver);
 	}
-	
-	/* Redefinibles */
-
-	protected boolean esEditable(Atributo<T> atributo) {
-		return !atributo.esSoloLectura();
-	}
-
-	protected boolean hayQueAgregarlo(Atributo<T> atributo) {
-		return true;
-	}
-	
-	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {};
-	
-	protected abstract void agregarBotones(Panel panelBotones);
 
 	/* Actions */
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == Action.VOLVER.name())
 			volver();
@@ -131,11 +118,21 @@ public abstract class Pantalla<T> extends JDialog implements ActionListener, Key
 	public void keyReleased(KeyEvent e) {
 	}
 	
-	protected abstract void verificarMasPosibilidades(String actionCommand);
-
 	private void volver() {
 		callbackVolver.run();
 	}
+	
+	/* Redefinibles */
+
+	protected abstract boolean esEditable(Atributo<T> atributo);
+
+	protected abstract boolean esVisible(Atributo<T> atributo);
+	
+	protected void agregarTabla(ArrayList<Atributo<T>> atributos) {};
+	
+	protected abstract void agregarBotones(Panel panelBotones);
+	
+	protected abstract void verificarMasPosibilidades(String actionCommand);
 	
 	/* Callbacks */
 	

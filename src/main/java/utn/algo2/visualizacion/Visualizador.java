@@ -10,7 +10,7 @@ public interface Visualizador<T> {
 
 	/* Necesarios */
 	
-	public void setFields(ArrayList<Atributo<T>> atributos);
+	public void setAtributos(ArrayList<Atributo<T>> atributos);
 	public void actualizarFiltro(List<Entidad<T>> entidades);
 	public Entidad<T> getEntidadModificada();
 	public void setEntidadModificada(Entidad<T> entidadModificada);

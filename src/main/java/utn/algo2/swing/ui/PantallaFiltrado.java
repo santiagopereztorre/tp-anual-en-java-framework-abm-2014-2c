@@ -35,7 +35,7 @@ public class PantallaFiltrado<T> extends Pantalla<T> implements ActionListener {
 		return true;
 	}
 
-	protected boolean hayQueAgregarlo(Atributo<T> atributo) {
+	protected boolean esVisible(Atributo<T> atributo) {
 		return atributo.esFiltrable();
 	}
 

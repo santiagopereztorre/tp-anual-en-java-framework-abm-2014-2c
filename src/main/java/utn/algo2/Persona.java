@@ -26,7 +26,8 @@ public class Persona {
 	@Filtrable
 	private Double sueldo;
 	
-	@Etiqueta(nombre="santi")
+	@SoloLectura
+	@Etiqueta(nombre="Fecha de nacimiento")
 	private LocalDate fecha;
 
 	/* Getters and Setters */

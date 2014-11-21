@@ -33,6 +33,12 @@ public class Entidad<T> {
 			atributos.add(atributo);
 		}
 	}
+	
+	public void actualizarAtributos() throws CasteoInvalidoException, ValorNoCumpleCondicionException {
+		for (Atributo<T> atributo : atributos) {
+			atributo.setIn(objeto);
+		}
+	}
 
 	/* Reflection */
 
@@ -59,9 +65,14 @@ public class Entidad<T> {
 		clase = unaClase;
 	}
 
-	public void setValor(Atributo<T> atributo2, Object unValor) {
-		atributo2.setValor(unValor);
-		atributos.add(atributo2);
+	public void setValor(Atributo<T> atributo, Object unValor) {
+		atributo.setValor(unValor);
+		atributos.add(atributo);
+	}
+	
+	public void actualizarValor(Atributo<T> atributo, String valor) {
+		int pos = atributos.indexOf(atributo);
+		atributos.get(pos).setValor(valor);
 	}
 
 	public Object getValor(Atributo<T> atributo) {

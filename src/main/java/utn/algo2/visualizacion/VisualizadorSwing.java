@@ -18,7 +18,7 @@ public class VisualizadorSwing<T> implements Visualizador<T> {
 	
 	private Entidad<T> entidadModificada;
 
-	public void setFields(ArrayList<Atributo<T>> atributos) {
+	public void setAtributos(ArrayList<Atributo<T>> atributos) {
 		this.atributos = atributos;
 	}
 

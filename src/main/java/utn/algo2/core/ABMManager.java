@@ -21,35 +21,35 @@ public class ABMManager<T> {
 		this.persistidor = persistidor;
 		this.visualizador = visualizador;
 		ArrayList<Atributo<T>> atributos = convertirFieldsAAtributos();
-		this.visualizador.setFields(atributos);
+		this.visualizador.setAtributos(atributos);
 	}
 	
 	/* Interfaz */
 
 	public void ejecutar() {
-		Runnable creacion = () -> callbackCreacion();
-		visualizador.onCrear(creacion);
+		Runnable crearCreacion = () -> callbackCrearCreacion();
+		visualizador.onCrear(crearCreacion);
 
-		Runnable modificacion = () -> callbackModificacion();
-		visualizador.onModificar(modificacion);
+		Runnable modificarModificacion = () -> callbackModificarModificacion();
+		visualizador.onModificar(modificarModificacion);
 
-		Runnable creacionFiltrado = () -> callbackCreacionFiltrado();
-		visualizador.onCrearFiltrado(creacionFiltrado);
+		Runnable crearFiltrado = () -> callbackCrearFiltrado();
+		visualizador.onCrearFiltrado(crearFiltrado);
 
-		Runnable modificacionFiltrado = () -> callbackModificacionFiltrado();
-		visualizador.onModificarFiltrado(modificacionFiltrado);
+		Runnable modificarFiltrado = () -> callbackModificarFiltrado();
+		visualizador.onModificarFiltrado(modificarFiltrado);
 		
 		Runnable borrarFiltrado = () -> callbackBorrarFiltrado();
 		visualizador.onBorrarFiltrado(borrarFiltrado);
 
-		Runnable volverCrear = () -> callbackVolverCrear();
-		visualizador.onVolverCrear(volverCrear);
+		Runnable volverCreacion = () -> callbackVolverCreacion();
+		visualizador.onVolverCrear(volverCreacion);
 		
-		Runnable volverModificar = () -> callbackVolverModificar();
-		visualizador.onVolverModificar(volverModificar);
+		Runnable volverModificacion = () -> callbackVolverModificacion();
+		visualizador.onVolverModificar(volverModificacion);
 		
-		Runnable volverFiltrar = () -> callbackVolverFiltrar();
-		visualizador.onVolverFiltrar(volverFiltrar);
+		Runnable volverFiltracion = () -> callbackVolverFiltracion();
+		visualizador.onVolverFiltrar(volverFiltracion);
 
 		List<Entidad<T>> entidades = recuperarTodasEntidades();
 		visualizador.abrirPantallaFiltrado(entidades);
@@ -58,7 +58,7 @@ public class ABMManager<T> {
 	/* Complementarios */
 
 	private ArrayList<Atributo<T>> convertirFieldsAAtributos() {
-		Field[] fields = this.clase.getDeclaredFields();
+		Field[] fields = clase.getDeclaredFields();
 		ArrayList<Atributo<T>> atributos = new ArrayList<Atributo<T>>();
 		for (Field field : fields) {
 			Atributo<T> atributo = new Atributo<T>(field);
@@ -69,7 +69,7 @@ public class ABMManager<T> {
 	
 	/* Callbacks */
 
-	private void callbackCreacion() {
+	private void callbackCrearCreacion() {
 		Entidad<T> entidadCreada = visualizador.getCreado();
 		try {
 			guardarEntidad(entidadCreada);
@@ -82,13 +82,11 @@ public class ABMManager<T> {
 		visualizador.actualizarFiltro(entidades);
 	}
 
-	private void callbackModificacion() {
+	private void callbackModificarModificacion() {
 		Entidad<T> entidadModificada = visualizador.getModificado();
-		Entidad<T> entidadVieja = visualizador.getFiltrado();
 		try {
-			actualizar(entidadVieja, entidadModificada);
+			actualizar(entidadModificada);
 		} catch (CasteoInvalidoException | ValorNoCumpleCondicionException e) {
-			System.out.println(e.getMessage());
 			visualizador.mostrarErrorEnModificar(e.getMessage());
 			return;
 		}
@@ -97,11 +95,11 @@ public class ABMManager<T> {
 		visualizador.actualizarFiltro(entidades);
 	}
 
-	private void callbackCreacionFiltrado() {
+	private void callbackCrearFiltrado() {
 		visualizador.abrirPantallaCrear();
 	}
 
-	private void callbackModificacionFiltrado() {
+	private void callbackModificarFiltrado() {
 		Entidad<T> entidadFiltrada = visualizador.getFiltrado();
 		visualizador.abrirPantallaModificar(entidadFiltrada);
 	}
@@ -117,15 +115,15 @@ public class ABMManager<T> {
 		visualizador.actualizarFiltro(entidades);
 	}
 
-	private void callbackVolverCrear() {
+	private void callbackVolverCreacion() {
 		visualizador.cerrarPantallaCrear();
 	}
 
-	private void callbackVolverModificar() {
+	private void callbackVolverModificacion() {
 		visualizador.cerrarPantallaModificar();
 	}
 	
-	private void callbackVolverFiltrar() {
+	private void callbackVolverFiltracion() {
 		System.exit(0);
 	}
 	
@@ -143,13 +141,8 @@ public class ABMManager<T> {
 		persistidor.remover(objeto);
 	}
 
-	private void actualizar(Entidad<T> entidadVieja,
-			Entidad<T> entidadModificada) throws CasteoInvalidoException, ValorNoCumpleCondicionException {
-		entidadVieja.setClase(clase);
-		T objetoViejo = entidadVieja.crearObjeto();
-		entidadModificada.setClase(clase);
-		T objetoNuevo = entidadModificada.crearObjeto();
-		persistidor.modificar(objetoViejo, objetoNuevo);
+	private void actualizar(Entidad<T> entidad) throws CasteoInvalidoException, ValorNoCumpleCondicionException {
+		entidad.actualizarAtributos();
 	}
 
 	private List<Entidad<T>> recuperarTodasEntidades() {
