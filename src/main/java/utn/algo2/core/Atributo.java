@@ -7,6 +7,7 @@ import java.lang.annotation.Annotation;
 
 import utn.algo2.annotations.Etiqueta;
 import utn.algo2.annotations.Filtrable;
+import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.SoloLectura;
 import utn.algo2.exception.CasteoInvalidoException;
@@ -237,5 +238,9 @@ public class Atributo<T> {
 
 	public boolean esFiltrable() {
 		return field.isAnnotationPresent(Filtrable.class);
+	}
+	
+	public boolean esNotNull(){
+		return field.isAnnotationPresent(NotNull.class);
 	}
 }

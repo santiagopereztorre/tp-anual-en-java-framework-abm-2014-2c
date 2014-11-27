@@ -1,5 +1,6 @@
 package utn.algo2;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import utn.algo2.annotations.EnteroMayorA0;
@@ -9,10 +10,9 @@ import utn.algo2.annotations.NotNull;
 import utn.algo2.annotations.Personalizada;
 import utn.algo2.annotations.SoloLectura;
 
-public class Persona {
+public class Persona implements Serializable{
 	
 	@NotNull
-	@Filtrable
 	private String nombre;
 
 	@SoloLectura
